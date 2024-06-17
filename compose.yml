@@ -1,0 +1,10 @@
+services:
+  frontend:
+    build: ./front-office
+    tty: true
+    ports:
+      - 5173:5173
+    volumes:
+      # - ./front-office/node_modules:/app/node_modules
+      - ./front-office:/app
+    command: yarn dev
