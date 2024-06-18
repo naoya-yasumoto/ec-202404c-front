@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
 import MySelect from './MySelect';
@@ -37,7 +37,7 @@ const Register: React.FC = () => {
     };
     console.log(formData);
     //ここにjson送信を入れる
-    
+
   };
   
   const fetchAddress = async (postcode: number) => {
@@ -84,7 +84,7 @@ const Register: React.FC = () => {
 
         <label htmlFor='postcode'>郵便番号</label>
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <input type='text' id='postcode' {...register("postcode", { required: "郵便番号は必須です" })} />
+        <input type='number' id='postcode' {...register("postcode", { required: "郵便番号は必須です" })} />
         <button type="button" onClick={() => fetchAddress(watch('postcode'))} disabled={loading}>
           {loading ? '取得中...' : '住所取得'}
         </button>
