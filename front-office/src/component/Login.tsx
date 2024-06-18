@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import axios from 'axios';
 
-const Login  = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
-    const [token, setToken] = useState('');
+const Login: React.FC = () => {
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [message, setMessage] = useState<string>('');
+    const [token, setToken] = useState<string>('');
 
-    const handleLogin = async (event) => {
+    const handleLogin = async (event: FormEvent) => {
         event.preventDefault();
         try {
             const response = await axios.post('http://localhost:8080/ec-202404c/users', { username, password });
@@ -24,11 +24,21 @@ const Login  = () => {
             <form onSubmit={handleLogin}>
                 <div>
                     <label>Username: </label>
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                    <input 
+                        type="text" 
+                        value={username} 
+                        onChange={(e) => setUsername(e.target.value)} 
+                        required 
+                    />
                 </div>
                 <div>
                     <label>Password: </label>
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                    <input 
+                        type="password" 
+                        value={password} 
+                        onChange={(e) => setPassword(e.target.value)} 
+                        required 
+                    />
                 </div>
                 <button type="submit">Login</button>
             </form>
