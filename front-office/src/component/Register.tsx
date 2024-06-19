@@ -33,10 +33,10 @@ const Register: React.FC = () => {
       email: data.email,
       password: data.password,
       zipcode: data.postcode,
-      prefectures: data.prefectures,
+      prefecture: data.prefectures,
       municipalities: data.municipalities,
       address: data.address,
-      tel: data.tel
+      telephone: data.tel
     };
     console.log(formData);
     //ここにjson送信を入れる
