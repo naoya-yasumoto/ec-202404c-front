@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Register from './components/Register.tsx';
 import Login from './components/Login.tsx';
 import ItemList from './pages/ItemList.tsx';
-import Cart from './components/Cart.tsx';
+import Cart from './pages/Cart.tsx';
 import { validationSchema } from "./utils/validationSchema.ts";
 
 export const RouterConfig = () => {
