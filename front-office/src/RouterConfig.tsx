@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from './App.tsx'
 import Register from './component/Register.tsx';
 import Login from './component/Login.tsx';
+import { validationSchema } from "./utils/validationSchema.ts";
 
 export const RouterConfig = () => {
     return (
