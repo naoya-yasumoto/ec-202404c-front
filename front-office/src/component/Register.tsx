@@ -21,7 +21,7 @@ const Register: React.FC = () => {
   const [loading, setLoading] = useState(false);
   
 
-  const onSubmit = (data: SignUpForm) => {
+  const onSubmit = async (data: SignUpForm) => {
     const combinedName = `${data.lastName} ${data.firstName}`;
 
     // 結合したフィールドを含むオブジェクトを作成
@@ -37,7 +37,8 @@ const Register: React.FC = () => {
     };
     console.log(formData);
     //ここにjson送信を入れる
-
+    const response = await axios.post('http://192.168.16.175:8080/ec-202404c/users/register', formData);
+    console.log(response);
   };
   
   const fetchAddress = async (postcode: number) => {

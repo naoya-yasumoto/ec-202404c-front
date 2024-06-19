@@ -31,6 +31,7 @@ const Register: React.FC = () => {
 
     const handleZipcodeAPI = async (event: FormEvent) => {
         event.preventDefault();
+        console.log(event.target.value)
         setZipcode(event.target.value);
         try {
             const response = await axios.get('https://zipcoda.net/api', {
