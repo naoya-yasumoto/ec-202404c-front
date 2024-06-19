@@ -12,7 +12,9 @@ export const RouterConfig = () => {
                         <Route path='/' element={<App/>} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/login" element={<Login />} />
-                        {/* <Route path="/room/:room_id" element={<ChatGUI />} /> */}
+                        {
+                        
+                        /* <Route path="/room/:room_id" element={<ChatGUI />} /> */}
                     </Routes>
                 </BrowserRouter>
         </>
