@@ -16,7 +16,7 @@ const Navbar: React.FC = () => (
 
     <div id="navbarBasicExample" className="navbar-menu">
       <div className="navbar-end">
-        <Link className="navbar-item" to="/cart">ショッピングカート</Link>
+        <a href="cart_list.html" className="navbar-item">ショッピングカート</a>
         <a href="order_history.html" className="navbar-item">注文履歴</a>
         <a href="login.html" className="navbar-item">ログイン</a>
         <a href="item_list_pizza.html" className="navbar-item">ログアウト</a>
