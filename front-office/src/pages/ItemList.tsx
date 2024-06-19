@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Item from './Item';
+import Item from '../components/Item';
 import axios from 'axios';
-import Navbar from './Navbar';
-import SearchForm from './SearchForm';
+import Navbar from '../components/Navbar';
+import SearchForm from '../components/SearchForm';
 
 const ItemList: React.FC = () => {
 
@@ -10,7 +10,7 @@ const ItemList: React.FC = () => {
 
   useEffect(() => {
     const getChatsAsync = async () => {
-        const response = await axios.get('http://192.168.128.189:8080/ec-202404c/items/set'); 
+        const response = await axios.get('http://192.168.16.130:8080/ec-202404c/items/set'); 
         console.log("response", response.data.items);
         setItems(response.data.items);
     }

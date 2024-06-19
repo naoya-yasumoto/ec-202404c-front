@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
 import MySelect from './MySelect';
-import {prefecturesOptions} from '../utils/prefectures'
+import {prefecturesOptions} from '../constants/prefectures'
 
 interface SignUpForm {
     lastName: string,
