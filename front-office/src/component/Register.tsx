@@ -5,6 +5,7 @@ import MySelect from './MySelect';
 import { prefecturesOptions } from '../utils/prefectures';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validationSchema } from '../utils/validationSchema';
+import { useNavigate } from "react-router-dom";
 
 interface SignUpForm {
     lastName: string,
@@ -17,6 +18,8 @@ interface SignUpForm {
     address: string,
     tel: number;
   }
+
+  const navigate = useNavigate();
 
 const Register: React.FC = () => {
     const { register, handleSubmit, control, setValue, watch, formState: { errors } } 
@@ -41,6 +44,12 @@ const Register: React.FC = () => {
     console.log(formData);
     //ここにjson送信を入れる
     const response = await axios.post('http://192.168.16.175:8080/ec-202404c/users/register', formData);
+    // 成功
+    if(response.status === 200){
+      navigate('/login');
+    }else{
+      <p>エラーが発生しました！</p>
+    }
     console.log(response);
   };
   
