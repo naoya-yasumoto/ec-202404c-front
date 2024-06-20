@@ -41,6 +41,8 @@ const Login: React.FC = () => {
 
     // アクセストークンをセッションストレージに格納
     window.sessionStorage.setItem('accessToken', accessToken);
+    const token = window.sessionStorage.getItem('accessToken');
+  
 
 
     ///アクセスが必要なものに記述する
