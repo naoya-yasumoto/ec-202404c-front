@@ -75,23 +75,26 @@ const ItemDetail: React.FC = () => {
   useEffect(() => {
     const getChatsAsync = async () => {
       const response = await axios.get('http://192.168.16.130:8080/ec-202404c/items/set');
-      console.log("response", response.data.items);
-      setItems(response.data.items);
+      console.log("responseDetailpage", response.data.items[0]);
+      console.log("Item ID from URL:", id);
+      setItems(response.data.items[0]);
     }
     getChatsAsync();
   }, [])
+
 
   return (
     <Container>
       <form action="cart_list.html">
         <Title>商品詳細</Title>
+        <h1>この商品のID:{id}</h1>
         <Row>
           <Column>
             <Image src="../static/img_pizza/1.jpg" alt="じゃがバターベーコン" />
           </Column>
           <Column>
             <div>
-              <h4>じゃがバターベーコン</h4>
+              <h4>じゃがバターベーコン{id}</h4>
               <p>
                 マイルドな味付けのカレーに大きくカットしたポテトをのせた、バターとチーズの風味が食欲をそそるお子様でも楽しめる商品です。
               </p>

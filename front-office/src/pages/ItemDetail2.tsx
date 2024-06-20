@@ -4,7 +4,7 @@ import Item from '../components/Item';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 
-const ItemDetail: React.FC = () => {
+const ItemDetail2: React.FC = () => {
 
   const { id } = useParams();
   const [items, setItems] = useState([]);
@@ -12,7 +12,7 @@ const ItemDetail: React.FC = () => {
   useEffect(() => {
     const getChatsAsync = async () => {
       const response = await axios.get('http://192.168.16.130:8080/ec-202404c/items/set');
-      console.log("response", response.data.items);
+      console.log("response222", response.data.items);
       setItems(response.data.items);
     }
     getChatsAsync();
@@ -80,4 +80,4 @@ const ItemDetail: React.FC = () => {
   );
 };
 
-export default ItemDetail;
+export default ItemDetail2;

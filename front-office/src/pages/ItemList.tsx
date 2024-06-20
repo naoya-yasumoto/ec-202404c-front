@@ -12,7 +12,7 @@ const ItemList: React.FC = () => {
   useEffect(() => {
     const getChatsAsync = async () => {
         const response = await axios.get('http://192.168.16.130:8080/ec-202404c/items/set'); 
-        console.log("response", response.data.items);
+        // console.log("response", response.data.items);
         setItems(response.data.items[0]);
     }
     getChatsAsync();
