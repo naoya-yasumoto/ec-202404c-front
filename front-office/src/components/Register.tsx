@@ -5,6 +5,7 @@ import MySelect from './MySelect';
 import { prefecturesOptions } from '../utils/prefectures';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validationSchema } from '../utils/validationSchema';
+import { HOST_IP } from '../config';
 
 interface SignUpForm {
     lastName: string,
@@ -40,7 +41,7 @@ const Register: React.FC = () => {
     };
     console.log(formData);
     //ここにjson送信を入れる
-    const response = await axios.post('http://192.168.16.175:8080/ec-202404c/users/register', formData);
+    const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/users/register`, formData);
     console.log(response);
   };
   

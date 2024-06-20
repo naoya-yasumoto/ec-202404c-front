@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar: React.FC = () => (
   <div className="bg-gray-100">
@@ -6,9 +7,9 @@ const Navbar: React.FC = () => (
       <div className="flex-1 flex items-center">
         <a className="text-3xl font-poiret font-extrabold">RakuStyle</a>
         <ul className="menu menu-horizontal p-0 ml-4">
-        <li><a href="#" className="text-lg">set</a></li>
-          <li><a href="#" className="text-lg">tops</a></li>
-          <li><a href="#" className="text-lg">bottoms</a></li>
+        <li><Link to="/item-list/set" className="text-lg">Sets</Link></li>
+        <li><Link to="/item-list/top" className="text-lg">Tops</Link></li>
+        <li><Link to="/item-list/bottom" className="text-lg">Bottom</Link></li>
         </ul>
       </div>
 
@@ -46,8 +47,8 @@ const Navbar: React.FC = () => (
                 <span className="badge">ログイン中</span>
               </a>
             </li>
-            <li><a>Sign Up</a></li>
-            <li><a>Logout</a></li>
+            <li><Link to="/register" className="text-lg">Sign up</Link></li>
+            <li><Link to="/login" className="text-lg">Login</Link></li>
           </ul>
         </div>
       </div>
