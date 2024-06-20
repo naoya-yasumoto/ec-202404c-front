@@ -70,7 +70,7 @@ const Register: React.FC = () => {
       <h1>登録フォーム</h1>
       <hr />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor='lastName'>性</label>
+        <label htmlFor='lastName'>姓</label>
         <input type='text' id='lastName' {...register("lastName")}></input>
         <label htmlFor='firstName'>名</label>
         <input type='text' id='firstName' {...register("firstName")}></input><br />
