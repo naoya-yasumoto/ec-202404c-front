@@ -4,6 +4,7 @@ import axios from 'axios';
 import Navbar from '../components/Navbar';
 import SearchForm from '../components/SearchForm';
 
+
 const ItemList: React.FC = () => {
 
   const [items, setItems] = useState([]);
@@ -12,7 +13,7 @@ const ItemList: React.FC = () => {
     const getChatsAsync = async () => {
         const response = await axios.get('http://192.168.16.130:8080/ec-202404c/items/set'); 
         console.log("response", response.data.items);
-        setItems(response.data.items);
+        setItems(response.data.items[0]);
     }
     getChatsAsync();
 }, [])
@@ -25,6 +26,7 @@ const ItemList: React.FC = () => {
         <div className="columns is-multiline is-centered">
           {items.map((item, index) => (
             <Item key={index} item={item} />
+              
           ))}
         </div>
       </div>

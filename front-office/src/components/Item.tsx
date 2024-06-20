@@ -1,10 +1,14 @@
 import React from 'react';
+import { Link } from "react-router-dom";
+
 
 interface ItemProps {
   item: any;
 }
 
-const Item: React.FC<ItemProps> = ({ item }) => (
+const Item: React.FC<ItemProps> = ({ item }) => {
+  console.log("aaaa" + item);
+  return (
   <div className="column is-one-third">
     <div className="card">
       <div className="card-image">
@@ -20,12 +24,15 @@ const Item: React.FC<ItemProps> = ({ item }) => (
         </div>
         <div className="content">
           <span className="price">М</span>&nbsp;&nbsp;{item.price}円(税抜)
+          <Link to={`/item/${item.id}`}>
+                <button>detail</button>
+          </Link>
           {/* <br /> */}
           {/* <span className="price">Ｌ</span>&nbsp;&nbsp;{item.priceL}円(税抜) */}
         </div>
       </div>
     </div>
   </div>
-);
+)};
 
 export default Item;
