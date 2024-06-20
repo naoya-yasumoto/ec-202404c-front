@@ -1,51 +1,63 @@
-import React, { useState, FormEvent } from 'react';
+import React from 'react';
 import axios from 'axios';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from '../utils/loginSchema';
+
+interface SignUpForm {
+    
+    email: string,
+    password: string,
+    postcode: number
+  }
 
 const Login: React.FC = () => {
-    const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [message, setMessage] = useState<string>('');
-    const [token, setToken] = useState<string>('');
+    const { register, handleSubmit, formState: { errors } } 
+    = useForm<SignUpForm>({mode:"onBlur", resolver: zodResolver(loginSchema)});
+  
+  
 
-    const handleLogin = async (event: FormEvent) => {
-        event.preventDefault();
-        try {
-            const response = await axios.post('http://localhost:8080/ec-202404c/users', { username, password });
-            setToken(response.data);
-            setMessage('Login successful!');
-        } catch (error) {
-            setMessage('Login failed.');
-        }
+  const onSubmit = async (data: SignUpForm) => {
+    
+
+    // 結合したフィールドを含むオブジェクトを作成
+    const formData = {
+      email: data.email,
+      password: data.password,
+      
+      
+      
     };
+    console.log(formData);
+    //ここにjson送信を入れる
+    const response = await axios.post('http://192.168.16.133:8080/ec-202404c/auth/login', formData);
+    console.log(response);
+  };
+  
+  
 
-    return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleLogin}>
-                <div>
-                    <label>Username: </label>
-                    <input 
-                        type="text" 
-                        value={username} 
-                        onChange={(e) => setUsername(e.target.value)} 
-                        required 
-                    />
-                </div>
-                <div>
-                    <label>Password: </label>
-                    <input 
-                        type="password" 
-                        value={password} 
-                        onChange={(e) => setPassword(e.target.value)} 
-                        required 
-                    />
-                </div>
-                <button type="submit">Login</button>
-            </form>
-            {message && <p>{message}</p>}
-            {token && <p>Token: {token}</p>}
-        </div>
-    );
+  return (
+    <div className="form-container">
+      <h1>登録フォーム</h1>
+      <hr />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        
+
+
+        <label htmlFor='email'>メールアドレス</label>
+        <input type='email' id='email' {...register("email")}></input>
+        <p>{errors.email && errors.email?.message}</p><br />
+        
+        <label htmlFor='password'>パスワード</label>
+        <input type='password' id='password' {...register("password")}></input>
+        <p>{errors.password && errors.password?.message}</p><br />       
+        
+
+        <button type='submit'>登録</button><button type='reset'>キャンセル</button>
+      </form>
+      
+    </div>
+  )
 };
 
 export default Login;

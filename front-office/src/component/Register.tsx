@@ -4,7 +4,9 @@ import { useForm, Controller } from "react-hook-form";
 import MySelect from "./MySelect";
 import { prefecturesOptions } from "../utils/prefectures";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { validationSchema } from "../utils/validationSchema";
+import { validationSchema } from '../utils/validationSchema';
+import { useNavigate } from "react-router-dom";
+
 
 interface SignUpForm {
   lastName: string;
@@ -17,6 +19,8 @@ interface SignUpForm {
   address: string;
   tel: string;
 }
+
+  
 
 const Register: React.FC = () => {
   const {
@@ -32,6 +36,11 @@ const Register: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
 
+
+  const navigate = useNavigate();
+  
+
+
   const onSubmit = async (data: SignUpForm) => {
     const combinedName = `${data.lastName} ${data.firstName}`;
 
@@ -41,18 +50,30 @@ const Register: React.FC = () => {
       email: data.email,
       password: data.password,
       zipcode: data.postcode,
-      prefectures: data.prefectures,
+      prefecture: data.prefectures,
       municipalities: data.municipalities,
       address: data.address,
-      tel: data.tel,
+      telephone: data.tel
     };
     console.log(formData);
-    //ここにjson送信を入れる
-    const response = await axios.post(
-      "http://192.168.16.175:8080/ec-202404c/users/register",
-      formData
-    );
-    console.log(response);
+
+    try {
+      const response = await axios.post('http://192.168.16.133:8080/ec-202404c/users/register', formData);
+      if(response.status === 200){
+          navigate('/login');
+         }
+      console.log('Employee data:', response.data);
+    } catch (error:any) {
+      console.log("catch:" + error.response.status);
+      if (error.response && error.response.status >= 500) {
+        // サーバーエラーの場合
+        console.log("500:" + error.response.status);
+      } else {
+        // その他のエラーの場合は適切な処理を行う
+        console.error('An error occurred:', error);
+      }
+    }
+    
   };
 
   const fetchAddress = async (postcode: number) => {
