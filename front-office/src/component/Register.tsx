@@ -72,8 +72,6 @@ const Register: React.FC = () => {
         console.error('An error occurred:', error);
       }
     }
-    
-
   };
   
   const fetchAddress = async (postcode: number) => {
