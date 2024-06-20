@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const phoneRegex = /^0\d{9,10}$/;
+
 export const validationSchema = z.object({
   firstName: z.string().min(1,{message: "性は必須です"}),
   lastName: z.string().min(1,{message: "名は必須です"}),
@@ -9,5 +11,5 @@ export const validationSchema = z.object({
   prefectures: z.string().refine(value => {return value !== '---';},{message: "都道府県を選択してください"}).transform(value => (value === '' ? undefined : value)),
   municipalities: z.string().min(1,{message: "市区町村は必須です"}),
   address: z.string().min(1,{message: "住所は必須です"}),
-  tel: z.coerce.number().min(1,{message: "電話番号は必須です"}),
+  tel: z.string().min(1,{message: "電話番号は必須です"}).regex(phoneRegex,{message: "半角数字で入力してください"}),
 });

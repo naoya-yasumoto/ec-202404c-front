@@ -6,37 +6,39 @@ import { prefecturesOptions } from '../utils/prefectures';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validationSchema } from '../utils/validationSchema';
 
-interface SignUpForm {
-    lastName: string,
-    firstName: string,
+interface OrderfirmForm {
+    orderName: string,
     email: string,
-    password: string,
     postcode: number,
     prefectures: string,
     municipalities: string,
     address: string,
-    tel: string;
+    telephone: number,
+    deliveryDate: Date,
+    delivaryTime: string,
+    peymentMethod: string;
   }
 
-const Register: React.FC = () => {
+const Order_cconfirm: React.FC = () => {
     const { register, handleSubmit, control, setValue, watch, formState: { errors } } 
-    = useForm<SignUpForm>({mode:"onBlur", resolver: zodResolver(validationSchema)});
+    = useForm<OrderfirmForm>({mode:"onBlur", resolver: zodResolver(validationSchema)});
   const [loading, setLoading] = useState(false);
   
 
-  const onSubmit = async (data: SignUpForm) => {
-    const combinedName = `${data.lastName} ${data.firstName}`;
+  const onSubmit = async (data: OrderfirmForm) => {
+    
 
     // 結合したフィールドを含むオブジェクトを作成
     const formData = {
-      name: combinedName,
+      name: data.orderName,
       email: data.email,
-      password: data.password,
       zipcode: data.postcode,
       prefectures: data.prefectures,
       municipalities: data.municipalities,
       address: data.address,
-      tel: data.tel
+      telephone: data.telephone,
+      deliveryDate: data.deliveryDate,
+      peymentMethod: data.peymentMethod
     };
     console.log(formData);
     //ここにjson送信を入れる
@@ -67,24 +69,18 @@ const Register: React.FC = () => {
 
   return (
     <div className="form-container">
-      <h1>登録フォーム</h1>
+      <h1>注文確認画面</h1>
       <hr />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor='lastName'>性</label>
-        <input type='text' id='lastName' {...register("lastName")}></input>
-        <label htmlFor='firstName'>名</label>
-        <input type='text' id='firstName' {...register("firstName")}></input><br />
-        <p>{errors.lastName && errors.lastName?.message}</p>
-        <p>{errors.firstName && errors.firstName?.message}</p><br />
+        <label htmlFor='orderName'>お名前</label>
+        <input type='text' id='orderName' {...register("orderName")}></input><br />
+        <p>{errors.orderName && errors.orderName?.message}</p><br />
 
 
         <label htmlFor='email'>メールアドレス</label>
         <input type='email' id='email' {...register("email")}></input>
         <p>{errors.email && errors.email?.message}</p><br />
-        
-        <label htmlFor='password'>パスワード</label>
-        <input type='password' id='password' {...register("password")}></input>
-        <p>{errors.password && errors.password?.message}</p><br />
+
 
         <label htmlFor='postcode'>郵便番号</label>
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -107,7 +103,7 @@ const Register: React.FC = () => {
           />
         )}
       />
-        {/* <p>{errors.prefectures && errors.prefectures?.message}</p> */}
+        <p>{errors.prefectures && errors.prefectures?.message}</p>
         <br />
 
         <label htmlFor='municipalities'>市区町村</label>
@@ -119,8 +115,23 @@ const Register: React.FC = () => {
         <p>{errors.address && errors.address?.message}</p><br />
 
         <label htmlFor='tel'>電話番号</label>
-        <input type='tel' id='tel' inputMode='numeric' {...register("tel")} maxLength={11} ></input>
-        <p>{errors.tel && errors.tel?.message}</p><br />
+        <input type='tel' id='tel' inputMode='numeric' {...register("telephone")} maxLength={11} ></input>
+        <p>{errors.telephone && errors.telephone?.message}</p><br />
+
+        <label htmlFor='tel'>配達日時</label>
+        <input type='date' id='deliveryDate'  {...register("deliveryDate")}  ></input><br />
+        
+        {/* selectに変更 */}
+        <input type='tel' id='delivaryTime' {...register("delivaryTime")} ></input>
+        <p>{errors.deliveryDate && errors.deliveryDate?.message}</p><br />
+        <p>{errors.delivaryTime && errors.delivaryTime?.message}</p><br />
+
+        {/* ラジオボタンのまま */}
+        <label htmlFor='tel'>お支払方法</label>
+        <input type='tel' id='peymentMethod'  {...register("peymentMethod")}  ></input>
+        <p>{errors.peymentMethod && errors.peymentMethod?.message}</p><br />
+
+
 
         <button type='submit'>登録</button><button type='reset'>キャンセル</button>
       </form>
@@ -129,4 +140,4 @@ const Register: React.FC = () => {
   )
 };
 
-export default Register;
+export default Order_cconfirm;
