@@ -5,7 +5,17 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        poiret: ['Poiret One', 'sans-serif'],
+      },
+      fontSize: {
+        '3xl': '2.2rem', // カスタムフォントサイズ
+      },
+      fontWeight: {
+        'extra-bold': '600', // 太いフォントの重さを追加
+      },
+    },
   },
   plugins: [require('daisyui'),],
 }

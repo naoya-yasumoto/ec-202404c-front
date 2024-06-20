@@ -20,7 +20,7 @@ const ItemList: React.FC = () => {
 
   return (
     <div style={{width:"100%"}}>
-      <div className="container">
+      <div>
         <Navbar />
         <SearchForm />
         <div className="columns is-multiline is-centered">
