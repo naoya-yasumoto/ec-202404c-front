@@ -3,43 +3,44 @@ import axios from 'axios';
 import Navbar from '../components/Navbar';
 
 const Cart: React.FC = () => {
-  // const [cartItems, setCartItems] = useState<any[]>([]);  
+  const [cartItems, setCartItems] = useState<any[]>([]);  
 
-  const cartItems = [
-    {
-      id: 1,
-      name: 'じゃがバターベーコン',
-      size: 'L',
-      price: 2380,
-      quantity: 1,
-      imagePath: '../static/img_pizza/1.jpg',
-      subtotal: 3280,
-    },
-    {
-      id: 2,
-      name: 'じゃがバターベーコン',
-      size: 'L',
-      price: 2380,
-      quantity: 1,
-      imagePath: '../static/img_pizza/1.jpg',
-      subtotal: 3280,
-    },
-    {
-      id: 3,
-      name: 'じゃがバターベーコン',
-      size: 'L',
-      price: 2380,
-      quantity: 1,
-      imagePath: '../static/img_pizza/1.jpg',
-      subtotal: 3280,
-    },
-  ];
+  // const cartItems = [
+  //   {
+  //     id: 1,
+  //     name: 'じゃがバターベーコン',
+  //     size: 'L',
+  //     price: 2380,
+  //     quantity: 1,
+  //     imagePath: '../static/img_pizza/1.jpg',
+  //     subtotal: 3280,
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'じゃがバターベーコン',
+  //     size: 'L',
+  //     price: 2380,
+  //     quantity: 1,
+  //     imagePath: '../static/img_pizza/1.jpg',
+  //     subtotal: 3280,
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'じゃがバターベーコン',
+  //     size: 'L',
+  //     price: 2380,
+  //     quantity: 1,
+  //     imagePath: '../static/img_pizza/1.jpg',
+  //     subtotal: 3280,
+  //   },
+  // ];
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const response = await axios.get('/api/cart'); // 仮のAPIエンドポイント
-        // setCartItems(response.data);
+        const response = await axios.get('http://192.168.16.175:8080/ec-202404c/cart/1'); // 仮のAPIエンドポイント
+        setCartItems(response.data);
+        // console.log(response.data.itemList);
       } catch (error) {
         console.error('Error fetching cart items:', error);
       }
@@ -47,6 +48,10 @@ const Cart: React.FC = () => {
 
     fetchCartItems();
   }, []);
+
+  if (!cartItems || cartItems.length === 0) {
+    return <div>Loading or no items in cart...</div>;
+  }
 
   return (
     <div className="container">
@@ -62,24 +67,37 @@ const Cart: React.FC = () => {
               <th></th>
             </tr>
           </thead>
+          {/* {cartItems.itemList[1]}
+          <ul>
+        {cartItems.itemList.map((cartItem, index) => (
+          <li key={index}>
+            <h3>Item ID: {cartItem.item.id}</h3>
+            <p>Name: {cartItem.item.name}</p>
+            <p>Description: {cartItem.item.description}</p>
+            <p>Price: {cartItem.item.price}</p>
+            <p>Quantity: {cartItem.quantity}</p>
+            <p>Size: {cartItem.size}</p>
+          </li>
+        ))}
+      </ul> */}
           <tbody>
-            {cartItems.map((item) => (
-              <tr key={item.id}>
+           {cartItems.itemList.map((cartItem) => (
+              <tr key={cartItem.item.id}>
                 <td>
                   <div className="has-text-centered">
                     <figure className="image is-128x128">
-                      <img src={item.imagePath} alt={item.name} />
+                      <img src={"http://192.168.16.175:9090/img/"+cartItem.item.imagePath} alt={cartItem.item.name} />
                     </figure>
-                    {item.name}
+                    {cartItem.item.name}
                   </div>
                 </td>
                 <td className="has-text-centered">
-                  <span className="price">&nbsp;{item.size}</span>&nbsp;&nbsp;{item.price}円&nbsp;&nbsp;{item.quantity}個
+                  <span className="price">&nbsp;{cartItem.item.size}</span>&nbsp;&nbsp;{cartItem.item.price}円&nbsp;&nbsp;{cartItem.item.quantity}個
                 </td>
                 <td className="has-text-centered">
-                  {item.subtotal}円
+                  {cartItem.item.subtotal}円
                 </td>
-                <td className="has-text-centered">
+                <td className="has-text-centered"> 
                   <button className="button is-primary">削除</button>
                 </td>
               </tr>
