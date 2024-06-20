@@ -105,7 +105,7 @@ const ItemDetail: React.FC = () => {
           <Label>サイズ</Label>
           <RadioLabel>
             <input type="radio" name="size" defaultChecked />
-            <span>&nbsp;М&nbsp;</span>&nbsp;&nbsp;1,380円(税抜)
+            <span>&nbsp;М&nbsp;</span>&nbsp;&nbsp;円(税抜)
           </RadioLabel>
           <RadioLabel>
             <input type="radio" name="size" />
