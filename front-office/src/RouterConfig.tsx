@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import App from './App.tsx'
 import Register from './component/Register.tsx';
-import Register2 from './component/Register2.tsx';
 import Login from './component/Login.tsx';
 import { validationSchema } from "./utils/validationSchema.ts";
 
@@ -13,7 +12,6 @@ export const RouterConfig = () => {
                     <Routes>
                         <Route path='/' element={<App/>} />
                         <Route path="/register" element={<Register />} />
-                        <Route path="/register2" element={<Register2 />} />
                         <Route path="/login" element={<Login />} />
                         {
                         
