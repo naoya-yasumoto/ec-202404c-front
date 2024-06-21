@@ -1,11 +1,10 @@
-import { useEffect,useState } from "react";
-
 
 
   interface MySelectProps {
     value: string;
     onChange: (value: string) => void;
     options: { value: string; label: string }[];
+    error?: string;
   }
 
   
@@ -16,6 +15,11 @@ import { useEffect,useState } from "react";
     // useEffect(() => {
     //   setSelected('---');
     // },[]);
+
+    console.log("value:" + value);
+    console.log("onChange:" + onChange);
+    
+    
 
     return (      
       <div>
@@ -28,6 +32,7 @@ import { useEffect,useState } from "react";
         ))
         }
       </select>
+     
     </div>
     );
   }

@@ -5,6 +5,7 @@ import MySelect from "./MySelect";
 import { prefecturesOptions } from "../utils/prefectures";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validationSchema } from '../utils/validationSchema';
+import { HOST_IP } from '../config';
 import { useNavigate } from "react-router-dom";
 
 
@@ -32,7 +33,7 @@ const Register: React.FC = () => {
     formState: { errors },
   } = useForm<SignUpForm>({
     mode: "onBlur",
-    resolver: zodResolver(validationSchema),
+    // resolver: zodResolver(validationSchema),
   });
   const [loading, setLoading] = useState(false);
 
@@ -43,6 +44,10 @@ const Register: React.FC = () => {
 
   const onSubmit = async (data: SignUpForm) => {
     const combinedName = `${data.lastName} ${data.firstName}`;
+    console.log("combinedName:" + combinedName);
+    console.log("data.prefectures:" + data.prefectures);
+    
+    
 
     // 結合したフィールドを含むオブジェクトを作成
     const formData = {
@@ -55,11 +60,12 @@ const Register: React.FC = () => {
       address: data.address,
       telephone: data.tel
     };
+    
+    
     console.log(formData);
-
     try {
-      const response = await axios.post('http://192.168.16.133:8080/ec-202404c/users/register', formData);
-      if(response.status === 200){
+      const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/users/register`, formData);
+      if(response.status === 201){
           navigate('/login');
          }
       console.log('Employee data:', response.data);
@@ -148,6 +154,7 @@ const Register: React.FC = () => {
               options={prefecturesOptions}
             />
           )}
+          
         />
         
         {/* <p>{errors.prefectures && errors.prefectures?.message}</p>  */}
