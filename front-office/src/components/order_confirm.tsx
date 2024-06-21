@@ -3,10 +3,9 @@ import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import MySelect from "./MySelect";
 import { prefecturesOptions } from "../utils/prefectures";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { orderSchema } from "../utils/orderSchema";
 import { times } from "../utils/times";
-import { useNavigate } from "react-router-dom";
+import { HOST_IP } from "../config";
+
 
 interface OrderfirmForm {
   orderName: string;
@@ -21,9 +20,7 @@ interface OrderfirmForm {
   paymentMethod: string;
 }
 
-const Order_cconfirm: React.FC = () => {
-
-  const navigate = useNavigate();
+const Order_confirm: React.FC = () => {
 
   const {
     register,
@@ -38,7 +35,6 @@ const Order_cconfirm: React.FC = () => {
     
   });
   const [loading, setLoading] = useState(false);
-  const [paymentValue, setPaymentValue] = useState("");
 
   const onSubmit = async (data: OrderfirmForm) => {
     
@@ -71,7 +67,7 @@ const Order_cconfirm: React.FC = () => {
     console.log(formData);
     //ここにjson送信を入れる
     const response = await axios.post(
-      "http://192.168.16.175:8080/ec-202404c/confirm",
+      `http://${HOST_IP}192.168.16.175:8080/ec-202404c/confirm`,
       formData
     );
     console.log("rsponse" + response);
@@ -253,4 +249,4 @@ const Order_cconfirm: React.FC = () => {
   );
 };
 
-export default Order_cconfirm;
+export default Order_confirm;

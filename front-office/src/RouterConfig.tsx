@@ -3,10 +3,8 @@ import Register from './components/Register.tsx';
 import Login from './components/Login.tsx';
 import ItemList from './pages/ItemList.tsx';
 import ItemDetail from './pages/ItemDetail.tsx';
-import { validationSchema } from "./utils/validationSchema.ts";
 import Navbar from './components/layout/Navbar.tsx';
-import Order_cconfirm from './components/order_confirm.tsx';
-
+import Order_confirm from './components/order_confirm.tsx';
 export const RouterConfig = () => {
     return (
         <>
@@ -17,7 +15,7 @@ export const RouterConfig = () => {
                         <Route path="/login" element={<Login />} />
                         <Route path="/item-list/:type" element={<ItemList />} />
                         <Route path="/item/:id" element={<ItemDetail />} />
-                        <Route path="/order_confirm" element={<Order_cconfirm />} />
+                        <Route path="/order_confirm" element={<Order_confirm />} />
                     </Routes>
                 </BrowserRouter>
         </>
