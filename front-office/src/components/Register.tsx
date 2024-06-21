@@ -3,8 +3,11 @@ import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import MySelect from "./MySelect";
 import { prefecturesOptions } from "../utils/prefectures";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { validationSchema } from '../utils/validationSchema';
 import { HOST_IP } from '../config';
 import { useNavigate } from "react-router-dom";
+
 
 interface SignUpForm {
   lastName: string;
@@ -28,9 +31,11 @@ const Register: React.FC = () => {
     formState: { errors },
   } = useForm<SignUpForm>({
     mode: "onBlur",
+    resolver: zodResolver(validationSchema),
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
 
   const onSubmit = async (data: SignUpForm) => {
     const combinedName = `${data.lastName} ${data.firstName}`;
@@ -150,7 +155,6 @@ const Register: React.FC = () => {
         <input type="text" id="address" {...register("address")} />
         <p className="error-message">{errors.address && errors.address.message}</p>
         <br />
-
 
         <label htmlFor="tel">電話番号</label>
         <input
