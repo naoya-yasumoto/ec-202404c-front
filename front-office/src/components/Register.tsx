@@ -3,11 +3,8 @@ import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import MySelect from "./MySelect";
 import { prefecturesOptions } from "../utils/prefectures";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { validationSchema } from '../utils/validationSchema';
 import { HOST_IP } from '../config';
 import { useNavigate } from "react-router-dom";
-
 
 interface SignUpForm {
   lastName: string;
@@ -21,8 +18,6 @@ interface SignUpForm {
   tel: string;
 }
 
-  
-
 const Register: React.FC = () => {
   const {
     register,
@@ -33,23 +28,13 @@ const Register: React.FC = () => {
     formState: { errors },
   } = useForm<SignUpForm>({
     mode: "onBlur",
-    // resolver: zodResolver(validationSchema),
   });
   const [loading, setLoading] = useState(false);
-
-
   const navigate = useNavigate();
-  
-
 
   const onSubmit = async (data: SignUpForm) => {
     const combinedName = `${data.lastName} ${data.firstName}`;
-    console.log("combinedName:" + combinedName);
-    console.log("data.prefectures:" + data.prefectures);
-    
-    
 
-    // 結合したフィールドを含むオブジェクトを作成
     const formData = {
       name: combinedName,
       email: data.email,
@@ -60,26 +45,22 @@ const Register: React.FC = () => {
       address: data.address,
       telephone: data.tel
     };
-    
-    
-    console.log(formData);
+
     try {
       const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/users/register`, formData);
-      if(response.status === 201){
-          navigate('/login');
-         }
-      console.log('Employee data:', response.data);
+      if (response.status === 201) {
+        navigate('/login');
+      }
+      console.log('User data:', response.data);
     } catch (error:any) {
-      console.log("catch:" + error.response.status);
-      if (error.response && error.response.status >= 500) {
-        // サーバーエラーの場合
-        console.log("500:" + error.response.status);
+      if (error.response && error.response.status === 409) {
+        alert("そのメールアドレスはすでに使われています。");
+      } else if (error.response && error.response.status >= 500) {
+        console.error('サーバーエラー:', error);
       } else {
-        // その他のエラーの場合は適切な処理を行う
         console.error('An error occurred:', error);
       }
     }
-    
   };
 
   const fetchAddress = async (postcode: number) => {
@@ -111,22 +92,21 @@ const Register: React.FC = () => {
       <hr />
       <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="lastName">姓</label>
-        <input type="text" id="lastName" {...register("lastName")}></input>
+        <input type="text" id="lastName" {...register("lastName")} />
+        <p className="error-message">{errors.lastName && errors.lastName.message}</p>
         <label htmlFor="firstName">名</label>
-        <input type="text" id="firstName" {...register("firstName")}></input>
-        <br />
-        <p>{errors.lastName && errors.lastName?.message}</p>
-        <p>{errors.firstName && errors.firstName?.message}</p>
+        <input type="text" id="firstName" {...register("firstName")} />
+        <p className="error-message">{errors.firstName && errors.firstName.message}</p>
         <br />
 
         <label htmlFor="email">メールアドレス</label>
-        <input type="email" id="email" {...register("email")}></input>
-        <p>{errors.email && errors.email?.message}</p>
+        <input type="email" id="email" {...register("email")} />
+        <p className="error-message">{errors.email && errors.email.message}</p>
         <br />
 
         <label htmlFor="password">パスワード</label>
-        <input type="password" id="password" {...register("password")}></input>
-        <p>{errors.password && errors.password?.message}</p>
+        <input type="password" id="password" {...register("password")} />
+        <p className="error-message">{errors.password && errors.password.message}</p>
         <br />
 
         <label htmlFor="postcode">郵便番号</label>
@@ -140,7 +120,7 @@ const Register: React.FC = () => {
             {loading ? "取得中..." : "住所取得"}
           </button>
         </div>
-        <p>{errors.postcode && errors.postcode?.message}</p>
+        <p className="error-message">{errors.postcode && errors.postcode.message}</p>
         <br />
 
         <label htmlFor="prefectures">都道府県</label>
@@ -154,9 +134,7 @@ const Register: React.FC = () => {
               options={prefecturesOptions}
             />
           )}
-          
         />
-       
         <br />
 
         <label htmlFor="municipalities">市区町村</label>
@@ -164,14 +142,15 @@ const Register: React.FC = () => {
           type="text"
           id="municipalities"
           {...register("municipalities")}
-        ></input>
-        <p>{errors.municipalities && errors.municipalities?.message}</p>
+        />
+        <p className="error-message">{errors.municipalities && errors.municipalities.message}</p>
         <br />
 
         <label htmlFor="address">住所</label>
-        <input type="text" id="address" {...register("address")}></input>
-        <p>{errors.address && errors.address?.message}</p>
+        <input type="text" id="address" {...register("address")} />
+        <p className="error-message">{errors.address && errors.address.message}</p>
         <br />
+
 
         <label htmlFor="tel">電話番号</label>
         <input
