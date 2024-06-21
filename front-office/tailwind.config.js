@@ -13,7 +13,7 @@ export default {
         '3xl': '2.2rem', // カスタムフォントサイズ
       },
       fontWeight: {
-        'extra-bold': '600', // 太いフォントの重さを追加
+        'extrabold': '600', // 太いフォントの重さを追加
       },
     },
   },
