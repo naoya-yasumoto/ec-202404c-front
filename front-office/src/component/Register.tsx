@@ -19,12 +19,14 @@ interface SignUpForm {
     tel: number;
   }
 
-  const navigate = useNavigate();
+  
 
 const Register: React.FC = () => {
     const { register, handleSubmit, control, setValue, watch, formState: { errors } } 
     = useForm<SignUpForm>({mode:"onBlur", resolver: zodResolver(validationSchema)});
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
   
 
   const onSubmit = async (data: SignUpForm) => {

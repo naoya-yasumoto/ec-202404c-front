@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from '../utils/loginSchema';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 interface SignUpForm {
     
@@ -15,7 +16,7 @@ const Login: React.FC = () => {
     const { register, handleSubmit, formState: { errors } } 
     = useForm<SignUpForm>({mode:"onBlur", resolver: zodResolver(loginSchema)});
   
-  
+    const navigate = useNavigate();
 
   const onSubmit = async (data: SignUpForm) => {
     
@@ -31,7 +32,14 @@ const Login: React.FC = () => {
     console.log(formData);
     //ここにjson送信を入れる
     const response = await axios.post('http://192.168.16.175:8080/ec-202404c/auth/login', formData);
+    // 成功
+    if(response.status === 200){
+      navigate('/item-list/set');
+    }else{
+      <p>エラーが発生しました！</p>
+    }
     console.log(response);
+    
   };
   
   
