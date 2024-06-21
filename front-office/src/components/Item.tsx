@@ -1,15 +1,18 @@
 import React from 'react';
+import { Link } from "react-router-dom";
+import { HOST_IP } from '../config';
 
 interface ItemProps {
   item: any;
 }
 
-const Item: React.FC<ItemProps> = ({ item }) => (
+const Item: React.FC<ItemProps> = ({ item }) => {
+  return (
   <div className="column is-one-third">
     <div className="card">
       <div className="card-image">
-        <figure className="image is-4by3">
-          <img src={"http://192.168.16.130:9090/img/jaket11.png"} alt={item.name} />
+        <figure className="image " style={{maxWidth:"150px"}}>
+          <img src={`http://${HOST_IP}:9090/img/`+item.imagePath}alt={item.name} />
         </figure>
       </div>
       <div className="card-content">
@@ -20,12 +23,15 @@ const Item: React.FC<ItemProps> = ({ item }) => (
         </div>
         <div className="content">
           <span className="price">М</span>&nbsp;&nbsp;{item.price}円(税抜)
+          <Link to={`/item/${item.id}`}>
+                <button>detail</button>
+          </Link>
           {/* <br /> */}
           {/* <span className="price">Ｌ</span>&nbsp;&nbsp;{item.priceL}円(税抜) */}
         </div>
       </div>
     </div>
   </div>
-);
+)};
 
 export default Item;

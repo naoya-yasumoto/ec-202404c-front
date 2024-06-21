@@ -2,4 +2,7 @@ FROM node:18
 
 WORKDIR /app
 
+ARG HOST_IP
+ENV VITE_HOST_IP=${HOST_IP}
+
 COPY . /app

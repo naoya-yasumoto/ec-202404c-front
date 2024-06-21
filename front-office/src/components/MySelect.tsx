@@ -7,17 +7,32 @@
     error?: string;
   }
 
-  const MySelect = ({ value, onChange, options, error }: MySelectProps) => {
-    return (
-        <div>
+  
+
+  const MySelect = ({ value, onChange, options }: MySelectProps) => {
+    // const [selected,setSelected] = useState('');
+
+    // useEffect(() => {
+    //   setSelected('---');
+    // },[]);
+
+    console.log("value:" + value);
+    console.log("onChange:" + onChange);
+    
+    
+
+    return (      
+      <div>
       <select value={value} onChange={(e) => onChange(e.target.value)}>
-        {options.map((option) => (
+        {
+        options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
-        ))}
+        ))
+        }
       </select>
-      {error && <p>{error}</p>}
+     
     </div>
     );
   }
