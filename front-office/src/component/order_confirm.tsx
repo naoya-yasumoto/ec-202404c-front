@@ -18,7 +18,7 @@ interface OrderfirmForm {
   telephone: number;
   deliveryDate: Date;
   delivaryTime: string;
-  peymentMethod: string;
+  paymentMethod: string;
 }
 
 const Order_cconfirm: React.FC = () => {
@@ -38,6 +38,7 @@ const Order_cconfirm: React.FC = () => {
     
   });
   const [loading, setLoading] = useState(false);
+  const [paymentValue, setPaymentValue] = useState("");
 
   const onSubmit = async (data: OrderfirmForm) => {
     
@@ -62,7 +63,7 @@ const Order_cconfirm: React.FC = () => {
       address: data.address,
       telephone: data.telephone,
       deliveryDate: deliveryDate,
-      peymentMethod: data.peymentMethod,
+      paymentMethodId: data.paymentMethod,
     };
     // console.log(data.prefectures);
     // console.log(data);
@@ -70,7 +71,7 @@ const Order_cconfirm: React.FC = () => {
     console.log(formData);
     //ここにjson送信を入れる
     const response = await axios.post(
-      "http://192.168.16.175:8080/ec-202404c/users/register",
+      "http://192.168.16.175:8080/ec-202404c/confirm",
       formData
     );
     console.log("rsponse" + response);
@@ -198,55 +199,52 @@ const Order_cconfirm: React.FC = () => {
 
         {/* ラジオボタンのまま */}
         <label>お支払方法</label>
-
         <div>
-          <div>
-            <input
-              type="radio"
-              name="peymentMethod"
-              value="visa"
-              id="answer_visa"
-            />
-            <label htmlFor="answer_visa">
+        <Controller
+          name="paymentMethod"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <>
+
+            {/* クレジット支払い */}
               <div>
-                <img src="/images/payment-icons/visa.svg" alt="VISA" />
-                <div>
-                  Card Ending <span> 6475</span>
-                </div>
+                <input
+                  type="radio"
+                  {...field}
+                  value="2"
+                  id="answer_visa"
+                />
+                <label htmlFor="answer_visa">
+                  <div>
+                    <img src="/images/payment-icons/visa.svg" alt="VISA" />
+                    <div>
+                      Card Ending <span> 6475</span>
+                    </div>
+                  </div>
+                </label>
               </div>
-            </label>
-          </div>
-          <div>
-            <input
-              type="radio"
-              name="peymentMethod"
-              value="master-card"
-              id="answer_master-card"
-            />
-            <label htmlFor="answer_master-card">
+              
+            {/* 代金引換 */}
               <div>
-                <img src="/images/payment-icons/master-card.svg" alt="VISA" />
-                <div>
-                  Card Ending <span> 4743</span>
-                </div>
+                <input
+                  type="radio"
+                  {...field}
+                  value="1"
+                  id="answer_paypal"
+                />
+                <label htmlFor="answer_paypal">
+                  <div>
+                    <img src="/images/payment-icons/paypal.svg" alt="PayPal" />
+                    <div>代金引換</div>
+                  </div>
+                </label>
               </div>
-            </label>
-          </div>
-          <div>
-            <input
-              type="radio"
-              name="peymentMethod"
-              value="paypal"
-              id="answer_paypal"
-            />
-            <label htmlFor="answer_paypal">
-              <div>
-                <img src="/images/payment-icons/paypal.svg" alt="VISA" />
-                <div>Paypal</div>
-              </div>
-            </label>
-          </div>
-        </div>
+            </>
+          )}
+        />
+      </div>
+          
 
         <button type="submit">登録</button>
         <button type="reset">キャンセル</button>
