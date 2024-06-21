@@ -62,7 +62,7 @@ const CreditCardInfo: React.FC = () => {
                 checked={paymentMethod === 'paypal'}
                 onChange={handlePaymentMethodChange}
               />
-              <label className="text-sm font-medium ml-4">PayPal</label>
+              <label className="text-sm font-medium ml-4">代金引換</label>
             </div>
             <div className="border-t">
               <div className="flex items-center px-8 py-5">
