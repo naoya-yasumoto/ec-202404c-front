@@ -1,22 +1,25 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import App from "./App.tsx";
-import Register from "./component/Register.tsx";
-import Login from "./component/Login.tsx";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Register from './components/Register.tsx';
+import Login from './components/Login.tsx';
+import ItemList from './pages/ItemList.tsx';
+import ItemDetail from './pages/ItemDetail.tsx';
 import { validationSchema } from "./utils/validationSchema.ts";
-import Order_cconfirm from "./component/order_confirm.tsx";
+import Navbar from './components/layout/Navbar.tsx';
+import Order_cconfirm from './components/order_confirm.tsx';
 
 export const RouterConfig = () => {
-  return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/order_confirm" element={<Order_cconfirm />} />
-          {/* <Route path="/room/:room_id" element={<ChatGUI />} /> */}
-        </Routes>
-      </BrowserRouter>
-    </>
-  );
+    return (
+        <>
+                <BrowserRouter>
+                <Navbar />
+                    <Routes>
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/item-list/:type" element={<ItemList />} />
+                        <Route path="/item/:id" element={<ItemDetail />} />
+                        <Route path="/order_confirm" element={<Order_cconfirm />} />
+                    </Routes>
+                </BrowserRouter>
+        </>
+    );
 };

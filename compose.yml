@@ -7,4 +7,6 @@ services:
     volumes:
       # - ./front-office/node_modules:/app/node_modules
       - ./front-office:/app
-    command: yarn dev
+    environment:
+      - HOST_IP=${HOST_IP}
+    command: sh -c "HOST_IP=$(hostname -I | awk '{print $1}') && yarn dev"
