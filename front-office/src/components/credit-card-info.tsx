@@ -1,4 +1,6 @@
+import axios from 'axios';
 import React, { useState } from 'react';
+import { HOST_IP } from 'src/config';
 
 const CreditCardInfo: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState<string>('paypal');
@@ -30,7 +32,7 @@ const CreditCardInfo: React.FC = () => {
     setBillingOption(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // フォーム送信処理
     console.log('Payment Method:', paymentMethod);
@@ -38,7 +40,11 @@ const CreditCardInfo: React.FC = () => {
     console.log('Terms Accepted:', termsAccepted);
     console.log('Billing Option:', billingOption);
 
-    
+    const response = await axios.post(
+      `http://${HOST_IP}192.168.16.175:8080/ec-202404c/confirm`,
+      cardDetails
+    );
+    console.log("rsponse" + response);
   };
 
   return (
