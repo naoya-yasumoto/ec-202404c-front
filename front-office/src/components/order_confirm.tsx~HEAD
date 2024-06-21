@@ -8,8 +8,6 @@ import { orderSchema } from "../utils/orderSchema";
 import { times } from "../utils/times";
 import { useNavigate } from "react-router-dom";
 
-
-
 interface OrderfirmForm {
   orderName: string;
   email: string;
@@ -24,9 +22,12 @@ interface OrderfirmForm {
 }
 
 const Order_cconfirm: React.FC = () => {
+<<<<<<< HEAD:front-office/src/components/order_confirm.tsx
+=======
 
   const navigate = useNavigate();
 
+>>>>>>> e82f61790d1003fcd99f6cf95161b2e54ad90f3a:front-office/src/component/order_confirm.tsx
   const {
     register,
     handleSubmit,
