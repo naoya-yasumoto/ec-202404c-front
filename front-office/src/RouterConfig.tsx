@@ -5,7 +5,7 @@ import ItemList from './pages/ItemList.tsx';
 import Cart from './pages/Cart.tsx';
 import ItemDetail from './pages/ItemDetail.tsx';
 import Navbar from './components/layout/Navbar.tsx';
-import Order_cconfirm from './components/order_confirm.tsx';
+import OrderConfirm from './components/order_confirm.tsx';
 
 export const RouterConfig = () => {
     return (
@@ -19,7 +19,7 @@ export const RouterConfig = () => {
                         {/* <Route path="/item-list" element={<ItemList />} /> */}
                         <Route path="/item-list/:type" element={<ItemList />} />
                         <Route path="/item/:id" element={<ItemDetail />} />
-                        <Route path="/order_confirm" element={<Order_cconfirm />} />
+                        <Route path="/order_confirm" element={<OrderConfirm />} />
                     </Routes>
                 </BrowserRouter>
         </>

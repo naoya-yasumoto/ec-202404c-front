@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import MySelect from "./MySelect";
 import { prefecturesOptions } from "../utils/prefectures";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validationSchema } from "../utils/validationSchema";
-import { times } from "../utils/times";
 import { orderSchema } from "../utils/orderSchema";
 import { times } from "../utils/times";
 import { useNavigate } from "react-router-dom";
+import { HOST_IP } from '../config';
 
 interface OrderfirmForm {
   orderName: string;
@@ -20,10 +20,10 @@ interface OrderfirmForm {
   telephone: number;
   deliveryDate: Date;
   delivaryTime: string;
-  peymentMethod: string;
+  paymentMethod: string;
 }
 
-const Order_cconfirm: React.FC = () => {
+const OrderConfirm: React.FC = () => {
 
   const navigate = useNavigate();
 
@@ -41,9 +41,24 @@ const Order_cconfirm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [paymentValue, setPaymentValue] = useState("");
 
+  const [order, setOrder] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      try {
+        const response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/cart/user/2`);
+        setOrder(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching cart items:', error);
+      }
+    };
+
+    fetchOrder();
+  }, []);
+
   const onSubmit = async (data: OrderfirmForm) => {
     
-    // const date = new Date(data.deliveryDate).setHours(Number.parseInt(data.delivaryTime));
     // `deliveryDate` を Date オブジェクトとして作成
     const deliveryDate = new Date(data.deliveryDate);
 
@@ -56,8 +71,10 @@ const Order_cconfirm: React.FC = () => {
 
     // 結合したフィールドを含むオブジェクトを作成
     const formData = {
-      name: data.orderName,
-      email: data.email,
+      orderId: order.id,
+      userId: 2,
+      destinationName: data.orderName,
+      destinationEmail: data.email,
       zipcode: data.postcode,
       prefecture: data.prefectures,
       municipalities: data.municipalities,
@@ -66,13 +83,11 @@ const Order_cconfirm: React.FC = () => {
       deliveryDate: deliveryDate,
       paymentMethodId: data.paymentMethod,
     };
-    // console.log(data.prefectures);
-    // console.log(data);
     
     console.log(formData);
     //ここにjson送信を入れる
     const response = await axios.post(
-      "http://192.168.16.175:8080/ec-202404c/confirm",
+      "http://192.168.16.175:8080/ec-202404c/order",
       formData
     );
     console.log("rsponse" + response);
@@ -254,4 +269,4 @@ const Order_cconfirm: React.FC = () => {
   );
 };
 
-export default Order_cconfirm;
+export default OrderConfirm;
