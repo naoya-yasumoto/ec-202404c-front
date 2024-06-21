@@ -47,7 +47,7 @@ const Register: React.FC = () => {
     console.log(formData);
     try {
       const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/users/register`, formData);
-      if(response.status === 200){
+      if(response.status === 201){
           navigate('/login');
          }
       console.log('Employee data:', response.data);
