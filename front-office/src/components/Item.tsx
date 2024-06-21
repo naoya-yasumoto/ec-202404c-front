@@ -7,7 +7,6 @@ interface ItemProps {
 }
 
 const Item: React.FC<ItemProps> = ({ item }) => {
-  console.log("aaaa" + item);
   return (
   <div className="column is-one-third">
     <div className="card">

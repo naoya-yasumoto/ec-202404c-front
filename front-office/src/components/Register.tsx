@@ -6,6 +6,7 @@ import { prefecturesOptions } from '../utils/prefectures';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validationSchema } from '../utils/validationSchema';
 import { HOST_IP } from '../config';
+import { useNavigate } from "react-router-dom";
 
 interface SignUpForm {
     lastName: string,
@@ -19,10 +20,14 @@ interface SignUpForm {
     tel: number;
   }
 
+  
+
 const Register: React.FC = () => {
     const { register, handleSubmit, control, setValue, watch, formState: { errors } } 
     = useForm<SignUpForm>({mode:"onBlur", resolver: zodResolver(validationSchema)});
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
   
 
   const onSubmit = async (data: SignUpForm) => {
@@ -40,9 +45,24 @@ const Register: React.FC = () => {
       telephone: data.tel
     };
     console.log(formData);
-    //ここにjson送信を入れる
-    const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/users/register`, formData);
-    console.log(response);
+    try {
+      const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/users/register`, formData);
+      if(response.status === 200){
+          navigate('/login');
+         }
+      console.log('Employee data:', response.data);
+    } catch (error:any) {
+      console.log("catch:" + error.response.status);
+      if (error.response && error.response.status >= 500) {
+        // サーバーエラーの場合
+        console.log("500:" + error.response.status);
+      } else {
+        // その他のエラーの場合は適切な処理を行う
+        console.error('An error occurred:', error);
+      }
+    }
+    
+
   };
   
   const fetchAddress = async (postcode: number) => {
