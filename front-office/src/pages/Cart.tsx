@@ -1,46 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Navbar from '../components/Navbar';
+import { HOST_IP } from '../config';
 
 const Cart: React.FC = () => {
-  const [cartItems, setCartItems] = useState<any[]>([]);  
-
-  // const cartItems = [
-  //   {
-  //     id: 1,
-  //     name: 'じゃがバターベーコン',
-  //     size: 'L',
-  //     price: 2380,
-  //     quantity: 1,
-  //     imagePath: '../static/img_pizza/1.jpg',
-  //     subtotal: 3280,
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'じゃがバターベーコン',
-  //     size: 'L',
-  //     price: 2380,
-  //     quantity: 1,
-  //     imagePath: '../static/img_pizza/1.jpg',
-  //     subtotal: 3280,
-  //   },
-  //   {
-  //     id: 3,
-  //     name: 'じゃがバターベーコン',
-  //     size: 'L',
-  //     price: 2380,
-  //     quantity: 1,
-  //     imagePath: '../static/img_pizza/1.jpg',
-  //     subtotal: 3280,
-  //   },
-  // ];
+  const [cartItems, setCartItems] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const response = await axios.get('http://192.168.16.175:8080/ec-202404c/cart/1'); // 仮のAPIエンドポイント
-        setCartItems(response.data);
-        // console.log(response.data.itemList);
+        const response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/cart/user/2`); // 仮のAPIエンドポイント
+        setCartItems(response.data.itemList);
+        console.log(response.data)
       } catch (error) {
         console.error('Error fetching cart items:', error);
       }
@@ -49,13 +19,27 @@ const Cart: React.FC = () => {
     fetchCartItems();
   }, []);
 
+  const handleDelete = async (orderItemId: number) => {
+    try {
+      await axios.delete(`http://${HOST_IP}:8080/ec-202404c/cart/delete`, {
+        data: {
+          orderItemId: orderItemId,
+          userId: 1
+        }
+      });
+      // Remove item from state after successful deletion
+      setCartItems(prevItems => prevItems.filter(item => item.id !== orderItemId));
+    } catch (error) {
+      console.error('Error deleting cart item:', error);
+    }
+  };
+
   if (!cartItems || cartItems.length === 0) {
     return <div>Loading or no items in cart...</div>;
   }
 
   return (
     <div className="container">
-      <Navbar />
       <h3 className="title has-text-centered">ショッピングカート</h3>
       <div className="table-container">
         <table className="table is-striped is-fullwidth">
@@ -67,38 +51,25 @@ const Cart: React.FC = () => {
               <th></th>
             </tr>
           </thead>
-          {/* {cartItems.itemList[1]}
-          <ul>
-        {cartItems.itemList.map((cartItem, index) => (
-          <li key={index}>
-            <h3>Item ID: {cartItem.item.id}</h3>
-            <p>Name: {cartItem.item.name}</p>
-            <p>Description: {cartItem.item.description}</p>
-            <p>Price: {cartItem.item.price}</p>
-            <p>Quantity: {cartItem.quantity}</p>
-            <p>Size: {cartItem.size}</p>
-          </li>
-        ))}
-      </ul> */}
           <tbody>
-           {cartItems.itemList.map((cartItem) => (
-              <tr key={cartItem.item.id}>
+            {cartItems.map((cartItem, index) => (
+              <tr key={index}>
                 <td>
-                  <div className="has-text-centered">
+                  <div className="has-text-centered" style={{ maxWidth: "200px" }}>
                     <figure className="image is-128x128">
-                      <img src={"http://192.168.16.175:9090/img/"+cartItem.item.imagePath} alt={cartItem.item.name} />
+                      <img src={`http://${HOST_IP}:9090/img/${cartItem.item.imagePath}`} alt={cartItem.item.name} />
                     </figure>
                     {cartItem.item.name}
                   </div>
                 </td>
                 <td className="has-text-centered">
-                  <span className="price">&nbsp;{cartItem.item.size}</span>&nbsp;&nbsp;{cartItem.item.price}円&nbsp;&nbsp;{cartItem.item.quantity}個
+                  <span className="price">&nbsp;{cartItem.size}</span>&nbsp;&nbsp;{cartItem.price}円&nbsp;&nbsp;{cartItem.quantity}個
                 </td>
                 <td className="has-text-centered">
-                  {cartItem.item.subtotal}円
+                  {cartItem.id}円
                 </td>
-                <td className="has-text-centered"> 
-                  <button className="button is-primary">削除</button>
+                <td className="has-text-centered">
+                  <button className="button is-primary" onClick={() => handleDelete(cartItem.id)}>削除</button>
                 </td>
               </tr>
             ))}

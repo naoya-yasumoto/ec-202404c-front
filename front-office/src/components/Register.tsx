@@ -156,8 +156,6 @@ const Register: React.FC = () => {
           )}
           
         />
-        
-        {/* <p>{errors.prefectures && errors.prefectures?.message}</p>  */}
        
         <br />
 
