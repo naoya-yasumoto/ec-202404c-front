@@ -38,6 +38,7 @@ const Navbar: React.FC = () => (
               <BiSearch className="text-white" />
             </button>
           </div>
+
           <select
             id="pricingType"
             name="pricingType"
