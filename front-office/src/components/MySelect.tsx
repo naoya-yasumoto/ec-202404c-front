@@ -11,11 +11,13 @@
     return (
         <div>
       <select value={value} onChange={(e) => onChange(e.target.value)}>
-        {options.map((option) => (
+        {
+        options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
-        ))}
+        ))
+        }
       </select>
       {error && <p>{error}</p>}
     </div>
