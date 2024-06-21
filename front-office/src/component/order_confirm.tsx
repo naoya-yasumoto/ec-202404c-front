@@ -4,25 +4,23 @@ import { useForm, Controller } from "react-hook-form";
 import MySelect from "./MySelect";
 import { prefecturesOptions } from "../utils/prefectures";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { validationSchema } from '../utils/validationSchema';
-import { useNavigate } from "react-router-dom";
+import { validationSchema } from "../utils/validationSchema";
+import { times } from "../utils/times";
 
-
-interface SignUpForm {
-  lastName: string;
-  firstName: string;
+interface OrderfirmForm {
+  orderName: string;
   email: string;
-  password: string;
   postcode: number;
   prefectures: string;
   municipalities: string;
   address: string;
-  tel: string;
+  telephone: number;
+  deliveryDate: Date;
+  delivaryTime: string;
+  peymentMethod: string;
 }
 
-  
-
-const Register: React.FC = () => {
+const Order_cconfirm: React.FC = () => {
   const {
     register,
     handleSubmit,
@@ -30,50 +28,35 @@ const Register: React.FC = () => {
     setValue,
     watch,
     formState: { errors },
-  } = useForm<SignUpForm>({
+  } = useForm<OrderfirmForm>({
     mode: "onBlur",
     resolver: zodResolver(validationSchema),
   });
   const [loading, setLoading] = useState(false);
+  const [date,setDateStatus] = useState("");
 
-
-  const navigate = useNavigate();
-  
-
-
-  const onSubmit = async (data: SignUpForm) => {
-    const combinedName = `${data.lastName} ${data.firstName}`;
+  const onSubmit = async (data: OrderfirmForm) => {
+    useState(data.deliveryDate)
 
     // 結合したフィールドを含むオブジェクトを作成
     const formData = {
-      name: combinedName,
+      name: data.orderName,
       email: data.email,
-      password: data.password,
       zipcode: data.postcode,
       prefecture: data.prefectures,
       municipalities: data.municipalities,
       address: data.address,
-      telephone: data.tel
+      telephone: data.telephone,
+      deliveryDate: data.deliveryDate,
+      peymentMethod: data.peymentMethod,
     };
     console.log(formData);
-
-    try {
-      const response = await axios.post('http://192.168.16.133:8080/ec-202404c/users/register', formData);
-      if(response.status === 200){
-          navigate('/login');
-         }
-      console.log('Employee data:', response.data);
-    } catch (error:any) {
-      console.log("catch:" + error.response.status);
-      if (error.response && error.response.status >= 500) {
-        // サーバーエラーの場合
-        console.log("500:" + error.response.status);
-      } else {
-        // その他のエラーの場合は適切な処理を行う
-        console.error('An error occurred:', error);
-      }
-    }
-    
+    //ここにjson送信を入れる
+    const response = await axios.post(
+      "http://192.168.16.175:8080/ec-202404c/users/register",
+      formData
+    );
+    console.log(response);
   };
 
   const fetchAddress = async (postcode: number) => {
@@ -101,26 +84,18 @@ const Register: React.FC = () => {
 
   return (
     <div className="form-container">
-      <h1>登録フォーム</h1>
+      <h1>注文確認画面</h1>
       <hr />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="lastName">姓</label>
-        <input type="text" id="lastName" {...register("lastName")}></input>
-        <label htmlFor="firstName">名</label>
-        <input type="text" id="firstName" {...register("firstName")}></input>
+        <label htmlFor="orderName">お名前</label>
+        <input type="text" id="orderName" {...register("orderName")}></input>
         <br />
-        <p>{errors.lastName && errors.lastName?.message}</p>
-        <p>{errors.firstName && errors.firstName?.message}</p>
+        <p>{errors.orderName && errors.orderName?.message}</p>
         <br />
 
         <label htmlFor="email">メールアドレス</label>
         <input type="email" id="email" {...register("email")}></input>
         <p>{errors.email && errors.email?.message}</p>
-        <br />
-
-        <label htmlFor="password">パスワード</label>
-        <input type="password" id="password" {...register("password")}></input>
-        <p>{errors.password && errors.password?.message}</p>
         <br />
 
         <label htmlFor="postcode">郵便番号</label>
@@ -149,9 +124,7 @@ const Register: React.FC = () => {
             />
           )}
         />
-        
-        {/* <p>{errors.prefectures && errors.prefectures?.message}</p>  */}
-       
+        <p>{errors.prefectures && errors.prefectures?.message}</p>
         <br />
 
         <label htmlFor="municipalities">市区町村</label>
@@ -173,10 +146,48 @@ const Register: React.FC = () => {
           type="tel"
           id="tel"
           inputMode="numeric"
-          {...register("tel")}
+          {...register("telephone")}
           maxLength={11}
         ></input>
-        <p>{errors.tel && errors.tel?.message}</p>
+        <p>{errors.telephone && errors.telephone?.message}</p>
+        <br />
+
+        <label htmlFor="tel">配達日時</label>
+        <input
+          type="date"
+          id="deliveryDate"
+          {...register("deliveryDate")}
+        ></input>
+        <br />
+        <br />
+
+        {/* selectに変更 */}
+        <label htmlFor="delivaryTime"></label>
+        <Controller
+          name="delivaryTime"
+          control={control}
+          render={({ field }) => (
+            <MySelect
+              value={field.value}
+              onChange={field.onChange}
+              options={times}
+            />
+          )}
+        />
+
+        <p>{errors.deliveryDate && errors.deliveryDate?.message}</p>
+        <br />
+        <p>{errors.delivaryTime && errors.delivaryTime?.message}</p>
+        <br />
+
+        {/* ラジオボタンのまま */}
+        <label htmlFor="tel">お支払方法</label>
+        <input
+          type="tel"
+          id="peymentMethod"
+          {...register("peymentMethod")}
+        ></input>
+        <p>{errors.peymentMethod && errors.peymentMethod?.message}</p>
         <br />
 
         <button type="submit">登録</button>
@@ -186,4 +197,4 @@ const Register: React.FC = () => {
   );
 };
 
-export default Register;
+export default Order_cconfirm;
