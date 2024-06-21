@@ -30,7 +30,7 @@ const Login: React.FC = () => {
     };
     console.log(formData);
     //ここにjson送信を入れる
-    const response = await axios.post('http://192.168.16.175:8080/ec-202404c/auth/login', formData);
+    const response = await axios.post('http://192.168.16.133:8080/ec-202404c/auth/login', formData);
     console.log(response);
   };
   
