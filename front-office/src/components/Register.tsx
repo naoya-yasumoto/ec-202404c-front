@@ -135,7 +135,6 @@ const Register: React.FC = () => {
             />
           )}
         />
-        {/* <p className="error-message">{errors.prefectures && errors.prefectures.message}</p> */}
         <br />
 
         <label htmlFor="municipalities">市区町村</label>

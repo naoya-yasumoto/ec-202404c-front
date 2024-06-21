@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 
 const Navbar: React.FC = () => (
   <div className="bg-gray-100">
-    <div className="navbar container mx-auto" style={{ width: '80%', height: 'calc(3.25rem * 2.0)'} }>
+    <div className="navbar container mx-auto" style={{ width: '80%', height: 'calc(3.25rem * 2.0)' }}>
       <div className="flex-1 flex items-center">
         <a className="text-3xl font-poiret font-extrabold">RakuStyle</a>
         <ul className="menu menu-horizontal p-0 ml-4">
-        <li><Link to="/item-list/set" className="text-lg">Sets</Link></li>
-        <li><Link to="/item-list/top" className="text-lg">Tops</Link></li>
-        <li><Link to="/item-list/bottom" className="text-lg">Bottom</Link></li>
+          <li><Link to="/item-list/set" className="text-lg">Sets</Link></li>
+          <li><Link to="/item-list/top" className="text-lg">Tops</Link></li>
+          <li><Link to="/item-list/bottom" className="text-lg">Bottom</Link></li>
         </ul>
       </div>
 
@@ -27,7 +27,9 @@ const Navbar: React.FC = () => (
             <span className="font-bold text-lg">8 Items</span>
             <span className="text-info">Subtotal: $999</span>
             <div className="card-actions">
-              <button className="btn btn-primary btn-block">View cart</button>
+              <Link to="/cart">
+                <button className="btn btn-primary btn-block">View cart</button>
+              </Link>
             </div>
           </div>
         </div>
