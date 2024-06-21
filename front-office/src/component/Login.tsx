@@ -25,8 +25,6 @@ const Login: React.FC = () => {
       email: data.email,
       password: data.password,
       
-      
-      
     };
     console.log(formData);
     //ここにjson送信を入れる
@@ -42,8 +40,19 @@ const Login: React.FC = () => {
     // アクセストークンをセッションストレージに格納
     window.sessionStorage.setItem('accessToken', accessToken);
     const token = window.sessionStorage.getItem('accessToken');
-  
 
+    if (token) {
+      // デコードしてユーザー名を取得
+      const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+      console.log(tokenPayload)
+      const username = tokenPayload.username;
+      const user_id = tokenPayload.user_id;
+      console.log("user_id : " + user_id);
+      console.log("username : " + username);
+
+      // 必要に応じて username を使用する
+  }
+  
 
     ///アクセスが必要なものに記述する
     // セッションストレージに格納したアクセストークンを取得する方法
