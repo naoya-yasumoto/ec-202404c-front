@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { HOST_IP } from 'src/config';
+import { HOST_IP } from '../config';
 
 const CreditCardInfo: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState<string>('paypal');
