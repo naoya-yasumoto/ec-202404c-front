@@ -92,8 +92,8 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full sm:w-4/5 lg:w-3/5">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 ">
+      <div className="w-full sm:w-4/5 lg:w-3/5 mt-20 mb-20">
         <div className="mx-2 my-20 sm:my-auto">
           <div className="flex justify-center">
             <div className="w-full sm:w-11/12 p-12 sm:px-10 sm:py-6 bg-white rounded-lg shadow-md lg:shadow-lg">
