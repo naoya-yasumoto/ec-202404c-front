@@ -32,7 +32,7 @@ const Register: React.FC = () => {
     formState: { errors },
   } = useForm<SignUpForm>({
     mode: "onBlur",
-    resolver: zodResolver(validationSchema),
+    // resolver: zodResolver(validationSchema),
   });
   const [loading, setLoading] = useState(false);
 
@@ -43,6 +43,10 @@ const Register: React.FC = () => {
 
   const onSubmit = async (data: SignUpForm) => {
     const combinedName = `${data.lastName} ${data.firstName}`;
+    console.log("combinedName:" + combinedName);
+    console.log("data.prefectures:" + data.prefectures);
+    
+    
 
     // 結合したフィールドを含むオブジェクトを作成
     const formData = {
@@ -55,6 +59,8 @@ const Register: React.FC = () => {
       address: data.address,
       telephone: data.tel
     };
+    
+    
     console.log(formData);
 
     try {
@@ -148,6 +154,7 @@ const Register: React.FC = () => {
               options={prefecturesOptions}
             />
           )}
+          
         />
         
         {/* <p>{errors.prefectures && errors.prefectures?.message}</p>  */}

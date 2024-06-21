@@ -17,6 +17,11 @@ import { useEffect,useState } from "react";
     //   setSelected('---');
     // },[]);
 
+    console.log("value:" + value);
+    console.log("onChange:" + onChange);
+    
+    
+
     return (      
       <div>
       <select value={value} onChange={(e) => onChange(e.target.value)}>
