@@ -5,6 +5,7 @@ import axios from 'axios';
 import Navbar from '../components/layout/Navbar';
 import SearchForm from '../components/SearchForm';
 import { HOST_IP } from '../config';
+import ItemCardList from '../components/ItemCardList'
 
 const ItemList: React.FC = () => {
   const { type } = useParams();
@@ -25,12 +26,7 @@ const ItemList: React.FC = () => {
       <div>
         {/* <Navbar /> */}
         <SearchForm />
-        <div className="columns is-multiline is-centered">
-          {items.map((item, index) => (
-            <Item key={index} item={item} />
-              
-          ))}
-        </div>
+        <ItemCardList />
       </div>
     </div>
   )

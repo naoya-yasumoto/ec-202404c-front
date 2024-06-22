@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { HOST_IP } from '../config';
 import { addItemSchema} from '../utils/addItemSchema';
 import { z } from 'zod';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   width: 100%;
@@ -99,6 +100,8 @@ const ItemDetail: React.FC = () => {
   const [selectedSize, setSelectedSize] = useState<string>("M");
   const [selectedQuantity, setSelectedQuantity] = useState<number>(1);
 
+  const navigate = useNavigate();
+
   type ItemFormData = z.infer<typeof addItemSchema>;
 
 
@@ -139,9 +142,12 @@ const ItemDetail: React.FC = () => {
     try {
       const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/cart/add`, cartItem);
       // Handle success, e.g., redirect or show success message
-    } catch (error) {
-      // Handle error
+    } catch (error:any) {
+      if (error.response && error.response.status === 403) {
+        navigate('/login');
+      }
       console.error("There was an error adding the item to the cart!", error);
+      
     }
   };
 
