@@ -139,11 +139,8 @@ const ItemDetail: React.FC = () => {
       price: totalPrice
     };
 
-    console.log(cartItem);
-
     try {
       const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/cart/add`, cartItem);
-      
       // Handle success, e.g., redirect or show success message
     } catch (error:any) {
       if (error.response && error.response.status === 403) {

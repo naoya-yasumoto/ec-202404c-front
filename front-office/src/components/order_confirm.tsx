@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { validationSchema } from "../utils/validationSchema";
 import { times } from "../utils/times";
 import { orderSchema } from "../utils/orderSchema";
-import { times } from "../utils/times";
 import { useNavigate } from "react-router-dom";
 
 interface OrderfirmForm {
@@ -20,7 +19,7 @@ interface OrderfirmForm {
   telephone: number;
   deliveryDate: Date;
   delivaryTime: string;
-  peymentMethod: string;
+  paymentMethod: string;
 }
 
 const Order_cconfirm: React.FC = () => {
@@ -66,16 +65,12 @@ const Order_cconfirm: React.FC = () => {
       deliveryDate: deliveryDate,
       paymentMethodId: data.paymentMethod,
     };
-    // console.log(data.prefectures);
-    // console.log(data);
-    
-    console.log(formData);
+
     //ここにjson送信を入れる
     const response = await axios.post(
       "http://192.168.16.175:8080/ec-202404c/confirm",
       formData
     );
-    console.log("rsponse" + response);
   };
 
   const fetchAddress = async (postcode: number) => {
