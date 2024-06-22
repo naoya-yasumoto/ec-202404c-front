@@ -6,7 +6,6 @@ import { prefecturesOptions } from "../utils/prefectures";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validationSchema } from "../utils/validationSchema";
 import { orderSchema } from "../utils/orderSchema";
-import { times } from "../utils/times";
 import { useNavigate } from "react-router-dom";
 import { HOST_IP } from '../config';
 
@@ -83,14 +82,17 @@ const OrderConfirm: React.FC = () => {
       deliveryDate: deliveryDate,
       paymentMethodId: data.paymentMethod,
     };
+<<<<<<< HEAD
     
     console.log(formData);
+=======
+
+>>>>>>> toClean
     //ここにjson送信を入れる
     const response = await axios.post(
       `http://${HOST_IP}:8080/ec-202404c/order`,
       formData
     );
-    console.log("rsponse" + response);
   };
 
   const fetchAddress = async (postcode: number) => {

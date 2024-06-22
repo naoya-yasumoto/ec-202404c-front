@@ -56,7 +56,6 @@ const Register: React.FC = () => {
       if (response.status === 201) {
         navigate('/login');
       }
-      console.log('User data:', response.data);
     } catch (error:any) {
       if (error.response && error.response.status === 409) {
         alert("そのメールアドレスはすでに使われています。");
