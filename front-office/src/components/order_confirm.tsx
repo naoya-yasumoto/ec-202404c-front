@@ -87,7 +87,7 @@ const OrderConfirm: React.FC = () => {
     console.log(formData);
     //ここにjson送信を入れる
     const response = await axios.post(
-      "http://192.168.16.175:8080/ec-202404c/order",
+      `http://${HOST_IP}:8080/ec-202404c/order`,
       formData
     );
     console.log("rsponse" + response);
