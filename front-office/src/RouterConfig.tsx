@@ -4,7 +4,6 @@ import Login from './components/Login.tsx';
 import ItemList from './pages/ItemList.tsx';
 import Cart from './pages/Cart.tsx';
 import ItemDetail from './pages/ItemDetail.tsx';
-import { validationSchema } from "./utils/validationSchema.ts";
 import Navbar from './components/layout/Navbar.tsx';
 import Order_cconfirm from './components/order_confirm.tsx';
 

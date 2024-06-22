@@ -4,11 +4,11 @@ import { useForm, Controller } from "react-hook-form";
 import MySelect from "./MySelect";
 import { prefecturesOptions } from "../utils/prefectures";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { validationSchema } from "../utils/validationSchema";
+import { times } from "../utils/times";
 import { orderSchema } from "../utils/orderSchema";
 import { times } from "../utils/times";
 import { useNavigate } from "react-router-dom";
-
-
 
 interface OrderfirmForm {
   orderName: string;
@@ -20,7 +20,7 @@ interface OrderfirmForm {
   telephone: number;
   deliveryDate: Date;
   delivaryTime: string;
-  paymentMethod: string;
+  peymentMethod: string;
 }
 
 const Order_cconfirm: React.FC = () => {
@@ -37,7 +37,6 @@ const Order_cconfirm: React.FC = () => {
   } = useForm<OrderfirmForm>({
     mode: "onBlur",
     // resolver: zodResolver(orderSchema),
-    
   });
   const [loading, setLoading] = useState(false);
   const [paymentValue, setPaymentValue] = useState("");
@@ -173,6 +172,7 @@ const Order_cconfirm: React.FC = () => {
         <br />
 
         <label htmlFor="deliveryDate">配達日時</label>
+
         <input
           type="date"
           id="deliveryDate"
@@ -246,7 +246,6 @@ const Order_cconfirm: React.FC = () => {
           )}
         />
       </div>
-          
 
         <button type="submit">登録</button>
         <button type="reset">キャンセル</button>
