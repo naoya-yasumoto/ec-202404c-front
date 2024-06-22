@@ -14,7 +14,6 @@ const ItemList: React.FC = () => {
     console.log(HOST_IP);
     const getChatsAsync = async () => {
         const response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/items/${type}`); 
-        console.log("response", response.data.items);
         setItems(response.data.items);
     }
     getChatsAsync();

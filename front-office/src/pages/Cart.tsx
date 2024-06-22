@@ -10,7 +10,6 @@ const Cart: React.FC = () => {
       try {
         const response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/cart/user/2`); // 仮のAPIエンドポイント
         setCartItems(response.data.itemList);
-        console.log(response.data)
       } catch (error) {
         console.error('Error fetching cart items:', error);
       }

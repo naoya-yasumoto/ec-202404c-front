@@ -28,7 +28,7 @@ const Login: React.FC = () => {
       password: data.password,
       
     };
-    console.log(formData);
+
     //ここにjson送信を入れる
     //const response = await axios.post('http://192.168.16.175:8080/ec-202404c/auth/login', formData);
     const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/auth/login`, formData);
@@ -40,13 +40,10 @@ const Login: React.FC = () => {
       <p>エラーが発生しました！</p>
     }
 
-    console.log(response);
 
     
     console.dir("response:" + JSON.stringify(response));
-    // console.dir("access token : " + JSON.stringify(response.headers));
     const accessToken = response.headers["access-token"];
-    console.log("access token : " + accessToken);
 
     // アクセストークンをセッションストレージに格納
     window.sessionStorage.setItem('accessToken', accessToken);
@@ -55,7 +52,6 @@ const Login: React.FC = () => {
     if (token) {
       // デコードしてユーザー名を取得
       const tokenPayload = JSON.parse(atob(token.split('.')[1]));
-      console.log(tokenPayload)
       const username = tokenPayload.username;
       const userid = tokenPayload.userid;
       console.log("userid : " + userid);
