@@ -54,8 +54,6 @@ const Login: React.FC = () => {
       const tokenPayload = JSON.parse(atob(token.split('.')[1]));
       const username = tokenPayload.username;
       const userid = tokenPayload.userid;
-      console.log("userid : " + userid);
-      console.log("username : " + username);
 
       // 必要に応じて username を使用する
   }

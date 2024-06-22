@@ -1,3 +1,2 @@
 // export const HOST_IP = import.meta.env.VITE_HOST_IP;
 export const HOST_IP = "192.168.128.189";
-console.log('HOST_IP:', HOST_IP);
