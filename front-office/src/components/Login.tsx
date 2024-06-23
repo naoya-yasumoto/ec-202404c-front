@@ -82,29 +82,70 @@ const Login: React.FC = () => {
   
 
   return (
-    <div className="form-container">
-      <h1>登録フォーム</h1>
-      <hr />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        
-
-
-        <label htmlFor='email'>メールアドレス</label>
-        <input type='email' id='email' {...register("email")}></input>
-        <p>{errors.email && errors.email?.message}</p><br />
-        
-        <label htmlFor='password'>パスワード</label>
-        <input type='password' id='password' {...register("password")}></input>
-        <p>{errors.password && errors.password?.message}</p><br />       
-        
-
-        <button type='submit'>登録</button><button type='reset'>キャンセル</button>
-      </form>
-      
-    </div>
+    
 
     //sample
-    
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 ">
+      <div className="w-full sm:w-4/5 lg:w-3/5 mt-20 mb-20">
+        <div className="mx-2 my-20 sm:my-auto">
+          <div className="flex justify-center">
+            <div className="w-full sm:w-11/12 p-12 sm:px-10 sm:py-6 bg-white rounded-lg shadow-md lg:shadow-lg">
+              <h2 className="text-center  font-semibold text-3xl lg:text-4xl text-gray-800 mt-6 mb-6" >
+                Login
+              </h2>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                
+
+                <label
+                  htmlFor="email"
+                  className="block text-xs font-semibold text-gray-600 uppercase mt-4"
+                >
+                  メールアドレス
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  {...register("email")}
+                  className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
+                />
+                <p>{errors.email && errors.email.message}</p>
+
+                <label
+                  htmlFor="password"
+                  className="block text-xs font-semibold text-gray-600 uppercase mt-4"
+                >
+                  パスワード
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  {...register("password")}
+                  className="block w-full py-3 px-1 mt-2 mb-4 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
+                />
+                <p>{errors.password && errors.password.message}</p>
+
+                
+
+                <div className="flex space-x-4 mt-8">
+                  <button
+                    type="submit"
+                    className="w-full py-3 bg-gray-800 rounded-sm font-medium text-white uppercase focus:outline-none hover:bg-gray-700 hover:shadow-none"
+                  >
+                    登録
+                  </button>
+                  <button
+                    type="reset"
+                    className="w-full py-3 bg-gray-300 rounded-sm font-medium text-gray-800 uppercase focus:outline-none hover:bg-gray-400 hover:shadow-none"
+                  >
+                    キャンセル
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 };
 
