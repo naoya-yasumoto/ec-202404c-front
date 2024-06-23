@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from '../utils/loginSchema';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { HOST_IP } from '../config';
 
 interface SignUpForm {
@@ -27,10 +27,8 @@ const Login: React.FC = () => {
       email: data.email,
       password: data.password,
       
-      
-      
     };
-    console.log(formData);
+
     //ここにjson送信を入れる
     //const response = await axios.post('http://192.168.16.175:8080/ec-202404c/auth/login', formData);
     const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/auth/login`, formData);
@@ -42,8 +40,43 @@ const Login: React.FC = () => {
       <p>エラーが発生しました！</p>
     }
 
-    console.log(response);
+
     
+    console.dir("response:" + JSON.stringify(response));
+    const accessToken = response.headers["access-token"];
+
+    // アクセストークンをセッションストレージに格納
+    window.sessionStorage.setItem('accessToken', accessToken);
+    const token = window.sessionStorage.getItem('accessToken');
+
+    if (token) {
+      // デコードしてユーザー名を取得
+      const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+      const username = tokenPayload.username;
+      const userid = tokenPayload.userid;
+
+      // 必要に応じて username を使用する
+  }
+  
+
+    ///アクセスが必要なものに記述する
+    // セッションストレージに格納したアクセストークンを取得する方法
+    //  const token = window.sessionStorage.getItem('accessToken');
+
+    //   // WebAPIから従業員一覧情報を取得する
+    //   const response = await axios.get(
+    //     `${config.EMP_WEBAPI_URL}/employee/employees`,
+    //     {
+    //       headers: {
+    //         Authorization: "Bearer " + accessToken,
+    //       },
+    //     }
+    //   );
+    //   // 取得したJSONデータをコンソールに出力して確認
+    //   console.dir("response:" + JSON.stringify(response));
+
+
+
   };
   
   

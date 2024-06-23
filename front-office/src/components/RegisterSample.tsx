@@ -13,7 +13,6 @@ const Register: React.FC = () => {
         try {
             const response = await axios.post('http://192.168.16.175:8080/ec-202404c/users', { name:username, password:password });
             setMessage('User registered successfully!');
-            console.log(response);
         } catch (error) {
             setMessage('Registration failed.');
         }
@@ -23,7 +22,6 @@ const Register: React.FC = () => {
         event.preventDefault();
         try {
             const response = await axios.get('http://192.168.16.175:8080/ec-202404c/users');
-            console.log(response);
         } catch (error) {
             setMessage('Registration failed.');
         }
@@ -31,7 +29,6 @@ const Register: React.FC = () => {
 
     const handleZipcodeAPI = async (event: FormEvent) => {
         event.preventDefault();
-        console.log(event.target.value)
         setZipcode(event.target.value);
         try {
             const response = await axios.get('https://zipcoda.net/api', {
@@ -40,7 +37,6 @@ const Register: React.FC = () => {
                 }
               })
             if(response.status === 200){
-                console.log(response.data.items);
                 setZipResult(response.data.items[0].address);
             }
         } catch (error) {

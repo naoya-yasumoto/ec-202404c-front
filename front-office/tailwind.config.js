@@ -1,8 +1,14 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+
+const withMT = require("@material-tailwind/react/utils/withMT");
+
+
+export default withMT({
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@material-tailwind/react/components/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@material-tailwind/react/theme/components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -13,9 +19,9 @@ export default {
         '3xl': '2.2rem', // カスタムフォントサイズ
       },
       fontWeight: {
-        'extra-bold': '600', // 太いフォントの重さを追加
+        'extrabold': '600', // 太いフォントの重さを追加
       },
     },
   },
   plugins: [require('daisyui'),],
-}
+})
