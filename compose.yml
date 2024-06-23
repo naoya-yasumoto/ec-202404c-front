@@ -9,4 +9,4 @@ services:
       - ./front-office:/app
     environment:
       - HOST_IP=${HOST_IP}
-    command: sh -c "HOST_IP=$(hostname -I | awk '{print $1}') && yarn dev"
+    command: sh -c "yarn dev"
