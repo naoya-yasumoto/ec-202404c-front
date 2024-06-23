@@ -8,34 +8,26 @@ import { validationSchema } from '../utils/validationSchema';
 import { HOST_IP } from '../config';
 import { useNavigate } from "react-router-dom";
 
-
 interface SignUpForm {
   lastName: string;
   firstName: string;
   email: string;
   password: string;
-  postcode: number;
-  prefectures: string;
+  postcode: string;
+  prefecture: string;
   municipalities: string;
   address: string;
   tel: string;
 }
 
 const Register: React.FC = () => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<SignUpForm>({
+  const { register, handleSubmit, control, setValue, watch, formState: { errors } } = useForm<SignUpForm>({
     mode: "onBlur",
     resolver: zodResolver(validationSchema),
   });
+
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
 
   const onSubmit = async (data: SignUpForm) => {
     const combinedName = `${data.lastName} ${data.firstName}`;
@@ -45,18 +37,20 @@ const Register: React.FC = () => {
       email: data.email,
       password: data.password,
       zipcode: data.postcode,
-      prefecture: data.prefectures,
+      prefecture: data.prefecture,
       municipalities: data.municipalities,
       address: data.address,
       telephone: data.tel
     };
+
+    console.log(formData);
 
     try {
       const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/users/register`, formData);
       if (response.status === 201) {
         navigate('/login');
       }
-    } catch (error:any) {
+    } catch (error: any) {
       if (error.response && error.response.status === 409) {
         alert("そのメールアドレスはすでに使われています。");
       } else if (error.response && error.response.status >= 500) {
@@ -67,7 +61,7 @@ const Register: React.FC = () => {
     }
   };
 
-  const fetchAddress = async (postcode: number) => {
+  const fetchAddress = async (postcode: string) => {
     setLoading(true);
     try {
       const response = await axios.get(
@@ -77,7 +71,7 @@ const Register: React.FC = () => {
 
       if (data.results) {
         const result = data.results[0];
-        setValue("prefectures", result.address1);
+        setValue("prefecture", result.address1);
         setValue("municipalities", result.address2);
         setValue("address", result.address3);
       } else {
@@ -98,6 +92,7 @@ const Register: React.FC = () => {
         <label htmlFor="lastName">姓</label>
         <input type="text" id="lastName" {...register("lastName")} />
         <p className="error-message">{errors.lastName && errors.lastName.message}</p>
+
         <label htmlFor="firstName">名</label>
         <input type="text" id="firstName" {...register("firstName")} />
         <p className="error-message">{errors.firstName && errors.firstName.message}</p>
@@ -115,7 +110,7 @@ const Register: React.FC = () => {
 
         <label htmlFor="postcode">郵便番号</label>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <input type="number" id="postcode" {...register("postcode")} />
+          <input type="text" id="postcode" {...register("postcode")} />
           <button
             type="button"
             onClick={() => fetchAddress(watch("postcode"))}
@@ -127,18 +122,19 @@ const Register: React.FC = () => {
         <p className="error-message">{errors.postcode && errors.postcode.message}</p>
         <br />
 
-        <label htmlFor="prefectures">都道府県</label>
+        <label htmlFor="prefecture">都道府県</label>
         <Controller
-          name="prefectures"
+          name="prefecture"
           control={control}
           render={({ field }) => (
             <MySelect
-              value={field.value}
+              value={field.value || ''}
               onChange={field.onChange}
               options={prefecturesOptions}
             />
           )}
         />
+        <p className="error-message">{errors.prefecture && errors.prefecture.message}</p>
         <br />
 
         <label htmlFor="municipalities">市区町村</label>
@@ -162,8 +158,8 @@ const Register: React.FC = () => {
           inputMode="numeric"
           {...register("tel")}
           maxLength={11}
-        ></input>
-        <p>{errors.tel && errors.tel?.message}</p>
+        />
+        <p className="error-message">{errors.tel && errors.tel.message}</p>
         <br />
 
         <button type="submit">登録</button>

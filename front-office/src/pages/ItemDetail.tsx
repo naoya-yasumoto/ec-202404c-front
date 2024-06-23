@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Item from '../components/Item';
 import axios from 'axios';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import styled from 'styled-components';
 import { HOST_IP } from '../config';
 import { addItemSchema} from '../utils/addItemSchema';
 import { z } from 'zod';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { getAccessToken, decodeToken } from '../utils/authUtils';
+import LoginModal from '../components/LoginModal';
+import Toast from '../components/ToCartToast';
 
 const Container = styled.div`
   width: 100%;
@@ -99,6 +102,8 @@ const ItemDetail: React.FC = () => {
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [selectedSize, setSelectedSize] = useState<string>("M");
   const [selectedQuantity, setSelectedQuantity] = useState<number>(1);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showToast, setShowToast] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -131,9 +136,23 @@ const ItemDetail: React.FC = () => {
   const onSubmit = async (data: ItemFormData) => {
     if (!item) return;
 
+    const token = getAccessToken();
+    if (!token) {
+      // navigate('/login');
+      setShowModal(true);
+      return;
+    }
+
+    const userInfo = decodeToken(token);
+    if (!userInfo) {
+      // navigate('/login');
+      setShowModal(true);
+      return;
+    }
+
     const cartItem: AddCartRequest = {
       itemId: item.id,
-      userId: 2, 
+      userId: userInfo.userid, 
       quantity: data.quantity,
       size: data.size,
       price: totalPrice
@@ -141,7 +160,11 @@ const ItemDetail: React.FC = () => {
 
     try {
       const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/cart/add`, cartItem);
+      console.log(response)
       // Handle success, e.g., redirect or show success message
+      if(response.status === 200){
+        setShowToast(true);
+      }
     } catch (error:any) {
       if (error.response && error.response.status === 403) {
         navigate('/login');
@@ -212,6 +235,8 @@ const ItemDetail: React.FC = () => {
           <Button type="submit">カートに入れる</Button>
         </FormGroup>
       </form>
+      <LoginModal show={showModal} onClose={() => setShowModal(false)} />
+      <Toast show={showToast} message="カートに追加しました" onClose={() => setShowToast(false)} />
     </Container>
   );
 };

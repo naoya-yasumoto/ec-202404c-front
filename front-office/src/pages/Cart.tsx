@@ -3,16 +3,34 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { HOST_IP } from '../config';
 import CartItem from '../components/CartItem';
+import { getAccessToken, decodeToken } from '../utils/authUtils';
+import LoginModal from '../components/LoginModal';
 
 const Cart: React.FC = () => {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/cart/user/2`);
+
+        const token = getAccessToken();
+        if (!token) {
+          // navigate('/login');
+          setShowModal(true);
+          return;
+        }
+
+        const userInfo = decodeToken(token);
+        if (!userInfo) {
+          // navigate('/login');
+          setShowModal(true);
+          return;
+        }
+        const response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/cart/user/${userInfo.userid}`);
         setCartItems(response.data.itemList);
+        console.log(response.data);  // デバッグ用に追加
       } catch (error) {
         console.error('Error fetching cart items:', error);
       }
@@ -39,8 +57,10 @@ const Cart: React.FC = () => {
     navigate('/order_confirm');
   };
 
+
+
   const totalPrice = useMemo(() => {
-    return cartItems.reduce((total, cartItem) => total + (cartItem.item.price * cartItem.quantity), 0);
+    return (cartItems || []).reduce((total, cartItem) => total + (cartItem.item.price * cartItem.quantity), 0);
   }, [cartItems]);
 
   const tax = useMemo(() => {
@@ -80,6 +100,7 @@ const Cart: React.FC = () => {
           <button className="button is-warning is-fullwidth" onClick={handleProceedToOrder}>注文に進む</button>
         </div>
       </div>
+      <LoginModal show={showModal} onClose={() => setShowModal(false)} />
     </div>
   );
 };
