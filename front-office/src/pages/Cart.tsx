@@ -6,6 +6,17 @@ import CartItem from '../components/CartItem';
 import { getAccessToken, decodeToken } from '../utils/authUtils';
 import LoginModal from '../components/LoginModal';
 
+
+export const getCartInfo = async (userId: number) => {
+  try {
+    const response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/cart/user/${userId}`);
+    return response.data.itemList;
+  } catch (error) {
+    console.error('Error fetching cart items:', error);
+    return [];
+  }
+};
+
 const Cart: React.FC = () => {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const navigate = useNavigate();

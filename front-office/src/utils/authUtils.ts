@@ -16,3 +16,7 @@ export const getAccessToken = (): string | null => {
     }
   };
   
+  export const isLoggedIn = (): boolean => {
+    const token = getAccessToken();
+    return !!token && !!decodeToken(token);
+  };
