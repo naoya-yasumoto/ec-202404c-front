@@ -6,6 +6,8 @@ import { prefecturesOptions } from "../utils/prefectures";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validationSchema } from "../utils/validationSchema";
 import { times } from "../utils/times";
+import { orderSchema } from "../utils/orderSchema";
+import { useNavigate } from "react-router-dom";
 
 interface OrderfirmForm {
   orderName: string;
@@ -17,10 +19,13 @@ interface OrderfirmForm {
   telephone: number;
   deliveryDate: Date;
   delivaryTime: string;
-  peymentMethod: string;
+  paymentMethod: string;
 }
 
 const Order_cconfirm: React.FC = () => {
+
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -30,13 +35,23 @@ const Order_cconfirm: React.FC = () => {
     formState: { errors },
   } = useForm<OrderfirmForm>({
     mode: "onBlur",
-    resolver: zodResolver(validationSchema),
+    // resolver: zodResolver(orderSchema),
   });
   const [loading, setLoading] = useState(false);
-  const [date,setDateStatus] = useState("");
+  const [paymentValue, setPaymentValue] = useState("");
 
   const onSubmit = async (data: OrderfirmForm) => {
-    useState(data.deliveryDate)
+    
+    // const date = new Date(data.deliveryDate).setHours(Number.parseInt(data.delivaryTime));
+    // `deliveryDate` を Date オブジェクトとして作成
+    const deliveryDate = new Date(data.deliveryDate);
+
+    // デリバリー時間をセット
+    const deliveryHour = Number.parseInt(data.delivaryTime);
+                                              
+    if (!isNaN(deliveryHour)) {
+        deliveryDate.setHours(deliveryHour);
+    }
 
     // 結合したフィールドを含むオブジェクトを作成
     const formData = {
@@ -47,16 +62,15 @@ const Order_cconfirm: React.FC = () => {
       municipalities: data.municipalities,
       address: data.address,
       telephone: data.telephone,
-      deliveryDate: data.deliveryDate,
-      peymentMethod: data.peymentMethod,
+      deliveryDate: deliveryDate,
+      paymentMethodId: data.paymentMethod,
     };
-    console.log(formData);
+
     //ここにjson送信を入れる
     const response = await axios.post(
-      "http://192.168.16.175:8080/ec-202404c/users/register",
+      "http://192.168.16.175:8080/ec-202404c/confirm",
       formData
     );
-    console.log(response);
   };
 
   const fetchAddress = async (postcode: number) => {
@@ -152,7 +166,8 @@ const Order_cconfirm: React.FC = () => {
         <p>{errors.telephone && errors.telephone?.message}</p>
         <br />
 
-        <label htmlFor="tel">配達日時</label>
+        <label htmlFor="deliveryDate">配達日時</label>
+
         <input
           type="date"
           id="deliveryDate"
@@ -162,7 +177,6 @@ const Order_cconfirm: React.FC = () => {
         <br />
 
         {/* selectに変更 */}
-        <label htmlFor="delivaryTime"></label>
         <Controller
           name="delivaryTime"
           control={control}
@@ -181,14 +195,52 @@ const Order_cconfirm: React.FC = () => {
         <br />
 
         {/* ラジオボタンのまま */}
-        <label htmlFor="tel">お支払方法</label>
-        <input
-          type="tel"
-          id="peymentMethod"
-          {...register("peymentMethod")}
-        ></input>
-        <p>{errors.peymentMethod && errors.peymentMethod?.message}</p>
-        <br />
+        <label>お支払方法</label>
+        <div>
+        <Controller
+          name="paymentMethod"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <>
+
+            {/* クレジット支払い */}
+              <div>
+                <input
+                  type="radio"
+                  {...field}
+                  value="2"
+                  id="answer_visa"
+                />
+                <label htmlFor="answer_visa">
+                  <div>
+                    <img src="/images/payment-icons/visa.svg" alt="VISA" />
+                    <div>
+                      Card Ending <span> 6475</span>
+                    </div>
+                  </div>
+                </label>
+              </div>
+              
+            {/* 代金引換 */}
+              <div>
+                <input
+                  type="radio"
+                  {...field}
+                  value="1"
+                  id="answer_paypal"
+                />
+                <label htmlFor="answer_paypal">
+                  <div>
+                    <img src="/images/payment-icons/paypal.svg" alt="PayPal" />
+                    <div>代金引換</div>
+                  </div>
+                </label>
+              </div>
+            </>
+          )}
+        />
+      </div>
 
         <button type="submit">登録</button>
         <button type="reset">キャンセル</button>
