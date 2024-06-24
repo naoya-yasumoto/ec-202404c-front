@@ -3,14 +3,19 @@ import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import MySelect from "./MySelect";
 import { prefecturesOptions } from "../utils/prefectures";
+import Visa from "../assets/Visa.svg";
+import MasterCard from "../assets/MasterCard.svg";
+import Paypal from "../assets/PayPal.svg";
+import AmericanExpress from "../assets/AmericanExpress.svg";
+import CashTrade from "../assets/CashTrade.svg";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validationSchema } from "../utils/validationSchema";
 import { orderSchema } from "../utils/orderSchema";
 import { useNavigate } from "react-router-dom";
-import { HOST_IP } from '../config';
+import { HOST_IP } from "../config";
 import { times } from "../utils/times";
-import { getAccessToken, decodeToken, isLoggedIn } from '../utils/authUtils';
-import LoginModal from '../components/LoginModal';  
+import { getAccessToken, decodeToken, isLoggedIn } from "../utils/authUtils";
+import LoginModal from "../components/LoginModal";
 
 interface OrderConfirmForm {
   orderId: number;
@@ -28,7 +33,6 @@ interface OrderConfirmForm {
 }
 
 const OrderConfirm: React.FC = () => {
-
   const navigate = useNavigate();
 
   const {
@@ -40,12 +44,16 @@ const OrderConfirm: React.FC = () => {
     formState: { errors },
   } = useForm<OrderConfirmForm>({
     mode: "onBlur",
-    // resolver: zodResolver(orderSchema),
+    resolver: zodResolver(orderSchema),
   });
+  
+
   const [loading, setLoading] = useState(false);
 
   const [order, setOrder] = useState<any[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [buttonColor, setButtonColor] = useState('bg-gray-800');
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -61,11 +69,12 @@ const OrderConfirm: React.FC = () => {
           setShowModal(true);
           return;
         }
-        const response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/cart/user/${userInfo.userid}`);
-        setOrder(response.data)
-
+        const response = await axios.get(
+          `http://${HOST_IP}:8080/ec-202404c/cart/user/${userInfo.userid}`
+        );
+        setOrder(response.data);
       } catch (error) {
-        console.error('Error fetching cart items:', error);
+        console.error("Error fetching cart items:", error);
       }
     };
 
@@ -73,22 +82,33 @@ const OrderConfirm: React.FC = () => {
   }, []);
 
   const onSubmit = async (data: OrderConfirmForm) => {
-    
+    setIsSubmitting(true);
     // `deliveryDate` を Date オブジェクトとして作成
     const deliveryDate = new Date(data.deliveryDate);
 
-    
     // デリバリー時間をセット
     const deliveryHour = Number.parseInt(data.deliveryDate);
-                                              
+
     if (!isNaN(deliveryHour)) {
       deliveryDate.setHours(deliveryHour);
+    }
+
+    const token = getAccessToken();
+    if (!token) {
+      setShowModal(true);
+      return;
+    }
+
+    const userInfo = decodeToken(token);
+    if (!userInfo) {
+      setShowModal(true);
+      return;
     }
 
     // 結合したフィールドを含むオブジェクトを作成
     const formData = {
       orderId: order.id,
-      userId: 2,
+      userId: userInfo.userid,
       destinationName: data.destinationName,
       destinationEmail: data.destinationEmail,
       zipcode: data.postcode,
@@ -102,7 +122,7 @@ const OrderConfirm: React.FC = () => {
     };
 
     console.log(formData);
-        const response = await axios.post(
+    const response = await axios.post(
       `http://${HOST_IP}:8080/ec-202404c/order`,
       formData
     );
@@ -115,7 +135,7 @@ const OrderConfirm: React.FC = () => {
   };
 
   const handleBackClick = () => {
-    navigate('/item-list/set');
+    navigate("/item-list/set");
   };
 
   const fetchAddress = async (postcode: number) => {
@@ -151,21 +171,19 @@ const OrderConfirm: React.FC = () => {
                 注文確認画面
               </h2>
               <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-                <label
-                  htmlFor="orderName"
-                  className="block text-xs font-semibold text-gray-600 uppercase"
-                >
-                  お名前
-                </label>
-                <input
-                  type="text"
-                  id="orderName"
-                  {...register("destinationName")}
-                  className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
-                />
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.destinationName && errors.destinationName.message}
-                </p>
+              <label htmlFor="orderName" className="block text-xs font-semibold text-gray-600 uppercase">
+                お名前
+              </label>
+              <input
+                type="text"
+                id="orderName"
+                {...register("destinationName")}
+                className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
+              />
+              <p className="text-red-500 text-xs mt-1">
+                {errors.destinationName && errors.destinationName.message}
+              </p>
+
                 <br />
 
                 <label
@@ -189,7 +207,7 @@ const OrderConfirm: React.FC = () => {
                   htmlFor="postcode"
                   className="block text-xs font-semibold text-gray-600 uppercase"
                 >
-                  郵便番号
+                  郵便番号（ハイフン“−”は不要です）
                 </label>
                 <div className="flex items-center">
                   <input
@@ -200,7 +218,7 @@ const OrderConfirm: React.FC = () => {
                   />
                   <button
                     type="button"
-                    onClick={() => fetchAddress(watch("postcode"))}
+                    onClick={() => fetchAddress(Number(watch("postcode")))}
                     disabled={loading}
                     className="ml-4 w-48 bg-gray-800 py-3 px-6 rounded-sm text-white uppercase font-medium focus:outline-none hover:bg-gray-700 hover:shadow-none"
                   >
@@ -237,7 +255,7 @@ const OrderConfirm: React.FC = () => {
                 <label
                   htmlFor="municipalities"
                   className="block text-xs font-semibold text-gray-600 uppercase"
-                >
+                > 
                   市区町村
                 </label>
                 <input
@@ -272,7 +290,7 @@ const OrderConfirm: React.FC = () => {
                   htmlFor="tel"
                   className="block text-xs font-semibold text-gray-600 uppercase"
                 >
-                  電話番号
+                  電話番号（ハイフン“−”は不要です）
                 </label>
                 <input
                   type="tel"
@@ -331,47 +349,119 @@ const OrderConfirm: React.FC = () => {
                     defaultValue=""
                     render={({ field }) => (
                       <>
-                        <div className="mt-2">
-                          <input
-                            type="radio"
-                            {...field}
-                            value="2"
-                            id="answer_visa"
-                            className="mr-2"
-                          />
-                          <label
-                            htmlFor="answer_visa"
-                            className="inline-flex items-center"
-                          >
-                            <img
-                              src="/images/payment-icons/visa.svg"
-                              alt="VISA"
-                              className="w-8 h-8 mr-2"
+                        <div className="w-72">
+                          <div className="mb-3">
+                            <input
+                              type="radio"
+                              name="radio-example"
+                              className="sr-only peer"
+                              value="2"
+                              id="answer_american-express-card"
                             />
-                            <div>
-                              Card Ending <span> 6475</span>
-                            </div>
-                          </label>
-                        </div>
-                        <div className="mt-2">
-                          <input
-                            type="radio"
-                            {...field}
-                            value="1"
-                            id="answer_paypal"
-                            className="mr-2"
-                          />
-                          <label
-                            htmlFor="answer_paypal"
-                            className="inline-flex items-center"
-                          >
-                            <img
-                              src="/images/payment-icons/paypal.svg"
-                              alt="PayPal"
-                              className="w-8 h-8 mr-2"
+                            <label
+                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-gray-700 peer-checked:ring-2 peer-checked:border-transparent"
+                              htmlFor="answer_american-express-card"
+                            >
+                              <div className="flex items-center">
+                                <img
+                                  src={AmericanExpress}
+                                  alt="MasterCard"
+                                  className="w-12 h-6 mr-2"
+                                />
+                                <div className="text-sm">AmericanExpress </div>
+                              </div>
+                            </label>
+                          </div>
+                          <div className="mb-3">
+                            <input
+                              type="radio"
+                              name="radio-example"
+                              className="sr-only peer"
+                              value="2"
+                              id="answer_master-card"
                             />
-                            <div>代金引換</div>
-                          </label>
+                            <label
+                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-gray-700 peer-checked:ring-2 peer-checked:border-transparent"
+                              htmlFor="answer_master-card"
+                            >
+                              <div className="flex items-center">
+                                <img
+                                  src={MasterCard}
+                                  alt="MasterCard"
+                                  className="w-12 h-6 mr-2"
+                                />
+                                <div className="text-sm">MasterCard</div>
+                              </div>
+                            </label>
+                          </div>
+                          <div className="mb-3">
+                            <input
+                              type="radio"
+                              name="radio-example"
+                              className="sr-only peer"
+                              value="2"
+                              id="answer_paypal"
+                            />
+                            <label
+                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-gray-700 peer-checked:ring-2 peer-checked:border-transparent"
+                              htmlFor="answer_paypal"
+                            >
+                              <div className="flex items-center">
+                                <img
+                                  src={Paypal}
+                                  alt="Paypal"
+                                  className="w-12 h-5 mr-2"
+                                />
+                                <div className="text-sm">Paypal</div>
+                              </div>
+                            </label>
+                          </div>
+                          <div className="mb-3 relative">
+                            <input
+                              type="radio"
+                              name="radio-example"
+                              className="sr-only peer"
+                              defaultChecked
+                              value="2"
+                              id="answer_visa"
+                            />
+                            <label
+                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-gray-700 peer-checked:ring-2 peer-checked:border-transparent"
+                              htmlFor="answer_visa"
+                            >
+                              <div className="flex items-center">
+                                <img
+                                  src={Visa}
+                                  alt="VISA"
+                                  className="w-12 h-4 mr-2"
+                                />
+                                <div className="text-sm">Visa </div>
+                              </div>
+                            </label>
+                          </div>
+                          <div className="mb-3 relative">
+                            <input
+                              type="radio"
+                              name="radio-example"
+                              className="sr-only peer"
+                              defaultChecked
+                              value="1"
+                              id="answer_cash-trade"
+                            />
+                            <label
+                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-gray-700 peer-checked:ring-2 peer-checked:border-transparent"
+                              htmlFor="answer_cash-trade"
+                            >
+                              <div className="flex items-center">
+                                <img
+                                  src={CashTrade}
+                                  alt="VISA"
+                                  className="w-12 h-4 mr-2"
+                                />
+                                <div className="text-sm">代金引換 </div>
+                              </div>
+                            </label>
+                          </div>
                         </div>
                       </>
                     )}
@@ -382,9 +472,10 @@ const OrderConfirm: React.FC = () => {
                 <div className="flex justify-between mt-6">
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-gray-800 text-white rounded-sm focus:outline-none hover:bg-gray-700"
-                  >
-                    登録
+                    disabled={isSubmitting}
+                    className={`px-6 py-2 ${buttonColor} text-white rounded-sm focus:outline-none hover:bg-gray-700`}
+                    onClick={() => setButtonColor('bg-gray-400')}>
+                          注文
                   </button>
                   <button
                     type="reset"

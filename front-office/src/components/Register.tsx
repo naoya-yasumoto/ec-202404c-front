@@ -27,6 +27,9 @@ const Register: React.FC = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [emailExists, setEmailExists] = useState(false);
+  const [emailExistsMessage, setEmailExistsMessage] = useState<string | null>(null);
+
   const navigate = useNavigate();
 
   const onSubmit = async (data: SignUpForm) => {
@@ -51,7 +54,7 @@ const Register: React.FC = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 409) {
-        alert("そのメールアドレスはすでに使われています。");
+        //alert("そのメールアドレスはすでに使われています。");
       } else if (error.response && error.response.status >= 500) {
         console.error('サーバーエラー:', error);
       } else {
@@ -81,6 +84,17 @@ const Register: React.FC = () => {
       alert("住所の取得に失敗しました。");
     }
     setLoading(false);
+  };
+
+
+  const checkEmailExists = async (email: string) => {
+    try {
+      const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/users/check-email`, { email });
+      setEmailExists(response.status === 409);
+    } catch (error) {
+      setEmailExistsMessage("そのメールアドレスはすでに使われています。");
+      console.error("メールアドレスの確認に失敗しました:", error);
+    }
   };
 
   return (
@@ -132,12 +146,18 @@ const Register: React.FC = () => {
                 >
                   メールアドレス
                 </label>
+                
                 <input
                   type="email"
                   id="email"
                   {...register("email")}
+                  onChange={(e) => {
+                    register("email").onChange(e);
+                    checkEmailExists(e.target.value);
+                  }}
                   className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
                 />
+                {emailExistsMessage && <p className="text-black-500">{emailExistsMessage}</p>}
                 <p>{errors.email && errors.email.message}</p>
 
                 <label
@@ -158,7 +178,7 @@ const Register: React.FC = () => {
                   htmlFor="postcode"
                   className="block text-xs font-semibold text-gray-600 uppercase mt-4"
                 >
-                  郵便番号
+                  郵便番号（ハイフン“−”は不要です）
                 </label>
                 <div className="flex items-center">
                   <input
