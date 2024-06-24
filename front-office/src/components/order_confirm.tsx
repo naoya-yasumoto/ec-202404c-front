@@ -3,12 +3,18 @@ import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import MySelect from "./MySelect";
 import { prefecturesOptions } from "../utils/prefectures";
+<<<<<<< HEAD
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validationSchema } from "../utils/validationSchema";
 import { orderSchema } from "../utils/orderSchema";
 import { useNavigate } from "react-router-dom";
 import { HOST_IP } from '../config';
 import { times } from "../utils/times";
+=======
+import { times } from "../utils/times";
+import { HOST_IP } from "../config";
+
+>>>>>>> origin/feature/creditCardInfo
 
 interface OrderConfirmForm {
   orderId: number;
@@ -41,7 +47,6 @@ const OrderConfirm: React.FC = () => {
     // resolver: zodResolver(orderSchema),
   });
   const [loading, setLoading] = useState(false);
-  const [paymentValue, setPaymentValue] = useState("");
 
   const [order, setOrder] = useState<any[]>([]);
 
@@ -267,4 +272,8 @@ const OrderConfirm: React.FC = () => {
   );
 };
 
+<<<<<<< HEAD
 export default OrderConfirm;
+=======
+export default Order_confirm;
+>>>>>>> origin/feature/creditCardInfo
