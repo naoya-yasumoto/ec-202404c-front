@@ -16,7 +16,6 @@ export const RouterConfig = () => {
                         <Route path="/register" element={<Register />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/cart" element={<Cart />} />
-                        {/* <Route path="/item-list" element={<ItemList />} /> */}
                         <Route path="/item-list/:type" element={<ItemList />} />
                         <Route path="/item/:id" element={<ItemDetail />} />
                         <Route path="/order_confirm" element={<OrderConfirm />} />
