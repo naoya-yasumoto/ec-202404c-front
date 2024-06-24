@@ -61,10 +61,22 @@ const ItemDetail: React.FC = () => {
 
   useEffect(() => {
     const getItemAsync = async () => {
-      const response = await axios.get(
-        `http://${HOST_IP}:8080/ec-202404c/item/${id}`
-      );
+      const token = getAccessToken();
+      let response = null;
+      if (token) {
+        response = await axios.get( `http://${HOST_IP}:8080/ec-202404c/item/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+      }
+      else{
+        response = await axios.get( `http://${HOST_IP}:8080/ec-202404c/item/${id}`
+        );
+      }
+      
       setItem(response.data);
+      console.log(response.data)
       setTotalPrice(response.data.price); // Initialize with default price
     };
     getItemAsync();
