@@ -53,7 +53,9 @@ const Register: React.FC = () => {
     } catch (error: any) {
       if (error.response && error.response.status === 409) {
         alert("そのメールアドレスはすでに使われています。");
-      } else if (error.response && error.response.status >= 500) {
+      } else if (error.response && error.response.status
+        
+         >= 500) {
         console.error('サーバーエラー:', error);
       } else {
         console.error('An error occurred:', error);
@@ -90,7 +92,7 @@ const Register: React.FC = () => {
       const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/users/check-email`, { email });
       setEmailExists(response.status === 409);
     } catch (error) {
-      alert("そのメールアドレスはすでに使われています。");
+      // alert("そのメールアドレスはすでに使われています。");
       console.error("メールアドレスの確認に失敗しました:", error);
     }
   };

@@ -5,6 +5,7 @@ import { HOST_IP } from '../config';
 import CartItem from '../components/CartItem';
 import { getAccessToken, decodeToken } from '../utils/authUtils';
 import LoginModal from '../components/LoginModal';
+import Price from '../components/Price';
 
 export const getCartInfo = async (userId: number) => {
   try {
@@ -117,14 +118,14 @@ const Cart: React.FC = () => {
               </div>
               <div className="flex justify-between gap-4 text-gray-500">
                 <span className="font-oswald">消費税</span>
-                <span className="font-oswald">{tax.toFixed(0)}円</span>
+                <Price amount={tax.toFixed(0)}/>円</div>
               </div>
             </div>
             <div className="mt-4 border-t pt-4">
               <div className="flex items-start justify-between gap-4 text-gray-800">
                 <span className="text-lg font-bold font-oswald">合計</span>
                 <span className="flex flex-col items-end">
-                  <span className="text-lg font-bold font-oswald"><span className='text-xl'>{(totalPrice + tax).toFixed(0)}</span>円</span>
+                  <span className="text-lg font-bold font-oswald"><Price amount={(totalPrice + tax).toFixed(0)}/>円</span>
                   <span className="text-sm text-gray-500">(税込)</span>
                 </span>
               </div>
