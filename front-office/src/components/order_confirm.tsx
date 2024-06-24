@@ -30,7 +30,6 @@ interface OrderConfirmForm {
 const OrderConfirm: React.FC = () => {
 
   const navigate = useNavigate();
-  
 
   const {
     register,
@@ -41,8 +40,10 @@ const OrderConfirm: React.FC = () => {
     formState: { errors },
   } = useForm<OrderConfirmForm>({
     mode: "onBlur",
-    // resolver: zodResolver(orderSchema),
+    resolver: zodResolver(orderSchema),
   });
+  
+
   const [loading, setLoading] = useState(false);
 
   const [order, setOrder] = useState<any[]>([]);
@@ -155,21 +156,19 @@ const OrderConfirm: React.FC = () => {
                 注文確認画面
               </h2>
               <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-                <label
-                  htmlFor="orderName"
-                  className="block text-xs font-semibold text-gray-600 uppercase"
-                >
-                  お名前
-                </label>
-                <input
-                  type="text"
-                  id="orderName"
-                  {...register("destinationName")}
-                  className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
-                />
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.destinationName && errors.destinationName.message}
-                </p>
+              <label htmlFor="orderName" className="block text-xs font-semibold text-gray-600 uppercase">
+                お名前
+              </label>
+              <input
+                type="text"
+                id="orderName"
+                {...register("destinationName")}
+                className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
+              />
+              <p className="text-red-500 text-xs mt-1">
+                {errors.destinationName && errors.destinationName.message}
+              </p>
+
                 <br />
 
                 <label
