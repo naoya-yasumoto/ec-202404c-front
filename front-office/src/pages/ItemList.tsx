@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import Item from '../components/Item';
 import axios from 'axios';
 import Navbar from '../components/layout/Navbar';
-import SearchForm from '../components/SearchForm';
 import { HOST_IP } from '../config';
 
 const ItemList: React.FC = () => {
@@ -25,7 +24,7 @@ const ItemList: React.FC = () => {
     <div style={{width:"100%"}}>
       <div>
         {/* <Navbar /> */}
-        <SearchForm />
+        
         <div className="columns is-multiline is-centered">
           {items.map((item, index) => (
             <Item key={index} item={item} />
