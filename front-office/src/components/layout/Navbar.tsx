@@ -88,7 +88,7 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
     <div className="bg-gray-200 shadow-lg py-2">
       <div className="navbar container mx-auto" style={{ width: '80%', height: 'calc(3.25rem * 2.0)' }}>
         <div className="flex-1 flex items-center">
-          <a className="text-4xl font-poiret font-semibold">RakuStyle</a>
+          <Link to="/item-list" className="text-4xl font-poiret font-semibold" title="一覧画面に遷移">RakuStyle</Link>
           <ul className="menu menu-horizontal p-0 ml-8">
             <li>
               <Link to="/item-list/set" className="text-xl font-poiret font-extrabold hover:underline">Sets</Link>
