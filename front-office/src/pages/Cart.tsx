@@ -48,10 +48,12 @@ const Cart: React.FC = () => {
 
   const handleDelete = async (orderItemId: number) => {
     try {
+      const token = getAccessToken();
+      const userInfo = decodeToken(token);
       await axios.delete(`http://${HOST_IP}:8080/ec-202404c/cart/delete`, {
         data: {
           orderItemId: orderItemId,
-          userId: 1
+          userId: userInfo?.userid
         }
       });
       setCartItems(prevItems => prevItems.filter(item => item.id !== orderItemId));

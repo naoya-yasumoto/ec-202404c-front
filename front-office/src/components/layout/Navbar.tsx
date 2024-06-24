@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { BiSearch } from 'react-icons/bi';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
@@ -6,13 +7,14 @@ import { IoPersonOutline } from 'react-icons/io5';
 import LoginModal from '../LoginModal'; // モーダルコンポーネントのインポート
 import { getAccessToken, decodeToken, isLoggedIn } from '../../utils/authUtils';
 import { getCartInfo } from '../../pages/Cart';
+import { HOST_IP } from '../../config';
 
 const Navbar: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [cartItemsCount, setCartItemsCount] = useState(0);
   const [cartSubtotal, setCartSubtotal] = useState(0);
   const [username, setUsername] = useState('ゲストさん');
-  const [loginStatus, setLoginStatus] = useState('ログインしていません');
+  const [loginStatus, setLoginStatus] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +24,7 @@ const Navbar: React.FC = () => {
         const userInfo = decodeToken(token);
         if (userInfo) {
           setUsername(userInfo.username);
-          setLoginStatus('ログイン中');
+          setLoginStatus(true);
           console.log(userInfo.username)
           getCartInfo(userInfo.userid).then(cartItems => {
             const itemCount = cartItems.length;
@@ -41,6 +43,25 @@ const Navbar: React.FC = () => {
       navigate('/cart');
     } else {
       setShowModal(true);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const token = getAccessToken();
+      if (token) {
+        await axios.post(`http://${HOST_IP}:8080/ec-202404c/auth/signout`, {}, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        window.sessionStorage.removeItem('accessToken');
+        setUsername('ゲストさん');
+        setLoginStatus(false);
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Failed to log out:', error);
     }
   };
 
@@ -120,11 +141,17 @@ const Navbar: React.FC = () => {
               <li>
                 <a className="justify-between">
                   {username}さん
-                  <span className="badge">ログイン中</span>
+                  {loginStatus && <span className="badge">ログイン中</span>}
                 </a>
               </li>
-              <li><Link to="/register" className="text-lg">Sign up</Link></li>
-              <li><Link to="/login" className="text-lg">Login</Link></li>
+              {!loginStatus ? (
+                <>
+                  <li><Link to="/register" className="text-lg">Sign up</Link></li>
+                  <li><Link to="/login" className="text-lg">Log in</Link></li>
+                </>
+              ) : (
+                <li><a onClick={handleLogout} className="text-lg cursor -pointer">Log Out</a></li>
+              )}
             </ul>
           </div>
         </div>

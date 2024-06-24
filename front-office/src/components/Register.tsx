@@ -27,6 +27,7 @@ const Register: React.FC = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [emailExists, setEmailExists] = useState(false);
   const navigate = useNavigate();
 
   const onSubmit = async (data: SignUpForm) => {
@@ -83,9 +84,20 @@ const Register: React.FC = () => {
     setLoading(false);
   };
 
+
+  const checkEmailExists = async (email: string) => {
+    try {
+      const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/users/check-email`, { email });
+      setEmailExists(response.status === 409);
+    } catch (error) {
+      alert("そのメールアドレスはすでに使われています。");
+      console.error("メールアドレスの確認に失敗しました:", error);
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full sm:w-4/5 lg:w-3/5">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 ">
+      <div className="w-full sm:w-4/5 lg:w-3/5 mt-20 mb-20">
         <div className="mx-2 my-20 sm:my-auto">
           <div className="flex justify-center">
             <div className="w-full sm:w-11/12 p-12 sm:px-10 sm:py-6 bg-white rounded-lg shadow-md lg:shadow-lg">
@@ -132,13 +144,20 @@ const Register: React.FC = () => {
                 >
                   メールアドレス
                 </label>
+                
                 <input
                   type="email"
                   id="email"
                   {...register("email")}
+                  onChange={(e) => {
+                    register("email").onChange(e); // react-hook-formのonChangeを呼び出す
+                    checkEmailExists(e.target.value); // メールアドレスの重複チェック
+                  }}
                   className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
                 />
+                {emailExists && <p className="text-red-500">そのメールアドレスはすでに使われています。</p>}
                 <p>{errors.email && errors.email.message}</p>
+
 
                 <label
                   htmlFor="password"

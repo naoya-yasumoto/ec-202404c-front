@@ -1,4 +1,3 @@
-// MySelect.tsx
 import React from 'react';
 
 interface MySelectProps {
