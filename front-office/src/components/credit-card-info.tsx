@@ -40,11 +40,21 @@ const CreditCardInfo: React.FC = () => {
     console.log('Terms Accepted:', termsAccepted);
     console.log('Billing Option:', billingOption);
 
-    const response = await axios.post(
-      `http://${HOST_IP}192.168.16.175:8080/ec-202404c/confirm`,
-      cardDetails
-    );
-    console.log("rsponse" + response);
+    try {
+        const response = await axios.post(
+          `http://${HOST_IP}:8080/ec-202404c/order/card`,
+          cardDetails,
+          {
+            headers: {
+              'Content-Type': 'application/json', // ヘッダーにContent-Typeを設定
+            },
+            withCredentials: true, // クッキーをサーバーに送信するために必要
+          }
+        );
+      console.log("response: ", response.data);
+    } catch (error) {
+      console.error("Error during form submission: ", error);
+    }
   };
 
   return (

@@ -41,6 +41,7 @@ const OrderConfirm: React.FC = () => {
     control,
     setValue,
     watch,
+    trigger,
     formState: { errors },
   } = useForm<OrderConfirmForm>({
     mode: "onBlur",
@@ -218,7 +219,12 @@ const OrderConfirm: React.FC = () => {
                   />
                   <button
                     type="button"
-                    onClick={() => fetchAddress(Number(watch("postcode")))}
+                    onClick={async() => {await fetchAddress(Number(watch("postcode")))
+                      trigger("prefecture");
+                      trigger("municipalities");
+                      trigger("address");
+                    }
+                  } 
                     disabled={loading}
                     className="ml-4 w-48 bg-gray-800 py-3 px-6 rounded-sm text-white uppercase font-medium focus:outline-none hover:bg-gray-700 hover:shadow-none"
                   >
@@ -472,7 +478,7 @@ const OrderConfirm: React.FC = () => {
                 <div className="flex justify-between mt-6">
                   <button
                     type="submit"
-                    disabled={isSubmitting}
+                    //disabled={isSubmitting}
                     className={`px-6 py-2 ${buttonColor} text-white rounded-sm focus:outline-none hover:bg-gray-700`}
                     onClick={() => setButtonColor('bg-gray-400')}>
                           注文
