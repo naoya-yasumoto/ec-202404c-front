@@ -4,7 +4,9 @@ import { useForm, Controller } from "react-hook-form";
 import MySelect from "./MySelect";
 import { prefecturesOptions } from "../utils/prefectures";
 import { HOST_IP } from "../config";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { validationSchema } from "../utils/validationSchema";
 
 interface SignUpForm {
   lastName: string;
@@ -29,11 +31,6 @@ const Register: React.FC = () => {
 
   const onSubmit = async (data: SignUpForm) => {
     const combinedName = `${data.lastName} ${data.firstName}`;
-
-<<<<<<< HEAD
-=======
-    // Create form data object with combined fields
->>>>>>> origin/feature/creditCardInfo
     const formData = {
       name: combinedName,
       email: data.email,
@@ -44,7 +41,6 @@ const Register: React.FC = () => {
       address: data.address,
       telephone: data.tel,
     };
-<<<<<<< HEAD
 
     console.log(formData);
 
@@ -60,25 +56,6 @@ const Register: React.FC = () => {
         console.error('サーバーエラー:', error);
       } else {
         console.error('An error occurred:', error);
-=======
-    console.log(formData);
-
-    try {
-      const response = await axios.post(
-        `http://${HOST_IP}:8080/ec-202404c/users/register`,
-        formData
-      );
-      if (response.status === 201) {
-        navigate("/login");
-      }
-      console.log("Employee data:", response.data);
-    } catch (error: any) {
-      console.error("An error occurred:", error);
-      if (error.response && error.response.status >= 500) {
-        console.log("500:", error.response.status);
-      } else {
-        console.error("An error occurred:", error);
->>>>>>> origin/feature/creditCardInfo
       }
     }
   };
@@ -202,13 +179,13 @@ const Register: React.FC = () => {
                 <p>{errors.postcode && errors.postcode.message}</p>
 
                 <label
-                  htmlFor="prefectures"
+                  htmlFor="prefecture"
                   className="block text-xs font-semibold text-gray-600 uppercase mt-4"
                 >
                   都道府県
                 </label>
                 <Controller
-                  name="prefectures"
+                  name="prefecture"
                   control={control}
                   render={({ field }) => (
                     <MySelect
