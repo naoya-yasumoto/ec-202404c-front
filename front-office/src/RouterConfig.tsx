@@ -5,10 +5,11 @@ import Login from './components/Login.tsx';
 import ItemList from './pages/ItemList.tsx';
 import Cart from './pages/Cart.tsx';
 import ItemDetail from './pages/ItemDetail.tsx';
-import Navbar from './components/layout/Navbar.tsx';
 import OrderConfirm from './components/order_confirm.tsx';
 import CreditCardInfo from './components/credit-card-info.tsx';
 import OrderComplete from './pages/OrderComplete.tsx';
+import NotFound from './pages/NotFound.tsx'; 
+import Navbar from './components/layout/Navbar.tsx';
 import ItemListAll from './pages/ItemListAll.tsx';
 
 export const RouterConfig = () => {
@@ -27,6 +28,7 @@ export const RouterConfig = () => {
                         <Route path="/order_confirm" element={<OrderConfirm />} />
                         <Route path="/credit-card-info" element={<CreditCardInfo />} />
                         <Route path="/complete" element={<OrderComplete />} />
+                        <Route path="*" element={<NotFound />} /> {/* 404ページへのルート */}
                     </Routes>
                 </BrowserRouter>
         </>
