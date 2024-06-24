@@ -9,8 +9,9 @@ const formatNumberWithCommas = (number: number) => {
   
 const Price: React.FC<PriceProps> = ({ amount }) => {
     return (
-      <div className="text-xl font-semibold">
-        {formatNumberWithCommas(parseFloat(amount))}円
+      <div className="text-2xl font-semibold">
+        {formatNumberWithCommas(parseFloat(amount))}
+        <span className="text-sm">円</span>
       </div>
     );
   };
