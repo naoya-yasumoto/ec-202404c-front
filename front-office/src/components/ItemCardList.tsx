@@ -4,7 +4,12 @@ import Item from '../components/Item';
 import axios from 'axios';
 import { HOST_IP } from '../config';
 
-const ItemCardList: React.FC = () => {
+interface ItemCardListProps {
+  itemType: string;
+  query: string;
+}
+
+const ItemCardList: React.FC<ItemCardListProps> = ({ itemType, query }) => {
   const { type } = useParams<{ type: string }>();
   const [items, setItems] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
