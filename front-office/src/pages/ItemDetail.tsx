@@ -22,6 +22,9 @@ interface Item {
   name: string;
   price: number;
   topId: number;
+  topImagePath: string;
+  bottomImagePath: string;
+  isFavorite: boolean;
 }
 
 interface AddCartRequest {
@@ -134,6 +137,40 @@ const ItemDetail: React.FC = () => {
     }
   };
 
+  const handleFavoriteClick = async () => {
+    if (!item) return;
+
+    const token = getAccessToken();
+    if (!token) {
+      setShowModal(true);
+      return;
+    }
+
+    const userInfo = decodeToken(token);
+    if (!userInfo) {
+      setShowModal(true);
+      return;
+    }
+
+    try {
+      if (item.isFavorite) {
+        await axios.post(`http://${HOST_IP}:8080/ec-202404c/favorites/delete`, {
+          userId: userInfo.userid,
+          itemId: item.id
+        });
+      } else {
+        await axios.post(`http://${HOST_IP}:8080/ec-202404c/favorites/add`, {
+          userId: userInfo.userid,
+          itemId: item.id
+        });
+      }
+
+      setItem(prevItem => prevItem ? { ...prevItem, isFavorite: !prevItem.isFavorite } : prevItem);
+    } catch (error: any) {
+      console.error("There was an error updating the favorite status!", error);
+    }
+  };
+
   if (item === null) {
     return null;
   }
@@ -183,12 +220,13 @@ const ItemDetail: React.FC = () => {
                   />
                   <a
                     href="#"
-                    className="absolute right-4 top-4 inline-block rounded-lg border bg-white px-3.5 py-3 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-100 focus-visible:ring active:text-gray-700 md:text-base"
+                    onClick={handleFavoriteClick}
+                    className={`absolute right-4 top-4 inline-block rounded-lg border bg-white px-3.5 py-3 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-100 focus-visible:ring active:text-gray-700 md:text-base ${item.isFavorite ? 'text-red-500' : ''}`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6"
-                      fill="none"
+                      fill={item.isFavorite ? 'currentColor' : 'none'}
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                     >
