@@ -7,7 +7,6 @@ import { HOST_IP } from '../config';
 import ItemCardList from '../components/ItemCardList';
 
 const ItemList: React.FC = () => {
-  const { type } = useParams<{ type: string }>();
   const [itemsSet, setItemsSet] = useState<any[]>([]);
   const [itemsTop, setItemsTop] = useState<any[]>([]);
   const [itemsBottom, setItemsBottom] = useState<any[]>([]);
@@ -15,11 +14,18 @@ const ItemList: React.FC = () => {
 
   useEffect(() => {
     const getItemsAsync = async () => {
+
+      let url = `http://${HOST_IP}:8080/ec-202404c/items`;
+
+      // Check if there are query parameters
+      const queryParams = new URLSearchParams(location.search);
+      const q = queryParams.get('q');
+
       try {
         const [responseSet, responseTop, responseBottom] = await Promise.all([
-          axios.get(`http://${HOST_IP}:8080/ec-202404c/items/set`),
-          axios.get(`http://${HOST_IP}:8080/ec-202404c/items/top`),
-          axios.get(`http://${HOST_IP}:8080/ec-202404c/items/bottom`),
+          axios.get(`${url}/set`+`?q=${encodeURIComponent(q?q:"")}`),
+          axios.get(`${url}/top`+`?q=${encodeURIComponent(q?q:"")}`),
+          axios.get(`${url}/bottom`+`?q=${encodeURIComponent(q?q:"")}`),
         ]);
 
         setItemsSet(responseSet.data.items);
@@ -34,7 +40,7 @@ const ItemList: React.FC = () => {
     };
 
     getItemsAsync();
-  }, []);
+  }, [itemsSet, itemsTop, itemsBottom]);
 
   // ローディング中は何も表示しない
   if (loading) {
