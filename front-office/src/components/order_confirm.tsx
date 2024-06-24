@@ -240,7 +240,7 @@ const OrderConfirm: React.FC = () => {
                 <label
                   htmlFor="municipalities"
                   className="block text-xs font-semibold text-gray-600 uppercase"
-                >
+                > 
                   市区町村
                 </label>
                 <input
