@@ -47,6 +47,8 @@ const OrderConfirm: React.FC = () => {
 
   const [order, setOrder] = useState<any[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [buttonColor, setButtonColor] = useState('bg-gray-800');
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -74,6 +76,7 @@ const OrderConfirm: React.FC = () => {
   }, []);
 
   const onSubmit = async (data: OrderConfirmForm) => {
+    setIsSubmitting(true);
     
     // `deliveryDate` を Date オブジェクトとして作成
     const deliveryDate = new Date(data.deliveryDate);
@@ -190,7 +193,7 @@ const OrderConfirm: React.FC = () => {
                   htmlFor="postcode"
                   className="block text-xs font-semibold text-gray-600 uppercase"
                 >
-                  郵便番号
+                  郵便番号（ハイフン“−”は不要です）
                 </label>
                 <div className="flex items-center">
                   <input
@@ -273,7 +276,7 @@ const OrderConfirm: React.FC = () => {
                   htmlFor="tel"
                   className="block text-xs font-semibold text-gray-600 uppercase"
                 >
-                  電話番号
+                  電話番号（ハイフン“−”は不要です）
                 </label>
                 <input
                   type="tel"
@@ -383,9 +386,10 @@ const OrderConfirm: React.FC = () => {
                 <div className="flex justify-between mt-6">
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-gray-800 text-white rounded-sm focus:outline-none hover:bg-gray-700"
-                  >
-                    登録
+                    disabled={isSubmitting}
+                    className={`px-6 py-2 ${buttonColor} text-white rounded-sm focus:outline-none hover:bg-gray-700`}
+                    onClick={() => setButtonColor('bg-gray-400')}>
+                          注文
                   </button>
                   <button
                     type="reset"

@@ -177,7 +177,7 @@ const Register: React.FC = () => {
                   htmlFor="postcode"
                   className="block text-xs font-semibold text-gray-600 uppercase mt-4"
                 >
-                  郵便番号
+                  郵便番号（ハイフン“−”は不要です）
                 </label>
                 <div className="flex items-center">
                   <input
@@ -247,7 +247,7 @@ const Register: React.FC = () => {
                   htmlFor="tel"
                   className="block text-xs font-semibold text-gray-600 uppercase mt-4"
                 >
-                  電話番号
+                  電話番号（ハイフン“−”は不要です）
                 </label>
                 <input
                   type="tel"
