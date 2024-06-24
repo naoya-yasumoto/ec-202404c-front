@@ -62,6 +62,7 @@ const OrderConfirm: React.FC = () => {
           return;
         }
         const response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/cart/user/${userInfo.userid}`);
+        setOrder(response.data)
 
       } catch (error) {
         console.error('Error fetching cart items:', error);
@@ -101,12 +102,16 @@ const OrderConfirm: React.FC = () => {
     };
 
     console.log(formData);
-    //ここにjson送信を入れる
-    const response = await axios.post(
+        const response = await axios.post(
       `http://${HOST_IP}:8080/ec-202404c/order`,
       formData
     );
-    console.log(response);
+    // 成功
+    if (response.status === 200) {
+      navigate("/complete");
+    } else {
+      <p>エラーが発生しました！</p>;
+    }
   };
 
   const handleBackClick = () => {
