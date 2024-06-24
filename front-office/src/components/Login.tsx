@@ -12,7 +12,11 @@ interface SignUpForm {
   postcode: number;
 }
 
-const Login: React.FC = () => {
+interface LoginProps {
+  setUsername: React.Dispatch<React.SetStateAction<any>>;
+}
+
+const Login: React.FC<LoginProps> = ({ setUsername }) => {
   const {
     register,
     handleSubmit,
@@ -37,10 +41,10 @@ const Login: React.FC = () => {
       `http://${HOST_IP}:8080/ec-202404c/auth/login`,
       formData
     );
-
+    console.log(response)
     // 成功
     if (response.status === 200) {
-      navigate("/item-list/set");
+      navigate("/item-list");
     } else {
       <p>エラーが発生しました！</p>;
     }
@@ -57,7 +61,7 @@ const Login: React.FC = () => {
       const tokenPayload = JSON.parse(atob(token.split(".")[1]));
       const username = tokenPayload.username;
       const userid = tokenPayload.userid;
-
+      setUsername(tokenPayload.username);
       // 必要に応じて username を使用する
     }
 
