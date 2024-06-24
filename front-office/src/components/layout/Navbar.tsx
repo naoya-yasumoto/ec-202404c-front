@@ -70,7 +70,12 @@ const Navbar: React.FC = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     // console.log(`/item-list/${searchType.toLowerCase()}?q=${encodeURIComponent(searchQuery)}`)
-    navigate(`/item-list/${searchType.toLowerCase()}?q=${encodeURIComponent(searchQuery)}`);
+    if(searchType.toLowerCase() === "all"){
+      navigate(`/item-list?q=${encodeURIComponent(searchQuery)}`);
+    }
+    else{
+      navigate(`/item-list/${searchType.toLowerCase()}?q=${encodeURIComponent(searchQuery)}`);
+    }
   };
 
   return (
