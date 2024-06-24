@@ -4,36 +4,17 @@ import Item from '../components/Item';
 import axios from 'axios';
 import { HOST_IP } from '../config';
 
-interface ItemCardListProps {
-  itemType: string;
-  query: string;
-}
-
-const ItemCardList: React.FC<ItemCardListProps> = ({ itemType, query }) => {
-  const { type } = useParams<{ type: string }>();
-  const [items, setItems] = useState<any[]>([]);
+const ItemCardList: React.FC<{ items: any[] }> = ({ items }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/items/${type}`);
-        setItems(response.data.items);
-      } catch (error) {
-        console.error('Error fetching items:', error);
-      }
-    };
-    fetchItems();
-  }, [type]);
+  // ページネーションのためのページ変更ハンドラ
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   // 現在のページのアイテムを取得
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
-
-  // ページネーションのためのページ変更ハンドラ
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <div style={{ width: '100%' }}>

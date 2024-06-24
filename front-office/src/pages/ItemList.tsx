@@ -3,12 +3,11 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Footer from '../components/layout/Footer';
 import { HOST_IP } from '../config';
-import ItemCardList from '../components/ItemCardList'
+import ItemCardList from '../components/ItemCardList';
 
 const ItemList: React.FC = () => {
-  const { type } = useParams();
-  const [query, setQuery] = useState("");
-  const [items, setItems] = useState([]);
+  const { type } = useParams<{ type: string }>();
+  const [items, setItems] = useState<any[]>([]);
 
 
   useEffect(() => {
@@ -39,14 +38,10 @@ const ItemList: React.FC = () => {
 
   return (
     <div style={{width:"100%"}}>
-      <div>
-        {/* <Navbar /> */}
-        {/* <ItemCardList /> */}
-        <Footer />
-
-      </div>
+      <ItemCardList items={items} />
+      <Footer />
     </div>
-  )
+  );
 };
 
 export default ItemList;
