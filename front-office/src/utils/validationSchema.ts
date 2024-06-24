@@ -11,5 +11,5 @@ export const validationSchema = z.object({
   prefecture: z.string().nonempty({ message: "都道府県を選択してください" }),
   municipalities: z.string().min(1, { message: "市区町村は必須です" }),
   address: z.string().min(1,{message: "住所は必須です"}),
-  tel: z.string().min(1,{message: "電話番号は必須です"}).regex(phoneRegex,{message: "半角数字で入力してください"}),
+  tel: z.string().min(1,{message: "電話番号は必須です"}).regex(phoneRegex,{message: "正しい形式で入力してください"}),
 });

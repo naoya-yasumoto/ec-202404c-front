@@ -11,12 +11,15 @@ module.exports = withMT({
     extend: {
       fontFamily: {
         poiret: ['Poiret One', 'sans-serif'],
+        josefin: ['"Josefin Sans"', 'sans-serif'],
       },
       fontSize: {
         '3xl': '2.2rem', // カスタムフォントサイズ
       },
       fontWeight: {
         'extrabold': '600', // 太いフォントの重さを追加
+        'normal': 400, // Regular
+        'bold': 700,   // Bold
       },
       keyframes: {
         fadeInUp: {
