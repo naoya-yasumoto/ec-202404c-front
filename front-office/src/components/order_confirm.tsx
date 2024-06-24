@@ -30,7 +30,6 @@ interface OrderConfirmForm {
 const OrderConfirm: React.FC = () => {
 
   const navigate = useNavigate();
-  
 
   const {
     register,
@@ -41,12 +40,16 @@ const OrderConfirm: React.FC = () => {
     formState: { errors },
   } = useForm<OrderConfirmForm>({
     mode: "onBlur",
-    // resolver: zodResolver(orderSchema),
+    resolver: zodResolver(orderSchema),
   });
+  
+
   const [loading, setLoading] = useState(false);
 
   const [order, setOrder] = useState<any[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [buttonColor, setButtonColor] = useState('bg-gray-800');
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -74,6 +77,7 @@ const OrderConfirm: React.FC = () => {
   }, []);
 
   const onSubmit = async (data: OrderConfirmForm) => {
+    setIsSubmitting(true);
     
     // `deliveryDate` を Date オブジェクトとして作成
     const deliveryDate = new Date(data.deliveryDate);
@@ -165,21 +169,19 @@ const OrderConfirm: React.FC = () => {
                 注文確認画面
               </h2>
               <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-                <label
-                  htmlFor="orderName"
-                  className="block text-xs font-semibold text-gray-600 uppercase"
-                >
-                  お名前
-                </label>
-                <input
-                  type="text"
-                  id="orderName"
-                  {...register("destinationName")}
-                  className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
-                />
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.destinationName && errors.destinationName.message}
-                </p>
+              <label htmlFor="orderName" className="block text-xs font-semibold text-gray-600 uppercase">
+                お名前
+              </label>
+              <input
+                type="text"
+                id="orderName"
+                {...register("destinationName")}
+                className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
+              />
+              <p className="text-red-500 text-xs mt-1">
+                {errors.destinationName && errors.destinationName.message}
+              </p>
+
                 <br />
 
                 <label
@@ -203,7 +205,7 @@ const OrderConfirm: React.FC = () => {
                   htmlFor="postcode"
                   className="block text-xs font-semibold text-gray-600 uppercase"
                 >
-                  郵便番号
+                  郵便番号（ハイフン“−”は不要です）
                 </label>
                 <div className="flex items-center">
                   <input
@@ -251,7 +253,7 @@ const OrderConfirm: React.FC = () => {
                 <label
                   htmlFor="municipalities"
                   className="block text-xs font-semibold text-gray-600 uppercase"
-                >
+                > 
                   市区町村
                 </label>
                 <input
@@ -286,7 +288,7 @@ const OrderConfirm: React.FC = () => {
                   htmlFor="tel"
                   className="block text-xs font-semibold text-gray-600 uppercase"
                 >
-                  電話番号
+                  電話番号（ハイフン“−”は不要です）
                 </label>
                 <input
                   type="tel"
@@ -396,9 +398,10 @@ const OrderConfirm: React.FC = () => {
                 <div className="flex justify-between mt-6">
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-gray-800 text-white rounded-sm focus:outline-none hover:bg-gray-700"
-                  >
-                    登録
+                    disabled={isSubmitting}
+                    className={`px-6 py-2 ${buttonColor} text-white rounded-sm focus:outline-none hover:bg-gray-700`}
+                    onClick={() => setButtonColor('bg-gray-400')}>
+                          注文
                   </button>
                   <button
                     type="reset"

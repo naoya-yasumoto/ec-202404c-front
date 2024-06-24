@@ -1,14 +1,14 @@
-import { coerce, z } from "zod";
-import { phoneRegex } from "./phoneRegex";
+import { z } from 'zod';
 
 export const orderSchema = z.object({
-  
-  // orderName: z.string().min(1,{message: "お名前は必須です"}),
-  // email: z.string(s).min(1,{message: "メールアドレスは必須です"}).email({message: "正しいメールアドレスを入力してください"}),
-  // postcode: z.coerce.number().min(1,{message: "郵便番号は必須です"}),
-  // municipalitie: z.string().min(1,{message: "市区町村は必須です"}),
-  // address: z.string().min(1,{message: "住所は必須です"}),
-  // telephone: z.string().min(1,{message: "電話番号は必須です"}).regex(phoneRegex,{message: "半角数字で入力してください"}),
-  // deliveryDate: z.string().min(1,{message: "配達日を指定してください"}),
-
+  destinationName: z.string().nonempty("お名前は必須です"),
+  destinationEmail: z.string().email("有効なメールアドレスを入力してください"),
+  postcode: z.string().regex(/^\d{7}$/, "郵便番号は7桁の数字でなければなりません"),
+  prefecture: z.string().nonempty("都道府県を選択してください"),
+  municipalities: z.string().nonempty("市区町村は必須です"),
+  address: z.string().nonempty("住所は必須です"),
+  telephone: z.string().regex(/^\d{10,11}$/, "電話番号は10桁または11桁の数字でなければなりません"),
+  deliveryDate: z.string().nonempty("配達日時を選択してください"),
+  deliveryTime: z.string().nonempty("配達時間を選択してください"),
+  paymentMethod: z.string().nonempty("お支払い方法を選択してください"),
 });
