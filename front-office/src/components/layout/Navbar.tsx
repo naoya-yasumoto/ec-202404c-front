@@ -1,59 +1,137 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { BiSearch } from 'react-icons/bi';
+import { AiOutlineShoppingCart } from 'react-icons/ai';
+import { IoPersonOutline } from 'react-icons/io5';
+import LoginModal from '../LoginModal'; // モーダルコンポーネントのインポート
+import { getAccessToken, decodeToken, isLoggedIn } from '../../utils/authUtils';
+import { getCartInfo } from '../../pages/Cart';
 
-const Navbar: React.FC = () => (
-  <div className="bg-gray-100">
-    <div className="navbar container mx-auto" style={{ width: '80%', height: 'calc(3.25rem * 2.0)'} }>
-      <div className="flex-1 flex items-center">
-        <a className="text-3xl font-poiret font-extrabold">RakuStyle</a>
-        <ul className="menu menu-horizontal p-0 ml-4">
-        <li><Link to="/item-list/set" className="text-lg">Sets</Link></li>
-        <li><Link to="/item-list/top" className="text-lg">Tops</Link></li>
-        <li><Link to="/item-list/bottom" className="text-lg">Bottom</Link></li>
-        </ul>
-      </div>
+const Navbar: React.FC = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [cartItemsCount, setCartItemsCount] = useState(0);
+  const [cartSubtotal, setCartSubtotal] = useState(0);
+  const [username, setUsername] = useState('ゲストさん');
+  const [loginStatus, setLoginStatus] = useState('ログインしていません');
+  const navigate = useNavigate();
 
-      <div className="dropdown dropdown-end">
-        <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
-          <div className="indicator">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            <span className="badge badge-sm indicator-item">1</span>
-          </div>
-        </div>
-        <div tabIndex={0} className="mt-3 z-[1] card card-compact dropdown-content w-52 bg-base-100 shadow">
-          <div className="card-body">
-            <span className="font-bold text-lg">8 Items</span>
-            <span className="text-info">Subtotal: $999</span>
-            <div className="card-actions">
-              <button className="btn btn-primary btn-block">View cart</button>
-            </div>
-          </div>
-        </div>
-      </div>
+  useEffect(() => {
+    if (isLoggedIn()) {
+      const token = getAccessToken();
+      if (token) {
+        const userInfo = decodeToken(token);
+        if (userInfo) {
+          setUsername(userInfo.username);
+          setLoginStatus('ログイン中');
+          console.log(userInfo.username)
+          getCartInfo(userInfo.userid).then(cartItems => {
+            const itemCount = cartItems.length;
+            const subtotal = cartItems.reduce((total, item) => total + (item.item.price * item.quantity), 0);
+            setCartItemsCount(itemCount);
+            setCartSubtotal(subtotal);
+          });
+        
+        }
+      }
+    }
+  }, []);
 
-      <div className="flex-none gap-2">
-        <div className="dropdown dropdown-end">
-          <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-            <div className="w-10 rounded-full">
-              <img alt="Tailwind CSS Navbar component" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
-            </div>
-          </div>
-          <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+  const handleViewCart = () => {
+    if (isLoggedIn()) {
+      navigate('/cart');
+    } else {
+      setShowModal(true);
+    }
+  };
+
+  return (
+    <div className="bg-gray-200 shadow-lg py-2">
+      <div className="navbar container mx-auto" style={{ width: '80%', height: 'calc(3.25rem * 2.0)' }}>
+        <div className="flex-1 flex items-center">
+          <a className="text-4xl font-poiret font-semibold">RakuStyle</a>
+          <ul className="menu menu-horizontal p-0 ml-8">
             <li>
-              <a className="justify-between">
-                初田さん
-                <span className="badge">ログイン中</span>
-              </a>
+              <Link to="/item-list/set" className="text-xl font-poiret font-extrabold hover:underline">Sets</Link>
             </li>
-            <li><Link to="/register" className="text-lg">Sign up</Link></li>
-            <li><Link to="/login" className="text-lg">Login</Link></li>
+            <li>
+              <Link to="/item-list/top" className="text-xl font-poiret font-extrabold hover:underline">Tops</Link>
+            </li>
+            <li>
+              <Link to="/item-list/bottom" className="text-xl font-poiret font-extrabold hover:underline">Bottom</Link>
+            </li>
           </ul>
         </div>
+
+        <div className="flex items-center ml-auto space-x-4">
+          <form className="flex gap-3">
+            <div className="flex rounded-lg">
+              <input
+                type="text"
+                placeholder="商品名で検索"
+                className="w-full md:w-60 px-3 h-10 rounded-l-md border-2 border-gray-600 focus:outline-none focus:border-gray-600"
+              />
+              <button
+                type="submit"
+                className="bg-gray-600 text-white rounded-r-md px-2 md:px-3 py-0 md:py-1 flex items-center justify-center"
+              >
+                <BiSearch className="text-white" />
+              </button>
+            </div>
+
+            <select
+              id="pricingType"
+              name="pricingType"
+              className="w-24 h-10 border-2 border-gray-600 focus:outline-none focus:border-gray-600 text-black rounded-md px-2 md:px-3 py-0 md:py-1 tracking-wider"
+            >
+              <option value="All" selected>
+                All
+              </option>
+              <option value="set">set</option>
+              <option value="tops">tops</option>
+              <option value="bottoms">bottoms</option>
+            </select>
+          </form>
+
+          <div className="dropdown dropdown-end ml-4">
+            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+              <div className="indicator flex items-center" style={{ marginLeft: '-3px' }}>
+                <AiOutlineShoppingCart className="h-6 w-6 text-black" />
+                <span className="badge badge-sm indicator-item">{cartItemsCount}</span>
+              </div>
+            </div>
+            <div tabIndex={0} className="mt-3 z-[1] card card-compact dropdown-content w-52 bg-base-100 shadow">
+              <div className="card-body">
+                <span className="font-bold text-lg">{cartItemsCount} Items</span>
+                <span className="text-info">Subtotal: ${cartSubtotal.toFixed(2)}</span>
+                <div className="card-actions">
+                  <button className="bg-gray-600 text-white rounded-md px-2 md:px-3 py-1 md:py-2" onClick={handleViewCart}>View cart</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="dropdown dropdown-end ml-4">
+            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+              <div className="indicator flex items-center">
+                <IoPersonOutline className="h-6 w-6 text-black" />
+              </div>
+            </div>
+            <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+              <li>
+                <a className="justify-between">
+                  {username}さん
+                  <span className="badge">ログイン中</span>
+                </a>
+              </li>
+              <li><Link to="/register" className="text-lg">Sign up</Link></li>
+              <li><Link to="/login" className="text-lg">Login</Link></li>
+            </ul>
+          </div>
+        </div>
       </div>
+      <LoginModal show={showModal} onClose={() => setShowModal(false)} />
     </div>
-  </div>
-);
+  );
+};
 
 export default Navbar;

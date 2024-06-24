@@ -1,26 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import MySelect from "./MySelect";
 import { prefecturesOptions } from "../utils/prefectures";
-import { times } from "../utils/times";
-import { HOST_IP } from "../config";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { validationSchema } from "../utils/validationSchema";
+import { orderSchema } from "../utils/orderSchema";
 import { useNavigate } from "react-router-dom";
+import { HOST_IP } from '../config';
+import { times } from "../utils/times";
 
-interface OrderfirmForm {
-  orderName: string;
-  email: string;
-  postcode: number;
-  prefectures: string;
+interface OrderConfirmForm {
+  orderId: number;
+  userId: number;
+  destinationName: string;
+  destinationEmail: string;
+  postcode: string;
+  prefecture: string;
   municipalities: string;
   address: string;
-  telephone: number;
-  deliveryDate: Date;
-  delivaryTime: string;
+  telephone: string;
+  deliveryDate: string;
+  deliveryTime: string;
   paymentMethod: string;
 }
 
-const Order_confirm: React.FC = () => {
+const OrderConfirm: React.FC = () => {
+
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -28,48 +36,65 @@ const Order_confirm: React.FC = () => {
     setValue,
     watch,
     formState: { errors },
-  } = useForm<OrderfirmForm>({
+  } = useForm<OrderConfirmForm>({
     mode: "onBlur",
     // resolver: zodResolver(orderSchema),
   });
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (data: OrderfirmForm) => {
-    // const date = new Date(data.deliveryDate).setHours(Number.parseInt(data.delivaryTime));
+  const [order, setOrder] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      try {
+        const response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/cart/user/2`);
+        setOrder(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching cart items:', error);
+      }
+    };
+
+    fetchOrder();
+  }, []);
+
+  const onSubmit = async (data: OrderConfirmForm) => {
+    
     // `deliveryDate` を Date オブジェクトとして作成
     const deliveryDate = new Date(data.deliveryDate);
 
     
     // デリバリー時間をセット
-    const deliveryHour = Number.parseInt(data.delivaryTime);
-
+    const deliveryHour = Number.parseInt(data.deliveryDate);
+                                              
     if (!isNaN(deliveryHour)) {
       deliveryDate.setHours(deliveryHour);
     }
 
     // 結合したフィールドを含むオブジェクトを作成
     const formData = {
-      name: data.orderName,
-      email: data.email,
+      orderId: order.id,
+      userId: 2,
+      destinationName: data.destinationName,
+      destinationEmail: data.destinationEmail,
       zipcode: data.postcode,
-      prefecture: data.prefectures,
+      prefecture: data.prefecture,
       municipalities: data.municipalities,
       address: data.address,
       telephone: data.telephone,
       deliveryDate: deliveryDate,
+      deliveryTime: deliveryHour,
       paymentMethodId: data.paymentMethod,
     };
 
     console.log(formData);
     //ここにjson送信を入れる
     const response = await axios.post(
-      `http://${HOST_IP}192.168.16.175:8080/ec-202404c/confirm`,
+      `http://${HOST_IP}:8080/ec-202404c/order`,
       formData
     );
-    console.log("rsponse" + response);
+    console.log(response);
   };
-
-  const navigate = useNavigate();
 
   const handleBackClick = () => {
     navigate('/item-list/set');
@@ -85,7 +110,7 @@ const Order_confirm: React.FC = () => {
 
       if (data.results) {
         const result = data.results[0];
-        setValue("prefectures", result.address1);
+        setValue("prefecture", result.address1);
         setValue("municipalities", result.address2);
         setValue("address", result.address3);
       } else {
@@ -117,11 +142,11 @@ const Order_confirm: React.FC = () => {
                 <input
                   type="text"
                   id="orderName"
-                  {...register("orderName")}
+                  {...register("destinationName")}
                   className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
                 />
                 <p className="text-red-500 text-xs mt-1">
-                  {errors.orderName && errors.orderName.message}
+                  {errors.destinationName && errors.destinationName.message}
                 </p>
                 <br />
 
@@ -134,11 +159,11 @@ const Order_confirm: React.FC = () => {
                 <input
                   type="email"
                   id="email"
-                  {...register("email")}
+                  {...register("destinationEmail")}
                   className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
                 />
                 <p className="text-red-500 text-xs mt-1">
-                  {errors.email && errors.email.message}
+                  {errors.destinationEmail && errors.destinationEmail.message}
                 </p>
                 <br />
 
@@ -176,7 +201,7 @@ const Order_confirm: React.FC = () => {
                   都道府県
                 </label>
                 <Controller
-                  name="prefectures"
+                  name="prefecture"
                   control={control}
                   render={({ field }) => (
                     <MySelect
@@ -187,7 +212,7 @@ const Order_confirm: React.FC = () => {
                   )}
                 />
                 <p className="text-red-500 text-xs mt-1">
-                  {errors.prefectures && errors.prefectures.message}
+                  {errors.prefecture && errors.prefecture.message}
                 </p>
                 <br />
 
@@ -260,7 +285,7 @@ const Order_confirm: React.FC = () => {
                 <br />
 
                 <Controller
-                  name="delivaryTime"
+                  name="deliveryTime"
                   control={control}
                   render={({ field }) => (
                     <MySelect
@@ -274,7 +299,7 @@ const Order_confirm: React.FC = () => {
                   {errors.deliveryDate && errors.deliveryDate.message}
                 </p>
                 <p className="text-red-500 text-xs mt-1">
-                  {errors.delivaryTime && errors.delivaryTime.message}
+                  {errors.deliveryTime && errors.deliveryTime.message}
                 </p>
                 <br />
 
@@ -360,4 +385,4 @@ const Order_confirm: React.FC = () => {
   );
 };
 
-export default Order_confirm;
+export default OrderConfirm;

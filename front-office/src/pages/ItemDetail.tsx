@@ -1,72 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import Item from '../components/Item';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
-import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { HOST_IP } from '../config';
+import { addItemSchema } from '../utils/addItemSchema';
+import { getAccessToken, decodeToken } from '../utils/authUtils';
+import LoginModal from '../components/LoginModal';
+import Toast from '../components/ToCartToast';
+import { z } from 'zod';
+import Footer from '../components/layout/Footer';
 
-const Container = styled.div`
-  width: 100%;
-  // padding: 20px;
-`;
-
-const Title = styled.h3`
-  text-align: center;
-`;
-
-const Row = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 15px;
-`;
-
-const Column = styled.div`
-  flex: 1;
-  padding: 10px;
-`;
-
-const Image = styled.img`
-  width: 100%;
-  border-radius: 8px;
-`;
-
-const FormGroup = styled.div`
-  margin-bottom: 15px;
-`;
-
-const Label = styled.label`
-  display: block;
-  margin-bottom: 5px;
-`;
-
-const RadioLabel = styled.label`
-  margin-right: 15px;
-`;
-
-const Select = styled.select`
-  width: 100%;
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-`;
-
-const Button = styled.button`
-  width: 100%;
-  padding: 10px;
-  background-color: #f0ad4e;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-`;
-
-const TotalPrice = styled.span`
-  display: block;
-  margin-top: 20px;
-  font-size: 1.2em;
-  font-weight: bold;
-`;
 
 interface Item {
   bottomId: number;
@@ -81,98 +25,301 @@ interface Item {
 
 interface AddCartRequest {
   itemId: number;
-  name: string;
+  userId: number;
   size: string;
   quantity: number;
   price: number;
+  color: string;  // 追加
 }
 
 const ItemDetail: React.FC = () => {
-
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [item, setItem] = useState<Item | null>(null);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [selectedSize, setSelectedSize] = useState<string>("M");
+  const [selectedQuantity, setSelectedQuantity] = useState<number>(1);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [selectedColor, setSelectedColor] = useState<string>("gray-800");
+
+
+  const navigate = useNavigate();
+
+  type ItemFormData = z.infer<typeof addItemSchema>;
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<ItemFormData>({
+    resolver: zodResolver(addItemSchema),
+  });
+
+  const watchedQuantity = watch("quantity", 1);
 
   useEffect(() => {
-    const getChatsAsync = async () => {
-      const response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/item/${id}`);
-      console.log("responseDetailpage", response.data);
-      console.log("Item ID from URL:", id);
+    const getItemAsync = async () => {
+      const response = await axios.get(
+        `http://${HOST_IP}:8080/ec-202404c/item/${id}`
+      );
       setItem(response.data);
+      setTotalPrice(response.data.price); // Initialize with default price
+    };
+    getItemAsync();
+  }, [id]);
+
+  useEffect(() => {
+    if (item) {
+      const quantity = Number(watchedQuantity);
+      setTotalPrice(item.price * quantity);
     }
-    getChatsAsync();
-  }, [id])
+  }, [watchedQuantity, item]);
 
+  // 色の変更ハンドラ
+  const handleColorChange = (color: string) => {
+    setSelectedColor(color);
+  };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const onSubmit = async (data: ItemFormData) => {
+    if (!item) return;
 
-    const formData = new FormData(event.target as HTMLFormElement);
-    const size = formData.get('size');
-    const quantity = formData.get('quantity');
+    const token = getAccessToken();
+    if (!token) {
+      setShowModal(true);
+      return;
+    }
+
+    const userInfo = decodeToken(token);
+    if (!userInfo) {
+      setShowModal(true);
+      return;
+    }
 
     const cartItem: AddCartRequest = {
       itemId: item.id,
-      name: item.name,
-      size: "M",
-      quantity: 1,
-      price: item.price*quantity,
+      userId: userInfo.userid,
+      quantity: data.quantity,
+      size: data.size,
+      price: totalPrice,
+      color: selectedColor,  // 追加
     };
-
-    console.log(cartItem)
+    try {
+      const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/cart/add`, cartItem);
+      if(response.status === 200){
+        setShowToast(true);
+      }
+    } catch (error:any) {
+      if (error.response && (error.response.status === 403 || error.response.status === 401)) {
+        navigate("/login");
+      }
+      console.error("There was an error adding the item to the cart!", error);
+    }
   };
 
-  if(item===null){
-    return
+  if (item === null) {
+    return null;
   }
 
   return (
-    <Container>
-      {/* <Navbar /> */}
-      <form action="cart_list.html"  onSubmit={handleSubmit}>
-        <Title>商品詳細</Title>
-        <h1>この商品のID:{id}</h1>
-        <Row>
-          <Column>
-            <Image src={`http://${HOST_IP}:9090/img/`+item.imagePath} alt="じゃがバターベーコン" />
-          </Column>
-          <Column>
-            <div>
-              <h4>{item.name}</h4>
-              <p>
-              {item.description}
-              </p>
+    <div><div className="bg-white py-6 sm:py-8 lg:py-12">
+    <div className="mx-auto max-w-screen-2xl">
+      <div className="grid gap-8 md:grid-cols-2">
+        <div className="grid gap-4 lg:grid-cols-5">
+          <div className="order-last flex gap-4 lg:order-none lg:flex-col">
+            <div className="overflow-hidden rounded-lg bg-gray-100">
+              <img
+                src="https://images.unsplash.com/flagged/photo-1571366992791-2ad2078656cb?auto=format&q=75&fit=crop&w=250"
+                loading="lazy"
+                alt="Photo by Himanshu Dewangan"
+                className="h-full w-full object-cover object-center"
+              />
             </div>
-          </Column>
-        </Row>
-        <FormGroup>
-          <Label>サイズ</Label>
-          <RadioLabel>
-            <input type="radio" name="size" defaultChecked />
-            <span>&nbsp;М&nbsp;</span>&nbsp;&nbsp;{item.price}円(税抜)
-          </RadioLabel>
-          <RadioLabel>
-            <input type="radio" name="size" />
-            <span>&nbsp;Ｌ&nbsp;</span>&nbsp;&nbsp;{item.price}円(税抜)
-          </RadioLabel>
-        </FormGroup>
-        <FormGroup>
-          <Label>数量:</Label>
-          <Select name="quantity">
-            {[...Array(12)].map((_, i) => (
-              <option key={i} value={i + 1}>
-                {i + 1}
-              </option>
-            ))}
-          </Select>
-        </FormGroup>
-        <FormGroup>
-          <TotalPrice>この商品金額：{item.price}円(税抜)</TotalPrice>
-        </FormGroup>
-        <FormGroup>
-          <Button type="submit">カートに入れる</Button>
-        </FormGroup>
-      </form>
-    </Container>
+
+            <div className="overflow-hidden rounded-lg bg-gray-100">
+              <img
+                src="https://images.unsplash.com/flagged/photo-1571366992968-15b65708ee76?auto=format&q=75&fit=crop&w=250"
+                loading="lazy"
+                alt="Photo by Himanshu Dewangan"
+                className="h-full w-full object-cover object-center"
+              />
+            </div>
+
+            <div className="overflow-hidden rounded-lg bg-gray-100">
+              <img
+                src="https://images.unsplash.com/flagged/photo-1571366992999-47669b775ef6?auto=format&q=75&fit=crop&w=250"
+                loading="lazy"
+                alt="Photo by Himanshu Dewangan"
+                className="h-full w-full object-cover object-center"
+              />
+            </div>
+          </div>
+
+          <div className="relative overflow-hidden rounded-lg bg-gray-100 lg:col-span-4">
+            <img
+              src={`http://${HOST_IP}:9090/img/${item.imagePath}`}
+              loading="lazy"
+              alt={item.name}
+              className="h-full w-full object-cover object-center"
+            />
+            <a
+              href="#"
+              className="absolute right-4 top-4 inline-block rounded-lg border bg-white px-3.5 py-3 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-100 focus-visible:ring active:text-gray-700 md:text-base"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div className="md:py-8">
+          <div className="mb-2 md:mb-3">
+            <span className="mb-0.5 inline-block text-gray-500">
+              Fancy Brand
+            </span>
+            <h2 className="text-2xl font-bold text-gray-800 lg:text-3xl">
+              {item.name}
+            </h2>
+          </div>
+
+          <div className="mb-4 md:mb-6">
+            <span className="mb-3 inline-block text-sm font-semibold text-gray-500 md:text-base">
+              Color
+            </span>
+
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                className={`h-8 w-8 rounded-full border bg-gray-800 ring-2 ring-offset-1 transition duration-100 ${selectedColor === 'gray-800' ? 'ring-gray-800' : 'ring-transparent'}`}
+                onClick={() => handleColorChange('gray-800')}
+              ></button>
+              <button
+                type="button"
+                className={`h-8 w-8 rounded-full border bg-gray-500 ring-2 ring-offset-1 transition duration-100 ${selectedColor === 'gray-500' ? 'ring-gray-500' : 'ring-transparent'}`}
+                onClick={() => handleColorChange('gray-500')}
+              ></button>
+              <button
+                type="button"
+                className={`h-8 w-8 rounded-full border bg-gray-200 ring-2 ring-offset-1 transition duration-100 ${selectedColor === 'gray-200' ? 'ring-gray-200' : 'ring-transparent'}`}
+                onClick={() => handleColorChange('gray-200')}
+              ></button>
+              <button
+                type="button"
+                className={`h-8 w-8 rounded-full border bg-white ring-2 ring-offset-1 transition duration-100 ${selectedColor === 'white' ? 'ring-gray-200' : 'ring-transparent'}`}
+                onClick={() => handleColorChange('white')}
+              ></button>
+            </div>
+</div>
+
+
+          <div className="mb-8 md:mb-10">
+            <span className="mb-3 inline-block text-sm font-semibold text-gray-500 md:text-base">
+              Size
+            </span>
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <div className="flex flex-wrap gap-3">
+                <div>
+                  <input
+                    type="radio"
+                    id="size-s"
+                    value="S"
+                    {...register("size")}
+                    className="peer hidden"
+                  />
+                  <label
+                    htmlFor="size-s"
+                    className="flex h-8 w-12 cursor-pointer items-center justify-center rounded-lg border bg-white text-center text-sm font-semibold text-gray-500 ring-2 ring-transparent transition duration-100 peer-checked:bg-gray-800 peer-checked:text-white peer-checked:ring-gray-800 hover:bg-gray-100 md:h-10 md:w-14"
+                  >
+                    S
+                  </label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    id="size-m"
+                    value="M"
+                    {...register("size")}
+                    defaultChecked
+                    className="peer hidden"
+                  />
+                  <label
+                    htmlFor="size-m"
+                    className="flex h-8 w-12 cursor-pointer items-center justify-center rounded-lg border bg-white text-center text-sm font-semibold text-gray-500 ring-2 ring-transparent transition duration-100 peer-checked:bg-gray-800 peer-checked:text-white peer-checked:ring-gray-800 hover:bg-gray-100 md:h-10 md:w-14"
+                  >
+                    M
+                  </label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    id="size-l"
+                    value="L"
+                    {...register("size")}
+                    className="peer hidden"
+                  />
+                  <label
+                    htmlFor="size-l"
+                    className="flex h-8 w-12 cursor-pointer items-center justify-center rounded-lg border bg-white text-center text-sm font-semibold text-gray-500 ring-2 ring-transparent transition duration-100 peer-checked:bg-gray-800 peer-checked:text-white peer-checked:ring-gray-800 hover:bg-gray-100 md:h-10 md:w-14"
+                  >
+                    L
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="quantity">Quantity</label>
+                <input
+                  id="quantity"
+                  type="number"
+                  {...register("quantity")}
+                  defaultValue={1}
+                  min={1}
+                  className="block w-full rounded-lg border border-gray-300 px-4 py-2"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="block w-full rounded-lg bg-indigo-600 px-4 py-2 text-white text-center font-semibold transition duration-200 hover:bg-indigo-500 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-80"
+              >
+                カートに追加
+              </button>
+
+              <div>
+                <p>Total Price: ¥{totalPrice.toFixed(0)}</p>
+              </div>
+            </form>
+          </div>
+
+          <div className="mt-10 md:mt-16 lg:mt-20">
+            <div className="mb-3 text-lg font-semibold text-gray-800">
+              Description
+            </div>
+
+            <p className="text-gray-500">{item.description}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <LoginModal show={showModal} onClose={() => setShowModal(false)} />
+    <Toast show={showToast} message="カートに追加しました" onClose={() => setShowToast(false)} />
+  </div>
+  <Footer />
+  </div>
+    
   );
 };
 

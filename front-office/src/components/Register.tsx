@@ -4,71 +4,63 @@ import { useForm, Controller } from "react-hook-form";
 import MySelect from "./MySelect";
 import { prefecturesOptions } from "../utils/prefectures";
 import { HOST_IP } from "../config";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { validationSchema } from "../utils/validationSchema";
 
 interface SignUpForm {
   lastName: string;
   firstName: string;
   email: string;
   password: string;
-  postcode: number;
-  prefectures: string;
+  postcode: string;
+  prefecture: string;
   municipalities: string;
   address: string;
   tel: string;
 }
 
 const Register: React.FC = () => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<SignUpForm>({
+  const { register, handleSubmit, control, setValue, watch, formState: { errors } } = useForm<SignUpForm>({
     mode: "onBlur",
-    // resolver: zodResolver(validationSchema),
+    resolver: zodResolver(validationSchema),
   });
+
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const onSubmit = async (data: SignUpForm) => {
     const combinedName = `${data.lastName} ${data.firstName}`;
-
-    // Create form data object with combined fields
     const formData = {
       name: combinedName,
       email: data.email,
       password: data.password,
       zipcode: data.postcode,
-      prefecture: data.prefectures,
+      prefecture: data.prefecture,
       municipalities: data.municipalities,
       address: data.address,
       telephone: data.tel,
     };
+
     console.log(formData);
 
     try {
-      const response = await axios.post(
-        `http://${HOST_IP}:8080/ec-202404c/users/register`,
-        formData
-      );
+      const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/users/register`, formData);
       if (response.status === 201) {
-        navigate("/login");
+        navigate('/login');
       }
-      console.log("Employee data:", response.data);
     } catch (error: any) {
-      console.error("An error occurred:", error);
-      if (error.response && error.response.status >= 500) {
-        console.log("500:", error.response.status);
+      if (error.response && error.response.status === 409) {
+        alert("そのメールアドレスはすでに使われています。");
+      } else if (error.response && error.response.status >= 500) {
+        console.error('サーバーエラー:', error);
       } else {
-        console.error("An error occurred:", error);
+        console.error('An error occurred:', error);
       }
     }
   };
 
-  const fetchAddress = async (postcode: number) => {
+  const fetchAddress = async (postcode: string) => {
     setLoading(true);
     try {
       const response = await axios.get(
@@ -78,7 +70,7 @@ const Register: React.FC = () => {
 
       if (data.results) {
         const result = data.results[0];
-        setValue("prefectures", result.address1);
+        setValue("prefecture", result.address1);
         setValue("municipalities", result.address2);
         setValue("address", result.address3);
       } else {
@@ -187,13 +179,13 @@ const Register: React.FC = () => {
                 <p>{errors.postcode && errors.postcode.message}</p>
 
                 <label
-                  htmlFor="prefectures"
+                  htmlFor="prefecture"
                   className="block text-xs font-semibold text-gray-600 uppercase mt-4"
                 >
                   都道府県
                 </label>
                 <Controller
-                  name="prefectures"
+                  name="prefecture"
                   control={control}
                   render={({ field }) => (
                     <MySelect
