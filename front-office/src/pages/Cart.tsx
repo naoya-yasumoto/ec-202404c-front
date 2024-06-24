@@ -85,23 +85,23 @@ const Cart: React.FC = () => {
         <h3 className="text-2xl font-medium text-center mb-6 my-10">ショッピングカート</h3>
 
         <div className="bg-gray-200 text-gray-600 p-2 flex items-center justify-between h-11 rounded-sm">
-          <div style={{width:'20.5%'}}></div>
+          <div style={{ width: '20.5%' }}></div>
 
-          <div className="text-center w-1/4" style={{marginRight:'30px'}}>
+          <div className="text-center w-1/4" style={{ marginRight: '30px' }}>
             <p className="py-2 px-4 font-oswald">商品名/サイズ</p>
           </div>
 
-          <div className="text-center w-1/4" style={{marginLeft:'5px'}}>
+          <div className="text-center w-1/4" style={{ marginLeft: '5px' }}>
             <p className="py-2 px-4 font-oswald">価格(税抜)</p>
           </div>
 
-          <div className="text-center w-1/4" style={{marginLeft:'8px'}}>
+          <div className="text-center w-1/4" style={{ marginLeft: '8px' }}>
             <p className="py-2 px-4 font-oswald">数量</p>
           </div>
 
-          <div style={{width:'28%'}}></div>
+          <div style={{ width: '28%' }}></div>
         </div>
-        <hr className="border-gray-300" style={{marginTop:'18px'}}/>
+        <hr className="border-gray-300" style={{ marginTop: '18px' }} />
 
         <div className="overflow-x-auto mb-6">
           {cartItems.map((cartItem, index) => (
@@ -118,17 +118,14 @@ const Cart: React.FC = () => {
               </div>
               <div className="flex justify-between gap-4 text-gray-500">
                 <span className="font-oswald">消費税</span>
-                <Price amount={tax.toFixed(0)}/>円</div>
-              </div>
+                <Price amount={tax.toFixed(0)} /></div>
             </div>
+
             <div className="mt-4 border-t pt-4">
               <div className="flex items-start justify-between gap-4 text-gray-800">
                 <span className="text-lg font-bold font-oswald">合計</span>
                 <span className="flex flex-col items-end">
-                  <span className="text-lg font-bold font-oswald">
-                    <Price amount={(totalPrice + tax).toFixed(0)}/>
-                    円
-                    </span>
+                  <span className="text-lg font-bold font-oswald"><Price amount={(totalPrice + tax).toFixed(0)} /></span>
                   <span className="text-sm text-gray-500">(税込)</span>
                 </span>
               </div>
@@ -140,7 +137,9 @@ const Cart: React.FC = () => {
           >
             注文に進む
           </button>
-        <LoginModal show={showModal} onClose={() => setShowModal(false)} />
+        </div>
+      </div>
+      <LoginModal show={showModal} onClose={() => setShowModal(false)} />
     </>
   );
 };
