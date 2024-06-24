@@ -7,33 +7,39 @@ import { HOST_IP } from '../config';
 import ItemCardList from '../components/ItemCardList';
 
 const ItemList: React.FC = () => {
-  const { type } = useParams<{ type: string }>(); // useParamsの型指定
-  const [itemsSet, setItemsSet] = useState<any[]>([]); // setアイテムのステート
-  const [itemsTop, setItemsTop] = useState<any[]>([]); // topアイテムのステート
-  const [itemsBottom, setItemsBottom] = useState<any[]>([]); // bottomアイテムのステート
+  const { type } = useParams<{ type: string }>();
+  const [itemsSet, setItemsSet] = useState<any[]>([]);
+  const [itemsTop, setItemsTop] = useState<any[]>([]);
+  const [itemsBottom, setItemsBottom] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true); // ローディング状態を管理する
 
   useEffect(() => {
     const getItemsAsync = async () => {
       try {
-        // 各タイプの商品を取得するためのリクエストを並行して送信する
         const [responseSet, responseTop, responseBottom] = await Promise.all([
           axios.get(`http://${HOST_IP}:8080/ec-202404c/items/set`),
           axios.get(`http://${HOST_IP}:8080/ec-202404c/items/top`),
           axios.get(`http://${HOST_IP}:8080/ec-202404c/items/bottom`),
         ]);
 
-        // レスポンスから商品リストをセットする
         setItemsSet(responseSet.data.items);
         setItemsTop(responseTop.data.items);
         setItemsBottom(responseBottom.data.items);
+        setLoading(false); // データ取得完了後にローディング状態をfalseにする
       } catch (error) {
         console.error('Error fetching items:', error);
-        // エラー処理を追加することも考慮する
+        setLoading(false); // エラー発生時もローディング状態をfalseにする
+        // エラー処理を追加する
       }
     };
 
     getItemsAsync();
   }, []);
+
+  // ローディング中は何も表示しない
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div style={{ width: "100%" }}>
