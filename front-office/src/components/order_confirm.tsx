@@ -9,6 +9,8 @@ import { orderSchema } from "../utils/orderSchema";
 import { useNavigate } from "react-router-dom";
 import { HOST_IP } from '../config';
 import { times } from "../utils/times";
+import { getAccessToken, decodeToken, isLoggedIn } from '../utils/authUtils';
+import LoginModal from '../components/LoginModal';  
 
 interface OrderConfirmForm {
   orderId: number;
@@ -44,13 +46,25 @@ const OrderConfirm: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const [order, setOrder] = useState<any[]>([]);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/cart/user/2`);
-        setOrder(response.data);
-        console.log(response.data);
+        const token = getAccessToken();
+        if (!token) {
+          setShowModal(true);
+          return;
+        }
+
+        const userInfo = decodeToken(token);
+        if (!userInfo) {
+          setShowModal(true);
+          return;
+        }
+        const response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/cart/user/${userInfo.userid}`);
+        setOrder(response.data)
+
       } catch (error) {
         console.error('Error fetching cart items:', error);
       }
@@ -89,12 +103,16 @@ const OrderConfirm: React.FC = () => {
     };
 
     console.log(formData);
-    //ここにjson送信を入れる
-    const response = await axios.post(
+        const response = await axios.post(
       `http://${HOST_IP}:8080/ec-202404c/order`,
       formData
     );
-    console.log(response);
+    // 成功
+    if (response.status === 200) {
+      navigate("/complete");
+    } else {
+      <p>エラーが発生しました！</p>;
+    }
   };
 
   const handleBackClick = () => {
@@ -382,6 +400,7 @@ const OrderConfirm: React.FC = () => {
           </div>
         </div>
       </div>
+      <LoginModal show={showModal} onClose={() => setShowModal(false)} />
     </div>
   );
 };
