@@ -10,11 +10,16 @@ import { getCartInfo } from '../../pages/Cart';
 import { HOST_IP } from '../../config';
 import Price from '../Price';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  username: string;
+  setUsername: React.Dispatch<React.SetStateAction<any>>;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
   const [showModal, setShowModal] = useState(false);
   const [cartItemsCount, setCartItemsCount] = useState(0);
   const [cartSubtotal, setCartSubtotal] = useState(0);
-  const [username, setUsername] = useState('ゲストさん');
+  // const [username, setUsername] = useState('ゲストさん');
   const [loginStatus, setLoginStatus] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState('All'); // 初期値はAll
@@ -39,7 +44,7 @@ const Navbar: React.FC = () => {
         }
       }
     }
-  }, []);
+  }, [username]);
 
   const handleViewCart = () => {
     if (isLoggedIn()) {
@@ -61,7 +66,7 @@ const Navbar: React.FC = () => {
         window.sessionStorage.removeItem('accessToken');
         setUsername('ゲストさん');
         setLoginStatus(false);
-        navigate('/');
+        navigate('/login');
       }
     } catch (error) {
       console.error('Failed to log out:', error);

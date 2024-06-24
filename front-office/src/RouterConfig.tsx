@@ -1,3 +1,4 @@
+import React, { useState} from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Register from './components/Register.tsx';
 import Login from './components/Login.tsx';
@@ -11,13 +12,14 @@ import OrderComplete from './pages/OrderComplete.tsx';
 import ItemListAll from './pages/ItemListAll.tsx';
 
 export const RouterConfig = () => {
+    const [username, setUsername] = useState<any>(null);
     return (
         <>
                 <BrowserRouter>
-                <Navbar />
+                <Navbar username={username} setUsername={setUsername} />
                     <Routes>
                         <Route path="/register" element={<Register />} />
-                        <Route path="/login" element={<Login />} />
+                        <Route path="/login" element={<Login setUsername={setUsername} />} />
                         <Route path="/cart" element={<Cart />} />
                         <Route path="/item-list/:type" element={<ItemList />} />
                         <Route path="/item-list" element={<ItemListAll />} />
