@@ -30,6 +30,7 @@ interface OrderConfirmForm {
 const OrderConfirm: React.FC = () => {
 
   const navigate = useNavigate();
+  
 
   const {
     register,
@@ -200,7 +201,7 @@ const OrderConfirm: React.FC = () => {
                   />
                   <button
                     type="button"
-                    onClick={() => fetchAddress(watch("postcode"))}
+                    onClick={() => fetchAddress(Number(watch("postcode")))}
                     disabled={loading}
                     className="ml-4 w-48 bg-gray-800 py-3 px-6 rounded-sm text-white uppercase font-medium focus:outline-none hover:bg-gray-700 hover:shadow-none"
                   >
