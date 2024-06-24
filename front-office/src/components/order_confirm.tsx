@@ -3,14 +3,19 @@ import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import MySelect from "./MySelect";
 import { prefecturesOptions } from "../utils/prefectures";
+import Visa from "../assets/Visa.svg";
+import MasterCard from "../assets/MasterCard.svg";
+import Paypal from "../assets/PayPal.svg";
+import AmericanExpress from "../assets/AmericanExpress.svg";
+import CashTrade from "../assets/CashTrade.svg";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validationSchema } from "../utils/validationSchema";
 import { orderSchema } from "../utils/orderSchema";
 import { useNavigate } from "react-router-dom";
-import { HOST_IP } from '../config';
+import { HOST_IP } from "../config";
 import { times } from "../utils/times";
-import { getAccessToken, decodeToken, isLoggedIn } from '../utils/authUtils';
-import LoginModal from '../components/LoginModal';  
+import { getAccessToken, decodeToken, isLoggedIn } from "../utils/authUtils";
+import LoginModal from "../components/LoginModal";
 
 interface OrderConfirmForm {
   orderId: number;
@@ -28,7 +33,6 @@ interface OrderConfirmForm {
 }
 
 const OrderConfirm: React.FC = () => {
-
   const navigate = useNavigate();
 
   const {
@@ -65,11 +69,12 @@ const OrderConfirm: React.FC = () => {
           setShowModal(true);
           return;
         }
-        const response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/cart/user/${userInfo.userid}`);
-        setOrder(response.data)
-
+        const response = await axios.get(
+          `http://${HOST_IP}:8080/ec-202404c/cart/user/${userInfo.userid}`
+        );
+        setOrder(response.data);
       } catch (error) {
-        console.error('Error fetching cart items:', error);
+        console.error("Error fetching cart items:", error);
       }
     };
 
@@ -78,18 +83,16 @@ const OrderConfirm: React.FC = () => {
 
   const onSubmit = async (data: OrderConfirmForm) => {
     setIsSubmitting(true);
-    
     // `deliveryDate` を Date オブジェクトとして作成
     const deliveryDate = new Date(data.deliveryDate);
 
-    
     // デリバリー時間をセット
     const deliveryHour = Number.parseInt(data.deliveryDate);
-                                              
+
     if (!isNaN(deliveryHour)) {
       deliveryDate.setHours(deliveryHour);
     }
-    
+
     const token = getAccessToken();
     if (!token) {
       setShowModal(true);
@@ -101,7 +104,6 @@ const OrderConfirm: React.FC = () => {
       setShowModal(true);
       return;
     }
-
 
     // 結合したフィールドを含むオブジェクトを作成
     const formData = {
@@ -120,7 +122,7 @@ const OrderConfirm: React.FC = () => {
     };
 
     console.log(formData);
-        const response = await axios.post(
+    const response = await axios.post(
       `http://${HOST_IP}:8080/ec-202404c/order`,
       formData
     );
@@ -133,7 +135,7 @@ const OrderConfirm: React.FC = () => {
   };
 
   const handleBackClick = () => {
-    navigate('/item-list/set');
+    navigate("/item-list/set");
   };
 
   const fetchAddress = async (postcode: number) => {
@@ -347,47 +349,119 @@ const OrderConfirm: React.FC = () => {
                     defaultValue=""
                     render={({ field }) => (
                       <>
-                        <div className="mt-2">
-                          <input
-                            type="radio"
-                            {...field}
-                            value="2"
-                            id="answer_visa"
-                            className="mr-2"
-                          />
-                          <label
-                            htmlFor="answer_visa"
-                            className="inline-flex items-center"
-                          >
-                            <img
-                              src="/images/payment-icons/visa.svg"
-                              alt="VISA"
-                              className="w-8 h-8 mr-2"
+                        <div className="w-72">
+                          <div className="mb-3">
+                            <input
+                              type="radio"
+                              name="radio-example"
+                              className="sr-only peer"
+                              value="2"
+                              id="answer_american-express-card"
                             />
-                            <div>
-                              Card Ending <span> 6475</span>
-                            </div>
-                          </label>
-                        </div>
-                        <div className="mt-2">
-                          <input
-                            type="radio"
-                            {...field}
-                            value="1"
-                            id="answer_paypal"
-                            className="mr-2"
-                          />
-                          <label
-                            htmlFor="answer_paypal"
-                            className="inline-flex items-center"
-                          >
-                            <img
-                              src="/images/payment-icons/paypal.svg"
-                              alt="PayPal"
-                              className="w-8 h-8 mr-2"
+                            <label
+                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-gray-700 peer-checked:ring-2 peer-checked:border-transparent"
+                              htmlFor="answer_american-express-card"
+                            >
+                              <div className="flex items-center">
+                                <img
+                                  src={AmericanExpress}
+                                  alt="MasterCard"
+                                  className="w-12 h-6 mr-2"
+                                />
+                                <div className="text-sm">AmericanExpress </div>
+                              </div>
+                            </label>
+                          </div>
+                          <div className="mb-3">
+                            <input
+                              type="radio"
+                              name="radio-example"
+                              className="sr-only peer"
+                              value="2"
+                              id="answer_master-card"
                             />
-                            <div>代金引換</div>
-                          </label>
+                            <label
+                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-gray-700 peer-checked:ring-2 peer-checked:border-transparent"
+                              htmlFor="answer_master-card"
+                            >
+                              <div className="flex items-center">
+                                <img
+                                  src={MasterCard}
+                                  alt="MasterCard"
+                                  className="w-12 h-6 mr-2"
+                                />
+                                <div className="text-sm">MasterCard</div>
+                              </div>
+                            </label>
+                          </div>
+                          <div className="mb-3">
+                            <input
+                              type="radio"
+                              name="radio-example"
+                              className="sr-only peer"
+                              value="2"
+                              id="answer_paypal"
+                            />
+                            <label
+                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-gray-700 peer-checked:ring-2 peer-checked:border-transparent"
+                              htmlFor="answer_paypal"
+                            >
+                              <div className="flex items-center">
+                                <img
+                                  src={Paypal}
+                                  alt="Paypal"
+                                  className="w-12 h-5 mr-2"
+                                />
+                                <div className="text-sm">Paypal</div>
+                              </div>
+                            </label>
+                          </div>
+                          <div className="mb-3 relative">
+                            <input
+                              type="radio"
+                              name="radio-example"
+                              className="sr-only peer"
+                              defaultChecked
+                              value="2"
+                              id="answer_visa"
+                            />
+                            <label
+                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-gray-700 peer-checked:ring-2 peer-checked:border-transparent"
+                              htmlFor="answer_visa"
+                            >
+                              <div className="flex items-center">
+                                <img
+                                  src={Visa}
+                                  alt="VISA"
+                                  className="w-12 h-4 mr-2"
+                                />
+                                <div className="text-sm">Visa </div>
+                              </div>
+                            </label>
+                          </div>
+                          <div className="mb-3 relative">
+                            <input
+                              type="radio"
+                              name="radio-example"
+                              className="sr-only peer"
+                              defaultChecked
+                              value="1"
+                              id="answer_cash-trade"
+                            />
+                            <label
+                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-gray-700 peer-checked:ring-2 peer-checked:border-transparent"
+                              htmlFor="answer_cash-trade"
+                            >
+                              <div className="flex items-center">
+                                <img
+                                  src={CashTrade}
+                                  alt="VISA"
+                                  className="w-12 h-4 mr-2"
+                                />
+                                <div className="text-sm">代金引換 </div>
+                              </div>
+                            </label>
+                          </div>
                         </div>
                       </>
                     )}
