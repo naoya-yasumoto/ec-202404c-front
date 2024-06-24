@@ -3,7 +3,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../utils/loginSchema";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HOST_IP } from "../config";
 
 interface SignUpForm {
@@ -125,14 +125,14 @@ const Login: React.FC = () => {
                 </button>
                 <div className="sm:flex sm:flex-wrap mt-8 sm:mb-4 text-sm text-center">
                   <a href="#" className="flex-2 underline">
-                    Forgot password?
+                    Forgot password? 
                   </a>
                   <p className="flex-1 text-gray-500 text-md mx-4 my-1 sm:my-auto">
                     or
                   </p>
-                  <a href="#" className="flex-2 underline">
+                  <Link to="/register" className="flex-2 underline">
                     Create an Account
-                  </a>
+                  </Link>
                 </div>
               </form>
             </div>
