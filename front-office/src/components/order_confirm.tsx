@@ -41,7 +41,6 @@ const OrderConfirm: React.FC = () => {
     // resolver: zodResolver(orderSchema),
   });
   const [loading, setLoading] = useState(false);
-  const [paymentValue, setPaymentValue] = useState("");
 
   const [order, setOrder] = useState<any[]>([]);
 
