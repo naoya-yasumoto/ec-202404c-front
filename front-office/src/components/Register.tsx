@@ -52,7 +52,7 @@ const Register: React.FC = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 409) {
-        alert("そのメールアドレスはすでに使われています。");
+        // alert("そのメールアドレスはすでに使われています。");
       } else if (error.response && error.response.status >= 500) {
         console.error('サーバーエラー:', error);
       } else {
