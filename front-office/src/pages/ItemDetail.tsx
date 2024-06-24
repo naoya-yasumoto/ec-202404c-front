@@ -10,6 +10,7 @@ import LoginModal from '../components/LoginModal';
 import Toast from '../components/ToCartToast';
 import { z } from 'zod';
 import Footer from '../components/layout/Footer';
+import Price from '../components/Price';
 
 
 interface Item {
@@ -89,6 +90,10 @@ const ItemDetail: React.FC = () => {
       setShowModal(true);
       return;
     }
+
+    const formatNumberWithCommas = (number: number) => {
+      return new Intl.NumberFormat('ja-JP').format(number);
+    };
 
     const userInfo = decodeToken(token);
     if (!userInfo) {
@@ -299,7 +304,9 @@ const ItemDetail: React.FC = () => {
               </button>
 
               <div>
-                <p>Total Price: ¥{totalPrice.toFixed(0)}</p>
+                <p>Total Price: ¥
+                  <Price amount={totalPrice.toFixed(0)}/>
+                  </p>
               </div>
             </form>
           </div>

@@ -5,6 +5,7 @@ import { HOST_IP } from '../config';
 import CartItem from '../components/CartItem';
 import { getAccessToken, decodeToken } from '../utils/authUtils';
 import LoginModal from '../components/LoginModal';
+import Price from '../components/Price';
 
 
 export const getCartInfo = async (userId: number) => {
@@ -105,7 +106,7 @@ const Cart: React.FC = () => {
         </table>
       </div>
       <div className="has-text-centered">
-        <div className="is-size-4">消費税：{tax.toFixed(0)}円</div>
+        <div className="is-size-4">消費税：<Price amount={tax.toFixed(0)}/>円</div>
         <div className="is-size-4">ご注文金額合計：{(totalPrice + tax).toFixed(0)}円 (税込)</div>
       </div>
       <div className="columns is-centered">

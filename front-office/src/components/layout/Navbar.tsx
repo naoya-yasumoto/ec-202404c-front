@@ -8,6 +8,7 @@ import LoginModal from '../LoginModal'; // モーダルコンポーネントの�
 import { getAccessToken, decodeToken, isLoggedIn } from '../../utils/authUtils';
 import { getCartInfo } from '../../pages/Cart';
 import { HOST_IP } from '../../config';
+import Price from '../Price';
 
 const Navbar: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -123,7 +124,7 @@ const Navbar: React.FC = () => {
             <div tabIndex={0} className="mt-3 z-[1] card card-compact dropdown-content w-52 bg-base-100 shadow">
               <div className="card-body">
                 <span className="font-bold text-lg">{cartItemsCount} Items</span>
-                <span className="text-info">Subtotal: ${cartSubtotal.toFixed(2)}</span>
+                <span className="text-info">Subtotal: <Price amount = {cartSubtotal.toFixed(2)}/>円</span>
                 <div className="card-actions">
                   <button className="bg-gray-600 text-white rounded-md px-2 md:px-3 py-1 md:py-2" onClick={handleViewCart}>View cart</button>
                 </div>
