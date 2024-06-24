@@ -125,7 +125,10 @@ const Cart: React.FC = () => {
               <div className="flex items-start justify-between gap-4 text-gray-800">
                 <span className="text-lg font-bold font-oswald">合計</span>
                 <span className="flex flex-col items-end">
-                  <span className="text-lg font-bold font-oswald"><Price amount={(totalPrice + tax).toFixed(0)}/>円</span>
+                  <span className="text-lg font-bold font-oswald">
+                    <Price amount={(totalPrice + tax).toFixed(0)}/>
+                    円
+                    </span>
                   <span className="text-sm text-gray-500">(税込)</span>
                 </span>
               </div>
@@ -139,7 +142,6 @@ const Cart: React.FC = () => {
           </button>
         </div>
         <LoginModal show={showModal} onClose={() => setShowModal(false)} />
-      </div>
     </>
   );
 };
