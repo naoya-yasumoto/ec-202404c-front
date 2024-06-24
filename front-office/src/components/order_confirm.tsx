@@ -85,11 +85,24 @@ const OrderConfirm: React.FC = () => {
     if (!isNaN(deliveryHour)) {
       deliveryDate.setHours(deliveryHour);
     }
+    
+    const token = getAccessToken();
+    if (!token) {
+      setShowModal(true);
+      return;
+    }
+
+    const userInfo = decodeToken(token);
+    if (!userInfo) {
+      setShowModal(true);
+      return;
+    }
+
 
     // 結合したフィールドを含むオブジェクトを作成
     const formData = {
       orderId: order.id,
-      userId: 2,
+      userId: userInfo.userid,
       destinationName: data.destinationName,
       destinationEmail: data.destinationEmail,
       zipcode: data.postcode,
