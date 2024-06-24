@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { HOST_IP } from '../config';
+import Price from './Price';
 
 interface ItemProps {
   item: any;
@@ -17,7 +18,9 @@ const Item: React.FC<ItemProps> = ({ item }) => {
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2">{item.name}</div>
         <p className="text-gray-700 text-base">
-          <span className="price">М</span>&nbsp;&nbsp;{item.price}円(税抜)
+          <span className="price">М</span>&nbsp;&nbsp;
+          <Price amount={item.price}/>
+          円(税抜)
         </p>
         {/* Detailボタンを削除 */}
       </div>
