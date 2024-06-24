@@ -356,7 +356,7 @@ const OrderConfirm: React.FC = () => {
                               id="answer_american-express-card"
                             />
                             <label
-                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-blue-500 peer-checked:ring-2 peer-checked:border-transparent"
+                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-gray-700 peer-checked:ring-2 peer-checked:border-transparent"
                               htmlFor="answer_american-express-card"
                             >
                               <div className="flex items-center">
@@ -378,7 +378,7 @@ const OrderConfirm: React.FC = () => {
                               id="answer_master-card"
                             />
                             <label
-                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-blue-500 peer-checked:ring-2 peer-checked:border-transparent"
+                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-gray-700 peer-checked:ring-2 peer-checked:border-transparent"
                               htmlFor="answer_master-card"
                             >
                               <div className="flex items-center">
@@ -400,7 +400,7 @@ const OrderConfirm: React.FC = () => {
                               id="answer_paypal"
                             />
                             <label
-                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-blue-500 peer-checked:ring-2 peer-checked:border-transparent"
+                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-gray-700 peer-checked:ring-2 peer-checked:border-transparent"
                               htmlFor="answer_paypal"
                             >
                               <div className="flex items-center">
@@ -423,7 +423,7 @@ const OrderConfirm: React.FC = () => {
                               id="answer_visa"
                             />
                             <label
-                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-blue-500 peer-checked:ring-2 peer-checked:border-transparent"
+                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-gray-700 peer-checked:ring-2 peer-checked:border-transparent"
                               htmlFor="answer_visa"
                             >
                               <div className="flex items-center">
@@ -446,7 +446,7 @@ const OrderConfirm: React.FC = () => {
                               id="answer_cash-trade"
                             />
                             <label
-                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-blue-500 peer-checked:ring-2 peer-checked:border-transparent"
+                              className="flex p-5 bg-white border rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-gray-700 peer-checked:ring-2 peer-checked:border-transparent"
                               htmlFor="answer_cash-trade"
                             >
                               <div className="flex items-center">
