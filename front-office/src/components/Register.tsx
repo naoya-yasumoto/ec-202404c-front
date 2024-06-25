@@ -271,7 +271,7 @@ const Register: React.FC = () => {
                     type="reset"
                     className="w-full py-3 bg-gray-300 rounded-sm font-medium text-gray-800 uppercase focus:outline-none hover:bg-gray-400 hover:shadow-none"
                   >
-                    キャンセル
+                    リセット
                   </button>
                 </div>
               </form>

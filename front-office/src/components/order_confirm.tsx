@@ -142,7 +142,7 @@ const OrderConfirm: React.FC = () => {
   };
 
   const handleBackClick = () => {
-    navigate("/item-list/set");
+    navigate("/item-list/");
   };
 
   const fetchAddress = async (postcode: number) => {
@@ -503,7 +503,7 @@ const OrderConfirm: React.FC = () => {
                     className="px-6 py-2 bg-gray-500 text-white rounded-sm focus:outline-none hover:bg-gray-400"
                     onClick={handleBackClick}
                   >
-                    トップ戻る
+                    トップへ戻る
                   </button>
                 </div>
               </form>
