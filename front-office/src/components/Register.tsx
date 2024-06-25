@@ -13,6 +13,7 @@ interface SignUpForm {
   firstName: string;
   email: string;
   password: string;
+  confirmationPassword: string;
   postcode: string;
   prefecture: string;
   municipalities: string;
@@ -175,6 +176,21 @@ const Register: React.FC = () => {
                   className="block w-full py-3 px-1 mt-2 mb-4 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
                 />
                 <p>{errors.password && errors.password.message}</p>
+
+                <label
+                  htmlFor="confirmationPassword"
+                  className="block text-xs font-semibold text-gray-600 uppercase mt-4"
+                >
+                  確認用パスワード
+                </label>
+                <input
+                  type="password"
+                  id="confirmationPassword"
+                  {...register("confirmationPassword")}
+                  className="block w-full py-3 px-1 mt-2 mb-4 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
+                />
+                <p>{errors.confirmationPassword && errors.confirmationPassword.message}</p>
+
 
                 <label
                   htmlFor="postcode"
