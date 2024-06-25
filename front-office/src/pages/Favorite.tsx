@@ -63,9 +63,16 @@ const Favorite: React.FC = () => {
       <div style={{ width: "100%" }}>
         <div>
           <div className="flex flex-col gap-8">
+            <div style={{ width:'100%' ,display:'flex', justifyContent:'center'}}>
+              <p>お気に入り一覧</p>
+            </div>
+
+
             <Carousel/>
-            <ItemCardList items={itemsFavorite} />
+
+            
             <ItemCardList items={itemsPreview} />
+            <ItemCardList items={itemsFavorite} />
           </div>
           <Footer />
         </div>
