@@ -8,7 +8,6 @@ interface ItemProps {
 }
 
 const Item: React.FC<ItemProps> = ({ item }) => {
-  // console.log(item);
   const handleCardClick = () => {
     // プログラム的に遷移を実行する方法
   };
