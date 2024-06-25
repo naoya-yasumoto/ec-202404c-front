@@ -4,7 +4,7 @@ import Item from '../components/Item';
 import axios from 'axios';
 import { HOST_IP } from '../config';
 
-const ItemCardList: React.FC<{ items: any[] }> = ({ items }) => {
+const ItemCardList: React.FC<{ items: any[] ,type: string}> = ({ items, type}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
@@ -18,6 +18,13 @@ const ItemCardList: React.FC<{ items: any[] }> = ({ items }) => {
 
   return (
     <div style={{ width: '100%' }}>
+      <div className='flex justify-center'>
+        <div style={{width: '65%'}}>
+          <div >
+            <div className='font-poiret text-4xl font-bold'>{type}</div>
+          </div>
+        </div>
+      </div>
       <div className="columns is-multiline" style={{ display: 'flex', justifyContent: 'center' }}>
         {currentItems.map((item, index) => (
           <Item key={index} item={item} />
