@@ -114,7 +114,7 @@ const Cart: React.FC = () => {
             <div className="space-y-1">
               <div className="flex justify-between gap-4 text-gray-500">
                 <span className="font-oswald">小計</span>
-                <span className="font-oswald">{totalPrice.toFixed(0)}円</span>
+                <span className="font-oswald"><Price amount={totalPrice.toFixed(0)}/></span>
               </div>
               <div className="flex justify-between gap-4 text-gray-500">
                 <span className="font-oswald">消費税</span>
