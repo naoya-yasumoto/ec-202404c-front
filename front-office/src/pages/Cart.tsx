@@ -17,6 +17,75 @@ export const getCartInfo = async (userId: number) => {
   }
 };
 
+export const CartTop: React.FC<{ cartItems: any[], handleDelete: (orderItemId: number) => void }> = ({ cartItems, handleDelete }) => {
+  return (
+    <>
+      <div className="max-w-screen-2xl mx-auto my-3" style={{ width: '68%' }}>
+        <h3 className="text-2xl font-medium text-center mb-6 my-10">ショッピングカート</h3>
+
+        <div className="bg-gray-200 text-gray-600 p-2 flex items-center justify-between h-11 rounded-sm">
+          <div style={{ width: '20.5%' }}></div>
+
+          <div className="text-center w-1/4" style={{ marginRight: '30px' }}>
+            <p className="py-2 px-4 font-oswald">商品名/サイズ</p>
+          </div>
+
+          <div className="text-center w-1/4" style={{ marginLeft: '5px' }}>
+            <p className="py-2 px-4 font-oswald">価格(税抜)</p>
+          </div>
+
+          <div className="text-center w-1/4" style={{ marginLeft: '8px' }}>
+            <p className="py-2 px-4 font-oswald">数量</p>
+          </div>
+
+          <div style={{ width: '28%' }}></div>
+        </div>
+        <hr className="border-gray-300" style={{ marginTop: '18px' }} />
+
+        <div className="overflow-x-auto mb-6">
+          {cartItems.map((cartItem, index) => (
+            <CartItem key={index} cartItem={cartItem} onDelete={handleDelete} />
+          ))}
+        </div>
+      </div>
+    </>
+  );
+};
+
+export const CartBottom: React.FC<{ totalPrice: number, tax: number, handleProceedToOrder: () => void }> = ({ totalPrice, tax, handleProceedToOrder }) => {
+  return (
+    <div className="flex flex-col items-end gap-4"  style={{ width: '84%' }}>
+      <div className="w-full rounded-lg bg-gray-100 p-4 sm:max-w-xs">
+        <div className="space-y-1">
+          <div className="flex justify-between gap-4 text-gray-500">
+            <span className="font-oswald">小計</span>
+            <span className="font-oswald">{totalPrice.toFixed(0)}円</span>
+          </div>
+          <div className="flex justify-between gap-4 text-gray-500">
+            <span className="font-oswald">消費税</span>
+            <Price amount={tax.toFixed(0)} /></div>
+        </div>
+
+        <div className="mt-4 border-t pt-4">
+          <div className="flex items-start justify-between gap-4 text-gray-800">
+            <span className="text-lg font-bold font-oswald">合計</span>
+            <span className="flex flex-col items-end">
+              <span className="text-lg font-bold font-oswald"><Price amount={(totalPrice + tax).toFixed(0)} /></span>
+              <span className="text-sm text-gray-500">(税込)</span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <button
+        className="inline-block rounded-lg bg-gray-800 hover:bg-gray-900 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-gray-300 transition duration-100 focus-visible:ring active:bg-gray-600 md:text-base"
+        onClick={handleProceedToOrder}
+      >
+        注文に進む
+      </button>
+    </div>
+  );
+};
+
 const Cart: React.FC = () => {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const navigate = useNavigate();
@@ -81,64 +150,8 @@ const Cart: React.FC = () => {
 
   return (
     <>
-      <div className="max-w-screen-2xl mx-auto my-3" style={{ width: '68%' }}>
-        <h3 className="text-2xl font-medium text-center mb-6 my-10">ショッピングカート</h3>
-
-        <div className="bg-gray-200 text-gray-600 p-2 flex items-center justify-between h-11 rounded-sm">
-          <div style={{ width: '20.5%' }}></div>
-
-          <div className="text-center w-1/4" style={{ marginRight: '30px' }}>
-            <p className="py-2 px-4 font-oswald">商品名/サイズ</p>
-          </div>
-
-          <div className="text-center w-1/4" style={{ marginLeft: '5px' }}>
-            <p className="py-2 px-4 font-oswald">価格(税抜)</p>
-          </div>
-
-          <div className="text-center w-1/4" style={{ marginLeft: '8px' }}>
-            <p className="py-2 px-4 font-oswald">数量</p>
-          </div>
-
-          <div style={{ width: '28%' }}></div>
-        </div>
-        <hr className="border-gray-300" style={{ marginTop: '18px' }} />
-
-        <div className="overflow-x-auto mb-6">
-          {cartItems.map((cartItem, index) => (
-            <CartItem key={index} cartItem={cartItem} onDelete={handleDelete} />
-          ))}
-        </div>
-
-        <div className="flex flex-col items-end gap-4">
-          <div className="w-full rounded-lg bg-gray-100 p-4 sm:max-w-xs">
-            <div className="space-y-1">
-              <div className="flex justify-between gap-4 text-gray-500">
-                <span className="font-oswald">小計</span>
-                <span className="font-oswald"><Price amount={totalPrice.toFixed(0)}/></span>
-              </div>
-              <div className="flex justify-between gap-4 text-gray-500">
-                <span className="font-oswald">消費税</span>
-                <Price amount={tax.toFixed(0)} /></div>
-            </div>
-
-            <div className="mt-4 border-t pt-4">
-              <div className="flex items-start justify-between gap-4 text-gray-800">
-                <span className="text-lg font-bold font-oswald">合計</span>
-                <span className="flex flex-col items-end">
-                  <span className="text-lg font-bold font-oswald"><Price amount={(totalPrice + tax).toFixed(0)} /></span>
-                  <span className="text-sm text-gray-500">(税込)</span>
-                </span>
-              </div>
-            </div>
-          </div>
-          <button
-            className="inline-block rounded-lg bg-gray-800 hover:bg-gray-900 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-gray-300 transition duration-100 focus-visible:ring active:bg-gray-600 md:text-base"
-            onClick={handleProceedToOrder}
-          >
-            注文に進む
-          </button>
-        </div>
-      </div>
+      <CartTop cartItems={cartItems} handleDelete={handleDelete} />
+      <CartBottom totalPrice={totalPrice} tax={tax} handleProceedToOrder={handleProceedToOrder} />
       <LoginModal show={showModal} onClose={() => setShowModal(false)} />
     </>
   );
