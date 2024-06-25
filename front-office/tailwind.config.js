@@ -35,6 +35,14 @@ module.exports = withMT({
         fadeInUp: 'fadeInUp 0.5s ease-out',
         fadeOutDown: 'fadeOutDown 0.5s ease-out',
       },
+      colors: {
+        gray: {
+          900: '#1a1a1a', // Darker shade for hover effect
+        },
+      },
+      transitionDuration: {
+        200: '200ms',
+      },
     },
   },
   plugins: [require('daisyui')],

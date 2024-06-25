@@ -22,6 +22,9 @@ interface Item {
   name: string;
   price: number;
   topId: number;
+  topImagePath: string;
+  bottomImagePath: string;
+  favorite: boolean;
 }
 
 interface AddCartRequest {
@@ -42,7 +45,7 @@ const ItemDetail: React.FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [selectedColor, setSelectedColor] = useState<string>("gray-800");
-
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -61,14 +64,24 @@ const ItemDetail: React.FC = () => {
 
   useEffect(() => {
     const getItemAsync = async () => {
-      const response = await axios.get(
-        `http://${HOST_IP}:8080/ec-202404c/item/${id}`
-      );
+      const token = getAccessToken();
+      let response = null;
+      if (token) {
+        response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/item/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } else {
+        response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/item/${id}`);
+      }
+      console.log(response.data)
       setItem(response.data);
+      setIsFavorite(response.data.favorite); // Set the isFavorite state
       setTotalPrice(response.data.price); // Initialize with default price
     };
     getItemAsync();
-  }, [id]);
+  }, [id, isFavorite]);
 
   useEffect(() => {
     if (item) {
@@ -77,7 +90,6 @@ const ItemDetail: React.FC = () => {
     }
   }, [watchedQuantity, item]);
 
-  // 色の変更ハンドラ
   const handleColorChange = (color: string) => {
     setSelectedColor(color);
   };
@@ -107,7 +119,7 @@ const ItemDetail: React.FC = () => {
       quantity: data.quantity,
       size: data.size,
       price: totalPrice,
-      color: selectedColor,  // 追加
+      color: selectedColor,
     };
     try {
       const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/cart/add`, cartItem);
@@ -122,45 +134,81 @@ const ItemDetail: React.FC = () => {
     }
   };
 
+  const handleFavoriteClick = async () => {
+    if (!item) return;
+
+    const token = getAccessToken();
+    if (!token) {
+      setShowModal(true);
+      return;
+    }
+
+    const userInfo = decodeToken(token);
+    if (!userInfo) {
+      setShowModal(true);
+      return;
+    }
+
+    try {
+      if (isFavorite) {
+        await axios.post(`http://${HOST_IP}:8080/ec-202404c/favorites/delete`, {
+          userId: userInfo.userid,
+          itemId: item.id
+        });
+      } else {
+        await axios.post(`http://${HOST_IP}:8080/ec-202404c/favorites/add`, {
+          userId: userInfo.userid,
+          itemId: item.id
+        });
+      }
+
+      setIsFavorite(!isFavorite);
+    } catch (error: any) {
+      console.error("There was an error updating the favorite status!", error);
+    }
+  };
+
   if (item === null) {
     return null;
   }
 
   return (
     <>
-      <div style={{display:'flex', justifyContent:'center', marginTop:'1.5rem'}}>
-        <div className="bg-white py-6 sm:py-8 lg:py-12" style={{ width: '80%', marginLeft:'13.5rem'}}>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1.5rem' }}>
+        <div className="bg-white py-6 sm:py-8 lg:py-12" style={{ width: '80%', marginLeft: '13.5rem' }}>
           <div className="mx-auto max-w-screen-2xl">
             <div className="grid gap-8 md:grid-cols-2">
               <div className="grid gap-4 lg:grid-cols-5">
-                <div className="order-last flex gap-4 lg:order-none lg:flex-col">
-                  <div className="overflow-hidden rounded-lg bg-gray-100">
-                    <img
-                      src="https://images.unsplash.com/flagged/photo-1571366992791-2ad2078656cb?auto=format&q=75&fit=crop&w=250"
-                      loading="lazy"
-                      alt="Photo by Himanshu Dewangan"
-                      className="h-full w-full object-cover object-center"
-                    />
-                  </div>
+                 {item.itemType === "set" && <div className="order-last flex gap-4 lg:order-none lg:flex-col">
+                  
+                  {item.topId > 0 && (
+                    <div
+                      className="overflow-hidden rounded-lg bg-gray-100 cursor-pointer transition duration-200 hover:bg-gray-900"
+                      onClick={() => navigate(`/item/${item.topId}`)}
+                    >
+                      <img
+                        src={`http://${HOST_IP}:9090/img/${item.topImagePath}`}
+                        loading="lazy"
+                        alt="Photo by Himanshu Dewangan"
+                        className="h-full w-full object-cover object-center transition duration-200 hover:opacity-75"
+                      />
+                    </div>
+                  )}
 
-                  <div className="overflow-hidden rounded-lg bg-gray-100">
-                    <img
-                      src="https://images.unsplash.com/flagged/photo-1571366992968-15b65708ee76?auto=format&q=75&fit=crop&w=250"
-                      loading="lazy"
-                      alt="Photo by Himanshu Dewangan"
-                      className="h-full w-full object-cover object-center"
-                    />
-                  </div>
-
-                  <div className="overflow-hidden rounded-lg bg-gray-100">
-                    <img
-                      src="https://images.unsplash.com/flagged/photo-1571366992999-47669b775ef6?auto=format&q=75&fit=crop&w=250"
-                      loading="lazy"
-                      alt="Photo by Himanshu Dewangan"
-                      className="h-full w-full object-cover object-center"
-                    />
-                  </div>
-                </div>
+                  {item.bottomId > 0 && (
+                    <div
+                      className="overflow-hidden rounded-lg bg-gray-100 cursor-pointer transition duration-200 hover:bg-gray-900"
+                      onClick={() => navigate(`/item/${item.bottomId}`)}
+                    >
+                      <img
+                        src={`http://${HOST_IP}:9090/img/${item.bottomImagePath}`}
+                        loading="lazy"
+                        alt="Photo by Himanshu Dewangan"
+                        className="h-full w-full object-cover object-center transition duration-200 hover:opacity-75"
+                      />
+                    </div>
+                  )}
+                </div>}
 
                 <div className="relative overflow-hidden rounded-lg bg-gray-100 lg:col-span-4">
                   <img
@@ -171,12 +219,13 @@ const ItemDetail: React.FC = () => {
                   />
                   <a
                     href="#"
-                    className="absolute right-4 top-4 inline-block rounded-lg border bg-white px-3.5 py-3 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-100 focus-visible:ring active:text-gray-700 md:text-base"
+                    onClick={handleFavoriteClick}
+                    className={`absolute right-4 top-4 inline-block rounded-lg border bg-white px-3.5 py-3 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-100 focus-visible:ring active:text-gray-700 md:text-base ${isFavorite ? 'text-red-500' : ''}`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6"
-                      fill="none"
+                      fill={isFavorite ? 'currentColor' : 'none'}
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                     >
@@ -193,7 +242,6 @@ const ItemDetail: React.FC = () => {
 
               <div className="md:py-8">
                 <div className="mb-2 md:mb-3">
-
                   <h2 className="text-2xl font-bold text-gray-800 lg:text-3xl" style={{ marginTop: '4px' }}>
                     {item.name}
                   </h2>
@@ -205,7 +253,6 @@ const ItemDetail: React.FC = () => {
                   </span>
                   <Price amount={item.price.toFixed(0)} />
                 </div>
-
 
                 <div className="mb-8 md:mb-10">
                   <span className="mb-3 inline-block text-sm font-semibold text-gray-600 md:text-base">
@@ -290,8 +337,6 @@ const ItemDetail: React.FC = () => {
                       {/* ボタン要素 */}
                       <button type="submit" className="absolute inset-0 w-full h-full bg-transparent"></button>
                     </div>
-
-
 
                     <div>
                       <p><span className='font-semibold text-gray-600'>合計金額(税抜き)</span>
