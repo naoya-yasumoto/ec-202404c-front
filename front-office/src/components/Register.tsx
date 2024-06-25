@@ -13,6 +13,7 @@ interface SignUpForm {
   firstName: string;
   email: string;
   password: string;
+  confirmationPassword: string;
   postcode: string;
   prefecture: string;
   municipalities: string;
@@ -21,7 +22,7 @@ interface SignUpForm {
 }
 
 const Register: React.FC = () => {
-  const { register, handleSubmit, control, setValue, watch, formState: { errors } } = useForm<SignUpForm>({
+  const { register, handleSubmit, control, setValue, watch, trigger, formState: { errors } } = useForm<SignUpForm>({
     mode: "onBlur",
     resolver: zodResolver(validationSchema),
   });
@@ -91,6 +92,7 @@ const Register: React.FC = () => {
     try {
       const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/users/check-email`, { email });
       setEmailExists(response.status === 409);
+      setEmailExistsMessage(" ");
     } catch (error) {
       setEmailExistsMessage("そのメールアドレスはすでに使われています。");
       console.error("メールアドレスの確認に失敗しました:", error);
@@ -154,6 +156,7 @@ const Register: React.FC = () => {
                   onChange={(e) => {
                     register("email").onChange(e);
                     checkEmailExists(e.target.value);
+                    trigger("email");
                   }}
                   className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
                 />
@@ -175,6 +178,21 @@ const Register: React.FC = () => {
                 <p>{errors.password && errors.password.message}</p>
 
                 <label
+                  htmlFor="confirmationPassword"
+                  className="block text-xs font-semibold text-gray-600 uppercase mt-4"
+                >
+                  確認用パスワード
+                </label>
+                <input
+                  type="password"
+                  id="confirmationPassword"
+                  {...register("confirmationPassword")}
+                  className="block w-full py-3 px-1 mt-2 mb-4 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
+                />
+                <p>{errors.confirmationPassword && errors.confirmationPassword.message}</p>
+
+
+                <label
                   htmlFor="postcode"
                   className="block text-xs font-semibold text-gray-600 uppercase mt-4"
                 >
@@ -189,7 +207,13 @@ const Register: React.FC = () => {
                   />
                   <button
                     type="button"
-                    onClick={() => fetchAddress(watch("postcode"))}
+                    onClick={async () => {
+                      await fetchAddress((watch("postcode")))
+                      trigger("prefecture");
+                      trigger("municipalities");
+                      trigger("address");
+                    }
+                  }
                     disabled={loading}
                     className="ml-4 w-48 bg-gray-800 py-3 px-6 rounded-sm text-white uppercase font-medium focus:outline-none hover:bg-gray-700 hover:shadow-none"
                   >
@@ -271,7 +295,7 @@ const Register: React.FC = () => {
                     type="reset"
                     className="w-full py-3 bg-gray-300 rounded-sm font-medium text-gray-800 uppercase focus:outline-none hover:bg-gray-400 hover:shadow-none"
                   >
-                    キャンセル
+                    リセット
                   </button>
                 </div>
               </form>

@@ -90,12 +90,12 @@ const CreditCardInfo: React.FC = () => {
     <div className="flex items-center justify-center w-screen min-h-screen bg-gray-100 text-gray-800 p-8">
       <form
         onSubmit={handleSubmit}
-        className="grid lg:grid-cols-3 md:grid-cols-2 gap-8 w-full max-w-screen-lg"
+        className=" md:grid-cols-2 gap-8 w-3/5 max-w-screen-lg"
       >
         <div className="lg:col-span-2">
-          <h2 className="text-sm font-medium">Payment Method</h2>
-          <div className="bg-white rounded mt-4 shadow-lg">
-            <div className="flex items-center px-8 py-5">
+          <h2 className="text-sm font-medium">クレジットカード情報</h2>
+          <div className="bg-white rounded mt-4 shadow-lg px-10">
+            {/* <div className="flex items-center px-8 py-10">
               <input
                 className="appearance-none w-4 h-4 rounded-full border-2 border-white ring-2 ring-blue-600 ring-opacity-100 checked:bg-blue-600"
                 type="radio"
@@ -105,9 +105,9 @@ const CreditCardInfo: React.FC = () => {
                 onChange={handlePaymentMethodChange}
               />
               <label className="text-sm font-medium ml-4">PayPal</label>
-            </div>
+            </div> */}
             <div className="border-t">
-              <div className="flex items-center px-8 py-5">
+              <div className="flex items-center px-8 py-10">
                 <input
                   className="appearance-none w-4 h-4 rounded-full border-2 border-white ring-2 ring-blue-600 ring-opacity-100 checked:bg-blue-600"
                   type="radio"
@@ -116,7 +116,7 @@ const CreditCardInfo: React.FC = () => {
                   checked={paymentMethod === "credit-card"}
                   onChange={handlePaymentMethodChange}
                 />
-                <label className="text-sm font-medium ml-4">Credit Card</label>
+                <label className="text-sm font-medium ml-4">クレジットカード</label>
               </div>
               {paymentMethod === "credit-card" && (
                 <div className="grid grid-cols-2 gap-4 px-8 pb-8">
@@ -125,7 +125,7 @@ const CreditCardInfo: React.FC = () => {
                       className="text-xs font-semibold"
                       htmlFor="card_number"
                     >
-                      Card number
+                      カード番号
                     </label>
                     <input
                       className="flex items-center h-10 border mt-1 rounded px-4 w-full text-sm"
@@ -141,7 +141,8 @@ const CreditCardInfo: React.FC = () => {
                       className="text-xs font-semibold"
                       htmlFor="card_exp_month"
                     >
-                      Expiry Month
+                      有効期限<br/>
+                      月
                     </label>
                     <input
                       className="flex items-center h-10 border mt-1 rounded px-4 w-full text-sm"
@@ -157,7 +158,8 @@ const CreditCardInfo: React.FC = () => {
                       className="text-xs font-semibold"
                       htmlFor="card_exp_year"
                     >
-                      Expiry Year
+                      <br/>
+                      年
                     </label>
                     <input
                       className="flex items-center h-10 border mt-1 rounded px-4 w-full text-sm"
@@ -184,68 +186,22 @@ const CreditCardInfo: React.FC = () => {
                 </div>
               )}
             </div>
-          </div>
-        </div>
-        <div>
-          <h2 className="text-sm font-medium">Purchase Summary</h2>
-          <div className="bg-white rounded mt-4 shadow-lg py-6">
-            <div className="px-8">
-              <div className="flex items-end">
-                <select
-                  className="text-sm font-medium focus:outline-none -ml-1"
-                  value={billingOption}
-                  onChange={handleBillingChange}
-                >
-                  <option value="monthly">Product (Billed Monthly)</option>
-                  <option value="annually">Product (Billed Annually)</option>
-                </select>
-                <span className="text-sm ml-auto font-semibold">$20</span>
-                <span className="text-xs text-gray-500 mb-px">/mo</span>
+            <div>
+              <h2 className="text-sm font-medium"></h2>
+              <div>
+                <div className="flex flex-col px-8 py-10">
+                  <button
+                    type="submit"
+                    className="flex items-center justify-center bg-blue-600 text-sm font-medium w-full h-10 rounded text-blue-50 hover:bg-blue-700"
+                  >
+                    注文を確定する
+                  </button>
+                  <button
+                    type="button"
+                    className="text-xs text-blue-500 mt-3 underline"
+                  ></button>
+                </div>
               </div>
-              <span className="text-xs text-gray-500 mt-2">
-                Save 20% with annual billing
-              </span>
-            </div>
-            <div className="px-8 mt-4">
-              <div className="flex items-end justify-between">
-                <span className="text-sm font-semibold">Tax</span>
-                <span className="text-sm text-gray-500 mb-px">10%</span>
-              </div>
-            </div>
-            <div className="px-8 mt-4 border-t pt-4">
-              <div className="flex items-end justify-between">
-                <span className="font-semibold">Today you pay (AUD)</span>
-                <span className="font-semibold">$0</span>
-              </div>
-              <span className="text-xs text-gray-500 mt-2">
-                After 1 month free: $22/mo.
-              </span>
-            </div>
-            <div className="flex items-center px-8 mt-8">
-              <input
-                id="termsConditions"
-                type="checkbox"
-                checked={termsAccepted}
-                onChange={handleTermsChange}
-              />
-              <label
-                className="text-xs text-gray-500 ml-2"
-                htmlFor="termsConditions"
-              >
-                I agree to the terms and conditions.
-              </label>
-            </div>
-            <div className="flex flex-col px-8 pt-4">
-              <button
-                type="submit"
-                className="flex items-center justify-center bg-blue-600 text-sm font-medium w-full h-10 rounded text-blue-50 hover:bg-blue-700"
-              >
-                Start Subscription
-              </button>
-              <button
-                type="button"
-                className="text-xs text-blue-500 mt-3 underline"
-              ></button>
             </div>
           </div>
         </div>
