@@ -6,6 +6,7 @@ import Footer from "../components/layout/Footer";
 import { HOST_IP } from "../config";
 import ItemCardList from "../components/ItemCardList";
 import Loading from "../components/layout/Loading";
+import Carousel from "../components/Carousel";
 
 const Favorite: React.FC = () => {
   // お気に入りの商品単体
@@ -58,16 +59,18 @@ const Favorite: React.FC = () => {
     );
   }
   return (
-    <div style={{ width: "100%" }}>
-      <div>
-        {/* <Navbar /> */}
-        <div className="flex flex-col gap-8">
-          <ItemCardList items={itemsFavorite} />
-          <ItemCardList items={itemsPreview} />
+    <>
+      <div style={{ width: "100%" }}>
+        <div>
+          <div className="flex flex-col gap-8">
+            <Carousel/>
+            <ItemCardList items={itemsFavorite} />
+            <ItemCardList items={itemsPreview} />
+          </div>
+          <Footer />
         </div>
-        <Footer />
       </div>
-    </div>
+    </>
   );
 };
 
