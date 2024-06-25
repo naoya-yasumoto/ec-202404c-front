@@ -1,5 +1,6 @@
 import React from 'react';
 import { HOST_IP } from '../config';
+import Price from './Price';
 
 interface CartItemProps {
   cartItem: any;
@@ -28,7 +29,7 @@ const CartItem: React.FC<CartItemProps> = ({ cartItem, onDelete }) => {
           </div>
         </div>
 
-        <div className="text-center w-1/4 font-medium font-oswald"><span className="text-xl font-semibold">{(cartItem.item.price * cartItem.quantity).toFixed(0)}</span>円</div>
+        <div className="text-center w-1/4 font-medium font-oswald"><span className="text-xl font-semibold"><Price amount={(cartItem.item.price * cartItem.quantity).toFixed(0)}/></span></div>
         <div className="text-center w-1/4 font-oswald"><span className='text-2xl font-semibold'>{`${cartItem.quantity}`}</span>個</div>
 
         <div className="text-center w-1/4">

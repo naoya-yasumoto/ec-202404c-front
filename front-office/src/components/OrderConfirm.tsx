@@ -59,6 +59,7 @@ const OrderConfirm: React.FC = () => {
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [buttonColor, setButtonColor] = useState('bg-gray-800');
   const [isCartVisible, setIsCartVisible] = useState(false);
   const [triangleDirection, setTriangleDirection] = useState<'down' | 'up'>('down');
@@ -177,10 +178,17 @@ const OrderConfirm: React.FC = () => {
     );
     // 成功
     if (response.status === 200) {
-      navigate("/complete");
+      if(formData.paymentMethodId === "1" ){
+        navigate('/complete');
+      }else{
+        navigate("/credit-card-info");
+      }
+      
     } else {
       <p>エラーが発生しました！</p>;
     }
+
+    
   };
 
   const handleBackClick = () => {
@@ -299,12 +307,14 @@ const OrderConfirm: React.FC = () => {
                   <button
                     type="button"
                     onClick={async () => {
+
                       await fetchAddress(Number(watch("postcode")))
                       trigger("prefecture");
                       trigger("municipalities");
                       trigger("address");
                     }
                     }
+
                     disabled={loading}
                     className="ml-4 w-48 bg-gray-800 py-3 px-6 rounded-sm text-white uppercase font-medium focus:outline-none hover:bg-gray-700 hover:shadow-none"
                   >
@@ -439,7 +449,8 @@ const OrderConfirm: React.FC = () => {
                           <div className="mb-3">
                             <input
                               type="radio"
-                              name="radio-example"
+                              {...field}
+                              
                               className="sr-only peer"
                               value="2"
                               id="answer_american-express-card"
@@ -461,7 +472,8 @@ const OrderConfirm: React.FC = () => {
                           <div className="mb-3">
                             <input
                               type="radio"
-                              name="radio-example"
+                              {...field}
+                              
                               className="sr-only peer"
                               value="2"
                               id="answer_master-card"
@@ -483,7 +495,7 @@ const OrderConfirm: React.FC = () => {
                           <div className="mb-3">
                             <input
                               type="radio"
-                              name="radio-example"
+                              {...field}
                               className="sr-only peer"
                               value="2"
                               id="answer_paypal"
@@ -505,7 +517,8 @@ const OrderConfirm: React.FC = () => {
                           <div className="mb-3 relative">
                             <input
                               type="radio"
-                              name="radio-example"
+                              {...field}
+                              
                               className="sr-only peer"
                               defaultChecked
                               value="2"
@@ -528,7 +541,8 @@ const OrderConfirm: React.FC = () => {
                           <div className="mb-3 relative">
                             <input
                               type="radio"
-                              name="radio-example"
+                              {...field}
+                              
                               className="sr-only peer"
                               defaultChecked
                               value="1"
@@ -552,6 +566,7 @@ const OrderConfirm: React.FC = () => {
                       </>
                     )}
                   />
+                  {errors.paymentMethod && <p>{errors.paymentMethod.message}</p>}
                 </div>
                 <br />
 
