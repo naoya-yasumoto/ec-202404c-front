@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { ECsiteContext, CartItem } from './contexts.ts';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Register from './components/Register.tsx';
 import Login from './components/Login.tsx';
@@ -15,9 +16,11 @@ import Favorite from './pages/Favorite.tsx';
 
 export const RouterConfig = () => {
     const [username, setUsername] = useState<any>(null);
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
     return (
         <>
             <BrowserRouter>
+                <ECsiteContext.Provider value={{cartItems, setCartItems}}>
                 <Navbar username={username} setUsername={setUsername} />
                 <Routes>
                     <Route path="/register" element={<Register />} />
@@ -32,6 +35,7 @@ export const RouterConfig = () => {
                     <Route path="/favorite" element={<Favorite />} />
                     <Route path="*" element={<NotFound />} /> {/* 404ページへのルート */}
                 </Routes>
+                </ECsiteContext.Provider>
             </BrowserRouter>
         </>
     );

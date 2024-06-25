@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
@@ -11,6 +11,7 @@ import Toast from '../components/ToCartToast';
 import { z } from 'zod';
 import Footer from '../components/layout/Footer';
 import Price from '../components/Price';
+import { ECsiteContext } from "../contexts";
 
 
 interface Item {
@@ -46,6 +47,7 @@ const ItemDetail: React.FC = () => {
   const [showToast, setShowToast] = useState<boolean>(false);
   const [selectedColor, setSelectedColor] = useState<string>("gray-800");
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const { setCartItems } = useContext(ECsiteContext);
 
   const navigate = useNavigate();
 
@@ -75,7 +77,7 @@ const ItemDetail: React.FC = () => {
       } else {
         response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/item/${id}`);
       }
-      console.log(response.data)
+      // console.log(response.data)
       setItem(response.data);
       setIsFavorite(response.data.favorite); // Set the isFavorite state
       setTotalPrice(response.data.price); // Initialize with default price
@@ -124,6 +126,7 @@ const ItemDetail: React.FC = () => {
     try {
       const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/cart/add`, cartItem);
       if (response.status === 200) {
+        setCartItems(response.data.itemList);
         setShowToast(true);
       }
     } catch (error: any) {

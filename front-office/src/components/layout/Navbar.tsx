@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FormEvent } from "react";
+import React, { useState, useEffect, FormEvent, useContext } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
@@ -9,6 +9,7 @@ import { getAccessToken, decodeToken, isLoggedIn } from "../../utils/authUtils";
 import { getCartInfo } from "../../pages/Cart";
 import { HOST_IP } from "../../config";
 import Price from "../Price";
+import { ECsiteContext } from "../../contexts";
 
 interface NavbarProps {
   username: string;
@@ -24,6 +25,7 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchType, setSearchType] = useState("All"); // 初期値はAll
   const navigate = useNavigate();
+  const { cartItems} = useContext(ECsiteContext);
 
   useEffect(() => {
     if (isLoggedIn()) {
@@ -46,7 +48,7 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
         }
       }
     }
-  }, [username]);
+  }, [username, cartItems]);
 
   const handleViewCart = () => {
     if (isLoggedIn()) {
