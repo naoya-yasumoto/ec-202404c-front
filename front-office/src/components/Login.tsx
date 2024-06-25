@@ -129,10 +129,10 @@ const Login: React.FC<LoginProps> = ({ setUsername }) => {
                 </button>
                 <div className="sm:flex sm:flex-wrap mt-8 sm:mb-4 text-sm text-center">
                   <a href="#" className="flex-2 underline">
-                    Forgot password? 
+                    {/* Forgot password?  */}
                   </a>
                   <p className="flex-1 text-gray-500 text-md mx-4 my-1 sm:my-auto">
-                    or
+                    {/* or */}
                   </p>
                   <Link to="/register" className="flex-2 underline">
                     Create an Account

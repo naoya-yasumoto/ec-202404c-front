@@ -95,7 +95,7 @@ const CreditCardInfo: React.FC = () => {
         <div className="lg:col-span-2">
           <h2 className="text-sm font-medium">クレジットカード情報</h2>
           <div className="bg-white rounded mt-4 shadow-lg px-10">
-            <div className="flex items-center px-8 py-10">
+            {/* <div className="flex items-center px-8 py-10">
               <input
                 className="appearance-none w-4 h-4 rounded-full border-2 border-white ring-2 ring-blue-600 ring-opacity-100 checked:bg-blue-600"
                 type="radio"
@@ -105,7 +105,7 @@ const CreditCardInfo: React.FC = () => {
                 onChange={handlePaymentMethodChange}
               />
               <label className="text-sm font-medium ml-4">PayPal</label>
-            </div>
+            </div> */}
             <div className="border-t">
               <div className="flex items-center px-8 py-10">
                 <input

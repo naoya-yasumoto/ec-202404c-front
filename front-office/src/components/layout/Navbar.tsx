@@ -70,7 +70,7 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
           }
         );
         window.sessionStorage.removeItem("accessToken");
-        setUsername("ゲストさん");
+        setUsername("ゲスト");
         setLoginStatus(false);
         navigate("/login");
       }
