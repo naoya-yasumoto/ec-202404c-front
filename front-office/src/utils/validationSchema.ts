@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const phoneRegex = /^0\d{9,10}$/;
+const phoneRegex = /^0\d{10,11}$/;
 
 export const validationSchema = z.object({
   firstName: z.string().min(1,{message: "名は必須です"}),
