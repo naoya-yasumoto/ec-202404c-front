@@ -52,9 +52,9 @@ const ItemList: React.FC = () => {
       <div>
         {/* <Navbar /> */}
         <div className="flex flex-col gap-8">
-          <ItemCardList items={itemsSet} />
-          <ItemCardList items={itemsTop} />
-          <ItemCardList items={itemsBottom} />
+          <ItemCardList items={itemsSet} type="set"/>
+          <ItemCardList items={itemsTop} type="top"/>
+          <ItemCardList items={itemsBottom} type="bottom"/>
         </div>
         <Footer />
       </div>
