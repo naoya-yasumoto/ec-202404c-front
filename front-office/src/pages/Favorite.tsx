@@ -1,25 +1,22 @@
-// src/pages/NotFound.tsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { getAccessToken, decodeToken } from "../utils/authUtils";
+import { getAccessToken } from "../utils/authUtils";
 import Footer from "../components/layout/Footer";
 import { HOST_IP } from "../config";
 import ItemCardList from "../components/ItemCardList";
+import PreviewSetList from "../components/PreviewSetList";
 import Loading from "../components/layout/Loading";
 import Carousel from "../components/Carousel";
 
 const Favorite: React.FC = () => {
-  // お気に入りの商品単体
-  // ボトム，トップ，セットがそのまま取得されている
   const [itemsFavorite, setItemsFavorite] = useState<any[]>([]);
-
-  // 比較(プレビュー)用のデータ．お気に入りに登録したセットはそのまま取得されるが，ボトムやトップの場合は，そのidを持つセットが取得される
   const [itemsPreview, setItemsPreview] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCartVisible, setIsCartVisible] = useState(false);
   const [triangleDirection, setTriangleDirection] = useState<"down" | "up">(
     "down"
   );
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     const getFavoriteAsync = async () => {
@@ -54,13 +51,15 @@ const Favorite: React.FC = () => {
     getFavoriteAsync();
   }, []);
 
-  // クリック時に表示・非表示を切り替える関数
   const toggleCartVisibility = () => {
     setIsCartVisible(!isCartVisible);
     setTriangleDirection(triangleDirection === "down" ? "up" : "down");
   };
 
-  // ローディング中は何も表示しない
+  const handleImageClick = (imagePath: string) => {
+    setSelectedImage(`http://${HOST_IP}:9090/img/` + imagePath);
+  };
+
   if (loading) {
     return (
       <>
@@ -68,6 +67,7 @@ const Favorite: React.FC = () => {
       </>
     );
   }
+
   return (
     <>
       <div style={{ width: "100%" }}>
@@ -81,7 +81,7 @@ const Favorite: React.FC = () => {
               }}
               className="mt-6"
             >
-              <p>お気に入り一覧</p>
+              <p className="text-3xl">お気に入り一覧</p>
             </div>
 
             <div className="container mx-auto p-4 flex justify-center flex-col">
@@ -105,9 +105,75 @@ const Favorite: React.FC = () => {
                 </svg>
                 <span className="text-center">プレビューモードを展開</span>
               </div>
-              <div className='mt-3'>{isCartVisible && <Carousel />}</div>
-              <div className='mt-3'>{isCartVisible && <ItemCardList items={itemsPreview} />}</div>
-            <hr className='mt-6'/>
+              {isCartVisible && (
+                <>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <div
+                      className="text-md font-light text-blue-gray-800 mt-2"
+                      style={{ width: "70%" }}
+                    >
+                      ＊プレビューモードでは、お気に入りに登録したセット、
+                      <br />
+                      またはトップス・ボトムスに紐づくセットをプレビューで選択することができます
+                    </div>
+                  </div>
+                  <div className="relative mt-3">
+                    {selectedImage && (
+                      <div className="absolute inset-0 flex justify-center items-center">
+                        <img
+                          src={selectedImage}
+                          alt="Selected"
+                          className="z-50"
+                          style={{
+                            maxWidth: "73%",
+                            maxHeight: "73%",
+                            position: "absolute",
+                            top: "59%",
+                            left: "59%",
+                            transform: "translate(-50%, -50%)",
+                          }}
+                        />
+                      </div>
+                    )}
+                    <Carousel />
+                  </div>
+                  <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <div className="text-xl font-semibold text-blue-gray-700 pt-6" style={{ width: "70%"}}>
+                クリックしてプレビューするセットを入れ替える
+              </div>
+            </div>
+                  <div className='pb-3'>
+                    <PreviewSetList
+                      items={itemsPreview}
+                      onImageClick={handleImageClick}
+                    />
+                  </div>
+                </>
+              )}
+              <hr className="mt-6" />
+            </div>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <div className="text-2xl font-semibold" style={{ width: "70%" }}>
+                お気に入りに登録されたすべてのアイテム
+              </div>
             </div>
             <ItemCardList items={itemsFavorite} />
           </div>
