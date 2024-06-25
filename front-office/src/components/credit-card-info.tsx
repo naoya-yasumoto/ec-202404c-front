@@ -47,6 +47,7 @@ const CreditCardInfo: React.FC = () => {
       ...prevDetails,
       [name]: formattedValue,
     }));
+    
   };
 
   const handleTermsChange = () => {
