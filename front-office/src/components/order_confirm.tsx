@@ -47,14 +47,13 @@ const OrderConfirm: React.FC = () => {
     mode: "onBlur",
     resolver: zodResolver(orderSchema),
   });
-  
 
   const [loading, setLoading] = useState(false);
 
   const [order, setOrder] = useState<any[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [buttonColor, setButtonColor] = useState('bg-gray-800');
+  const [buttonColor, setButtonColor] = useState("bg-gray-800");
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -172,18 +171,21 @@ const OrderConfirm: React.FC = () => {
                 注文確認画面
               </h2>
               <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-              <label htmlFor="orderName" className="block text-xs font-semibold text-gray-600 uppercase">
-                お名前
-              </label>
-              <input
-                type="text"
-                id="orderName"
-                {...register("destinationName")}
-                className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
-              />
-              <p className="text-red-500 text-xs mt-1">
-                {errors.destinationName && errors.destinationName.message}
-              </p>
+                <label
+                  htmlFor="orderName"
+                  className="block text-xs font-semibold text-gray-600 uppercase"
+                >
+                  お名前
+                </label>
+                <input
+                  type="text"
+                  id="orderName"
+                  {...register("destinationName")}
+                  className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
+                />
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.destinationName && errors.destinationName.message}
+                </p>
 
                 <br />
 
@@ -219,12 +221,12 @@ const OrderConfirm: React.FC = () => {
                   />
                   <button
                     type="button"
-                    onClick={async() => {await fetchAddress(Number(watch("postcode")))
+                    onClick={async () => {
+                      await fetchAddress(Number(watch("postcode")));
                       trigger("prefecture");
                       trigger("municipalities");
                       trigger("address");
-                    }
-                  } 
+                    }}
                     disabled={loading}
                     className="ml-4 w-48 bg-gray-800 py-3 px-6 rounded-sm text-white uppercase font-medium focus:outline-none hover:bg-gray-700 hover:shadow-none"
                   >
@@ -261,7 +263,7 @@ const OrderConfirm: React.FC = () => {
                 <label
                   htmlFor="municipalities"
                   className="block text-xs font-semibold text-gray-600 uppercase"
-                > 
+                >
                   市区町村
                 </label>
                 <input
@@ -359,7 +361,8 @@ const OrderConfirm: React.FC = () => {
                           <div className="mb-3">
                             <input
                               type="radio"
-                              name="radio-example"
+                              {...field}
+                              checked={field.value === "AmericanExpress"}
                               className="sr-only peer"
                               value="2"
                               id="answer_american-express-card"
@@ -381,7 +384,8 @@ const OrderConfirm: React.FC = () => {
                           <div className="mb-3">
                             <input
                               type="radio"
-                              name="radio-example"
+                              {...field}
+                              checked={field.value === "MasterCard"}
                               className="sr-only peer"
                               value="2"
                               id="answer_master-card"
@@ -403,7 +407,8 @@ const OrderConfirm: React.FC = () => {
                           <div className="mb-3">
                             <input
                               type="radio"
-                              name="radio-example"
+                              {...field}
+                              checked={field.value === "Paypal"}
                               className="sr-only peer"
                               value="2"
                               id="answer_paypal"
@@ -425,7 +430,8 @@ const OrderConfirm: React.FC = () => {
                           <div className="mb-3 relative">
                             <input
                               type="radio"
-                              name="radio-example"
+                              {...field}
+                              checked={field.value === "Visa"}
                               className="sr-only peer"
                               defaultChecked
                               value="2"
@@ -448,7 +454,8 @@ const OrderConfirm: React.FC = () => {
                           <div className="mb-3 relative">
                             <input
                               type="radio"
-                              name="radio-example"
+                              {...field}
+                              checked={field.value === "CashTrade"}
                               className="sr-only peer"
                               defaultChecked
                               value="1"
@@ -472,6 +479,7 @@ const OrderConfirm: React.FC = () => {
                       </>
                     )}
                   />
+                  {errors.paymentMethod && <p>{errors.paymentMethod.message}</p>}
                 </div>
                 <br />
 
@@ -480,8 +488,9 @@ const OrderConfirm: React.FC = () => {
                     type="submit"
                     //disabled={isSubmitting}
                     className={`px-6 py-2 ${buttonColor} text-white rounded-sm focus:outline-none hover:bg-gray-700`}
-                    onClick={() => setButtonColor('bg-gray-400')}>
-                          注文
+                    onClick={() => setButtonColor("bg-gray-400")}
+                  >
+                    注文
                   </button>
                   <button
                     type="reset"
