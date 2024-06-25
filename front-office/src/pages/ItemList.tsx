@@ -24,7 +24,6 @@ const ItemList: React.FC = () => {
       
       try {
         const response = await axios.get(url);
-        console.log(url, response.data)
         setItems(response.data.items);
       } catch (error) {
         console.error('Error fetching items:', error);

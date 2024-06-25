@@ -11,6 +11,7 @@ import OrderComplete from './pages/OrderComplete.tsx';
 import NotFound from './pages/NotFound.tsx';
 import Navbar from './components/layout/Navbar.tsx';
 import ItemListAll from './pages/ItemListAll.tsx';
+import Favorite from './pages/Favorite.tsx';
 
 export const RouterConfig = () => {
     const [username, setUsername] = useState<any>(null);
@@ -28,6 +29,7 @@ export const RouterConfig = () => {
                     <Route path="/order_confirm" element={<OrderConfirm />} />
                     <Route path="/credit-card-info" element={<CreditCardInfo />} />
                     <Route path="/complete" element={<OrderComplete />} />
+                    <Route path="/favorite" element={<Favorite />} />
                     <Route path="*" element={<NotFound />} /> {/* 404ページへのルート */}
                 </Routes>
             </BrowserRouter>
