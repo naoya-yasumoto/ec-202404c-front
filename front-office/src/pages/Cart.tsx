@@ -7,6 +7,7 @@ import { getAccessToken, decodeToken } from '../utils/authUtils';
 import LoginModal from '../components/LoginModal';
 import Price from '../components/Price';
 import { ECsiteContext } from "../contexts";
+import EmptyCart from '../components/EmptyCart';
 
 export const getCartInfo = async (userId: number) => {
   try {
@@ -147,7 +148,7 @@ const Cart: React.FC = () => {
   }, [totalPrice]);
 
   if (!cartItems || cartItems.length === 0) {
-    return <div>Loading or no items in cart...</div>;
+    return <EmptyCart />; // カートが空の場合は EmptyCart コンポーネントを表示
   }
 
   return (
