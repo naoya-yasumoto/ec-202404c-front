@@ -362,7 +362,6 @@ const OrderConfirm: React.FC = () => {
                             <input
                               type="radio"
                               {...field}
-                              checked={field.value === "AmericanExpress"}
                               className="sr-only peer"
                               value="2"
                               id="answer_american-express-card"
@@ -385,7 +384,6 @@ const OrderConfirm: React.FC = () => {
                             <input
                               type="radio"
                               {...field}
-                              checked={field.value === "MasterCard"}
                               className="sr-only peer"
                               value="2"
                               id="answer_master-card"
@@ -408,7 +406,6 @@ const OrderConfirm: React.FC = () => {
                             <input
                               type="radio"
                               {...field}
-                              checked={field.value === "Paypal"}
                               className="sr-only peer"
                               value="2"
                               id="answer_paypal"
@@ -431,7 +428,6 @@ const OrderConfirm: React.FC = () => {
                             <input
                               type="radio"
                               {...field}
-                              checked={field.value === "Visa"}
                               className="sr-only peer"
                               defaultChecked
                               value="2"
@@ -455,7 +451,6 @@ const OrderConfirm: React.FC = () => {
                             <input
                               type="radio"
                               {...field}
-                              checked={field.value === "CashTrade"}
                               className="sr-only peer"
                               defaultChecked
                               value="1"
@@ -468,7 +463,7 @@ const OrderConfirm: React.FC = () => {
                               <div className="flex items-center">
                                 <img
                                   src={CashTrade}
-                                  alt="VISA"
+                                  alt="CashTrade"
                                   className="w-12 h-4 mr-2"
                                 />
                                 <div className="text-sm">代金引換 </div>
@@ -479,7 +474,9 @@ const OrderConfirm: React.FC = () => {
                       </>
                     )}
                   />
-                  {errors.paymentMethod && <p>{errors.paymentMethod.message}</p>}
+                  {errors.paymentMethod && (
+                    <p>{errors.paymentMethod.message}</p>
+                  )}
                 </div>
                 <br />
 
