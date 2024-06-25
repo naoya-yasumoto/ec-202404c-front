@@ -38,7 +38,7 @@ const ItemList: React.FC = () => {
 
   return (
     <div style={{width:"100%"}}>
-      <ItemCardList items={items} />
+      <ItemCardList items={items} type={type}/>
       <Footer />
     </div>
   );
