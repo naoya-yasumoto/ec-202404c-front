@@ -16,6 +16,8 @@ import { HOST_IP } from "../config";
 import { times } from "../utils/times";
 import { getAccessToken, decodeToken, isLoggedIn } from "../utils/authUtils";
 import LoginModal from "../components/LoginModal";
+import { CartTop } from "../pages/Cart";
+import CartItem from "../components/CartItem";
 
 interface OrderConfirmForm {
   orderId: number;
@@ -51,9 +53,15 @@ const OrderConfirm: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const [order, setOrder] = useState<any[]>([]);
+  const [cartItems, setCartItems] = useState<any[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [buttonColor, setButtonColor] = useState("bg-gray-800");
+  const [isCartVisible, setIsCartVisible] = useState(false);
+  const [triangleDirection, setTriangleDirection] = useState<"down" | "up">(
+    "down"
+  );
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -80,6 +88,51 @@ const OrderConfirm: React.FC = () => {
 
     fetchOrder();
   }, []);
+
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const token = getAccessToken();
+        if (!token) {
+          setShowModal(true);
+          return;
+        }
+
+        const userInfo = decodeToken(token);
+        if (!userInfo) {
+          setShowModal(true);
+          return;
+        }
+        const response = await axios.get(
+          `http://${HOST_IP}:8080/ec-202404c/cart/user/${userInfo.userid}`
+        );
+        setCartItems(response.data.itemList);
+        console.log(response.data); // デバッグ用に追加
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+      }
+    };
+
+    fetchCartItems();
+  }, []);
+
+  const handleDelete = async (orderItemId: number) => {
+    try {
+      const token = getAccessToken();
+      const userInfo = decodeToken(token);
+      await axios.delete(`http://${HOST_IP}:8080/ec-202404c/cart/delete`, {
+        data: {
+          orderItemId: orderItemId,
+          userId: userInfo?.userid,
+        },
+      });
+      setCartItems((prevItems) =>
+        prevItems.filter((item) => item.id !== orderItemId)
+      );
+    } catch (error) {
+      console.error("Error deleting cart item:", error);
+    }
+  };
 
   const onSubmit = async (data: OrderConfirmForm) => {
     setIsSubmitting(true);
@@ -129,7 +182,11 @@ const OrderConfirm: React.FC = () => {
     // 成功
 
     if (response.status === 200) {
-      navigate("/complete");
+      if (formData.paymentMethodId === "1") {
+        navigate("/complete");
+      } else {
+        navigate("/credit-card-info");
+      }
     } else {
       <p>エラーが発生しました！</p>;
     }
@@ -162,8 +219,40 @@ const OrderConfirm: React.FC = () => {
     setLoading(false);
   };
 
+  // クリック時に表示・非表示を切り替える関数
+  const toggleCartVisibility = () => {
+    setIsCartVisible(!isCartVisible);
+    setTriangleDirection(triangleDirection === "down" ? "up" : "down");
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 ">
+      <div className="container mx-auto p-4 flex justify-center flex-col mt-2">
+        <div
+          className="flex items-center justify-center cursor-pointer bg-blue-gray-500 text-white p-2 rounded hover:underline mx-40 hover:bg-blue-gray-600"
+          onClick={toggleCartVisibility}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={`h-4 w-4 mr-1 transition-transform transform ${
+              isCartVisible ? "rotate-180" : "rotate-0"
+            }`}
+            viewBox="0 0 11 10"
+            fill="currentColor"
+            onClick={toggleCartVisibility}
+          >
+            <path
+              d="M0 0H10.9091L5.45455 9.27272L0 0ZM1.64063 0.937503L5.45455 7.42329L9.26847 0.937503H1.64063Z"
+              fill="currentColor"
+            />
+          </svg>
+          <span className="text-center">カート表示する</span>
+        </div>
+        {isCartVisible && (
+          <CartTop cartItems={cartItems} handleDelete={handleDelete} />
+        )}
+      </div>
+
       <div className="w-full sm:w-4/5 lg:w-3/5 mt-20 mb-20">
         <div className="mx-2 my-20 sm:my-auto">
           <div className="flex justify-center">
