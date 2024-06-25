@@ -9,7 +9,11 @@ import ItemCardList from '../components/ItemCardList';
 
 const Favorite: React.FC = () => {
 
+    // お気に入りの商品単体
+    // ボトム，トップ，セットがそのまま取得されている
     const [itemsFavorite, setItemsFavorite] = useState<any[]>([]);
+
+    // 比較(プレビュー)用のデータ．お気に入りに登録したセットはそのまま取得されるが，ボトムやトップの場合は，そのidを持つセットが取得される
     const [itemsPreview, setItemsPreview] = useState<any[]>([]);
     const [loading, setLoading] = useState(true); 
 
