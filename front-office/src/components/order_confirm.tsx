@@ -128,10 +128,17 @@ const OrderConfirm: React.FC = () => {
     );
     // 成功
     if (response.status === 200) {
-      navigate("/complete");
+      if(formData.paymentMethodId === "1" ){
+        navigate('/complete');
+      }else{
+        navigate("/credit-card-info");
+      }
+      
     } else {
       <p>エラーが発生しました！</p>;
     }
+
+    
   };
 
   const handleBackClick = () => {
@@ -362,7 +369,7 @@ const OrderConfirm: React.FC = () => {
                             <input
                               type="radio"
                               {...field}
-                              checked={field.value === "AmericanExpress"}
+                              
                               className="sr-only peer"
                               value="2"
                               id="answer_american-express-card"
@@ -385,7 +392,7 @@ const OrderConfirm: React.FC = () => {
                             <input
                               type="radio"
                               {...field}
-                              checked={field.value === "MasterCard"}
+                              
                               className="sr-only peer"
                               value="2"
                               id="answer_master-card"
@@ -408,7 +415,6 @@ const OrderConfirm: React.FC = () => {
                             <input
                               type="radio"
                               {...field}
-                              checked={field.value === "Paypal"}
                               className="sr-only peer"
                               value="2"
                               id="answer_paypal"
@@ -431,7 +437,7 @@ const OrderConfirm: React.FC = () => {
                             <input
                               type="radio"
                               {...field}
-                              checked={field.value === "Visa"}
+                              
                               className="sr-only peer"
                               defaultChecked
                               value="2"
@@ -455,7 +461,7 @@ const OrderConfirm: React.FC = () => {
                             <input
                               type="radio"
                               {...field}
-                              checked={field.value === "CashTrade"}
+                              
                               className="sr-only peer"
                               defaultChecked
                               value="1"
