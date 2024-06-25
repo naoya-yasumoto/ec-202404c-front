@@ -144,17 +144,20 @@ const Favorite: React.FC = () => {
                     <Carousel />
                   </div>
                   <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <div className="text-xl font-semibold text-blue-gray-700 pt-6" style={{ width: "70%"}}>
-                クリックしてプレビューするセットを入れ替える
-              </div>
-            </div>
-                  <div className='pb-3'>
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <div
+                      className="text-xl font-semibold text-blue-gray-700 pt-6"
+                      style={{ width: "70%" }}
+                    >
+                      クリックしてプレビューするセットを入れ替える
+                    </div>
+                  </div>
+                  <div className="pb-3">
                     <PreviewSetList
                       items={itemsPreview}
                       onImageClick={handleImageClick}
