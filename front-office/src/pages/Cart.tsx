@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { HOST_IP } from '../config';
@@ -6,6 +6,7 @@ import CartItem from '../components/CartItem';
 import { getAccessToken, decodeToken } from '../utils/authUtils';
 import LoginModal from '../components/LoginModal';
 import Price from '../components/Price';
+import { ECsiteContext } from "../contexts";
 
 export const getCartInfo = async (userId: number) => {
   try {
@@ -87,9 +88,10 @@ export const CartBottom: React.FC<{ totalPrice: number, tax: number, handleProce
 };
 
 const Cart: React.FC = () => {
-  const [cartItems, setCartItems] = useState<any[]>([]);
+  // const [cartItems, setCartItems] = useState<any[]>([]);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState<boolean>(false);
+  const { cartItems, setCartItems } = useContext(ECsiteContext);
 
   useEffect(() => {
     const fetchCartItems = async () => {
