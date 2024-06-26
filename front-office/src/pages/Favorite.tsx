@@ -17,6 +17,7 @@ const Favorite: React.FC = () => {
     "down"
   );
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [imagePosition, setImagePosition] = useState({ top: "59%", left: "59%" });
 
   useEffect(() => {
     const getFavoriteAsync = async () => {
@@ -60,6 +61,20 @@ const Favorite: React.FC = () => {
     setSelectedImage(`http://${HOST_IP}:9090/img/` + imagePath);
   };
 
+  const moveImageToClickPosition = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const isOutsideWidth = e.clientX - rect.left > 1000 || e.clientX - rect.left < 300;
+    const isOutsideHeight = e.clientY - rect.top > 400 || e.clientY - rect.top < 210;
+    if (isOutsideWidth || isOutsideHeight) {
+      // If click is outside the Carousel width or height, reset position
+      setImagePosition({ top: "59%", left: "59%" });
+    } else {
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      setImagePosition({ top: `${y}%`, left: `${x}%` });
+    }
+  };
+
   if (loading) {
     return (
       <>
@@ -79,21 +94,20 @@ const Favorite: React.FC = () => {
                 display: "flex",
                 justifyContent: "center",
               }}
-              className="mt-6"
+              className="mt-7"
             >
               <p className="text-3xl">お気に入り一覧</p>
             </div>
 
             <div className="container mx-auto p-4 flex justify-center flex-col">
               <div
-                className="flex items-center justify-center cursor-pointer bg-blue-gray-500 text-white p-2 rounded hover:underline mx-40 hover:bg-blue-gray-600"
+                className="flex items-center justify-center cursor-pointer bg-teal-600 text-white p-2 rounded hover:underline mx-40 hover:bg-teal-800"
                 onClick={toggleCartVisibility}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className={`h-4 w-4 mr-1 transition-transform transform ${
-                    isCartVisible ? "rotate-180" : "rotate-0"
-                  }`}
+                  className={`h-4 w-4 mr-1 transition-transform transform ${isCartVisible ? "rotate-180" : "rotate-0"
+                    }`}
                   viewBox="0 0 11 10"
                   fill="currentColor"
                   onClick={toggleCartVisibility}
@@ -112,10 +126,11 @@ const Favorite: React.FC = () => {
                       width: "100%",
                       display: "flex",
                       justifyContent: "center",
+                      animation: "rollDown 1.5s ease-out"
                     }}
                   >
                     <div
-                      className="text-md font-light text-blue-gray-800 mt-2"
+                      className="text-md font-normal text-blue-gray-800 mt-2"
                       style={{ width: "70%" }}
                     >
                       ＊プレビューモードでは、お気に入りに登録したセット、
@@ -123,24 +138,44 @@ const Favorite: React.FC = () => {
                       またはトップス・ボトムスに紐づくセットをプレビューで選択することができます
                     </div>
                   </div>
-                  <div className="relative mt-3">
-                    {selectedImage && (
-                      <div className="absolute inset-0 flex justify-center items-center">
-                        <img
-                          src={selectedImage}
-                          alt="Selected"
-                          className="z-50"
-                          style={{
-                            maxWidth: "73%",
-                            maxHeight: "73%",
-                            position: "absolute",
-                            top: "59%",
-                            left: "59%",
-                            transform: "translate(-50%, -50%)",
-                          }}
-                        />
-                      </div>
-                    )}
+                  <div
+                    className="relative mt-3"
+                    onClick={moveImageToClickPosition}
+                    style={{ cursor: "pointer", animation: "rollDown 1s ease-out" }}
+                  >
+                    <div style={{ width: '60%', maxWidth: '900px', margin: '0 auto' }}>
+                      {selectedImage && (
+                        <div className="absolute inset-0 flex justify-center items-center">
+                          <img
+                            src={selectedImage}
+                            alt="Selected"
+                            className="z-50 transition-all duration-500"
+                            style={{
+                              maxWidth: "73%",
+                              maxHeight: "73%",
+                              position: "absolute",
+                              top: imagePosition.top,
+                              left: imagePosition.left,
+                              transform: "translate(-50%, -50%)",
+                            }}
+                          />
+                          <div
+                            style={{
+                              position: "absolute",
+                              width: "120px",
+                              height: "30px",
+                              backgroundColor: "rgba(128, 128, 128, 0.1)",
+                              borderRadius: "15px",
+                              transform: "translateY(630%)",
+                              top: imagePosition.top,
+                              left: `calc(${imagePosition.left} - 55px)`,
+                              zIndex: '40',
+                            }}
+                          ></div>
+                        </div>
+
+                      )}
+                    </div>
                     <Carousel />
                   </div>
                   <div
@@ -148,6 +183,7 @@ const Favorite: React.FC = () => {
                       width: "100%",
                       display: "flex",
                       justifyContent: "center",
+                      animation: "rollDown 1s ease-out"
                     }}
                   >
                     <div
@@ -157,7 +193,7 @@ const Favorite: React.FC = () => {
                       クリックしてプレビューするセットを入れ替える
                     </div>
                   </div>
-                  <div className="pb-3">
+                  <div className="pb-3" style={{ animation: "rollDown 1s ease-out" }}>
                     <PreviewSetList
                       items={itemsPreview}
                       onImageClick={handleImageClick}
@@ -183,6 +219,18 @@ const Favorite: React.FC = () => {
           <Footer />
         </div>
       </div>
+      <style jsx>{`
+        @keyframes rollDown {
+          0% {
+            max-height: 0;
+            opacity: 0;
+          }
+          100% {
+            max-height: 100%;
+            opacity: 1;
+          }
+        }
+      `}</style>
     </>
   );
 };
