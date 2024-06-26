@@ -7,10 +7,10 @@ import Visa from '../../assets/Visa.svg';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="footer p-10 bg-gray-200" style={{ position: 'relative', marginTop: 'auto' }}>
+    <footer className="footer p-10 bg-gray-200 mt-10" style={{ position: 'relative'}}>
       <div className="container mx-auto flex justify-between items-center" style={{ width: '80%' }}>
         <aside className="flex items-center">
-          <Link to="/item-list" className="text-5xl font-poiret font-semibold" title="一覧画面に遷移">RakuStyle</Link>
+          <Link to="/item-list" className="text-5xl text-blue-gray-900 font-poiret font-semibold" title="一覧画面に遷移">R<span className='text-orange-900 font-bold'>a</span>kuStyle</Link>
           <p className="ml-8">© 2024 RakuStyle. All Rights Reserved.</p>
         </aside>
         <nav>
