@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-
+import React from "react";
+import { Link } from "react-router-dom";
+import emptyOG from "../assets/emptyOG.svg";
 const EmptyCart: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
@@ -12,15 +12,19 @@ const EmptyCart: React.FC = () => {
                 カートは空です
               </h2>
               <p className="text-center text-gray-600 text-lg mb-6">
-                現在、ショッピングカートに商品がありません。<br />
+                現在、ショッピングカートに商品がありません。
+                <br />
                 商品を追加してください。
               </p>
-              <div className="text-center mb-6">
-                <svg className="w-24 h-24 text-gray-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h18M9 3v18M3 9h18M3 15h18" />
-                </svg>
+              <div className="flex justify-center">
+                <div className="text-center mb-6">
+                  <img src={emptyOG} alt="emptyOG" className="w-150 h-50 mr-2" />
+                </div>
               </div>
-              <Link to="/item-list/set" className="block w-full py-3 mt-4 bg-gray-800 rounded-sm font-medium text-white uppercase text-center focus:outline-none hover:bg-gray-700 hover:shadow-none">
+              <Link
+                to="/item-list/set"
+                className="block w-full py-3 mt-4 bg-gray-800 rounded-sm font-medium text-white uppercase text-center focus:outline-none hover:bg-gray-700 hover:shadow-none"
+              >
                 商品一覧へ戻る
               </Link>
               <div className="sm:flex sm:flex-wrap mt-8 sm:mb-4 text-sm text-center">
