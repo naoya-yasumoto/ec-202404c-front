@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
       <div className="container mx-auto flex justify-between items-center" style={{ width: '80%' }}>
         <aside className="flex items-center">
           <Link to="/item-list" className="text-5xl text-blue-gray-900 font-poiret font-semibold" title="一覧画面に遷移">R<span className='text-orange-900 font-bold'>a</span>kuStyle</Link>
-          <p className="ml-8">© 2024 RakuStyle. All Rights Reserved.</p>
+          <p className="ml-8 text-blue-gray-700 font-medium">© 2024 RakuStyle. All Rights Reserved.</p>
         </aside>
         <nav>
           <h6 className="footer-title">Accepted payment methods</h6>
