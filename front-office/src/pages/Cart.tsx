@@ -56,7 +56,7 @@ export const CartTop: React.FC<{ cartItems: any[], handleDelete: (orderItemId: n
 
 export const CartBottom: React.FC<{ totalPrice: number, tax: number, handleProceedToOrder: () => void }> = ({ totalPrice, tax, handleProceedToOrder }) => {
   return (
-    <div className="flex flex-col items-end gap-4"  style={{ width: '84%' }}>
+    <div className="flex flex-col items-end gap-4" style={{ width: '84%' }}>
       <div className="w-full rounded-lg bg-gray-100 p-4 sm:max-w-xs">
         <div className="space-y-1">
           <div className="flex justify-between gap-4 text-gray-500">
@@ -79,11 +79,17 @@ export const CartBottom: React.FC<{ totalPrice: number, tax: number, handleProce
         </div>
       </div>
       <button
-        className="inline-block rounded-lg bg-gray-800 hover:bg-gray-900 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-gray-300 transition duration-100 focus-visible:ring active:bg-gray-600 md:text-base"
+        className="relative inline-block px-8 py-3 text-center text-sm font-semibold text-gray-600 bg-gray-100 border border-gray-100 rounded-lg shadow-inner overflow-hidden group"
         onClick={handleProceedToOrder}
       >
-        注文に進む
+        <span className="absolute top-0 left-0 w-0 h-0 transition-all duration-200 border-t-2 border-gray-600 group-hover:w-full ease"></span>
+        <span className="absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 border-gray-600 group-hover:w-full ease"></span>
+        <span className="absolute top-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-gray-600 group-hover:h-full ease"></span>
+        <span className="absolute bottom-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-gray-600 group-hover:h-full ease"></span>
+        <span className="absolute inset-0 w-full h-full duration-300 delay-300 bg-gray-900 opacity-0 group-hover:opacity-100"></span>
+        <span className="relative transition-colors duration-300 delay-200 group-hover:text-white ease">注文に進む</span>
       </button>
+
     </div>
   );
 };
