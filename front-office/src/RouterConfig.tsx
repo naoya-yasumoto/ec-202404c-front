@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound.tsx";
 import Navbar from "./components/layout/Navbar.tsx";
 import ItemListAll from "./pages/ItemListAll.tsx";
 import Favorite from "./pages/Favorite.tsx";
+import OrderHistory from "./components/OrderHistory"; // Import OrderHistory component
 
 const AppLayout = ({ children }) => {
   const { pathname } = useLocation();
@@ -51,8 +52,8 @@ export const RouterConfig = () => {
               <Route path="/credit-card-info" element={<CreditCardInfo />} />
               <Route path="/complete" element={<OrderComplete />} />
               <Route path="/favorite" element={<Favorite />} />
-              <Route path="*" element={<NotFound />} />{" "}
-              {/* 404ページへのルート */}
+              <Route path="/order-history" element={<OrderHistory userId={username} />} /> {/* Order History route */}
+              <Route path="*" element={<NotFound />} /> {/* 404ページへのルート */}
             </Routes>
           </AppLayout>
         </ECsiteContext.Provider>
