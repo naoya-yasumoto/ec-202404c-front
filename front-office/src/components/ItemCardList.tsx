@@ -25,9 +25,10 @@ const ItemCardList: React.FC<{ items: any[]; type: string }> = ({
           <div>
             <div className="font-poiret text-4xl font-bold">{type}
               {
-              currentItems.length = 0 && 
-              <div>
-                検索結果が見つかりませんでした。
+              currentItems.length === 0 && 
+
+              <div className="flex justify-center">
+                <div className="my-20">検索結果が見つかりませんでした。</div>
               </div>
               }
             </div>
