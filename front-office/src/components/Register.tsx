@@ -106,7 +106,7 @@ const Register: React.FC = () => {
           <div className="flex justify-center">
             <div className="w-full sm:w-11/12 p-12 sm:px-10 sm:py-6 bg-white rounded-lg shadow-md lg:shadow-lg">
               <h2 className="text-center  font-semibold text-3xl lg:text-4xl text-gray-800 mt-6 mb-6" >
-                Sign Up
+                新規登録
               </h2>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex">
@@ -148,7 +148,7 @@ const Register: React.FC = () => {
                 >
                   メールアドレス
                 </label>
-                
+
                 <input
                   type="email"
                   id="email"
@@ -213,11 +213,19 @@ const Register: React.FC = () => {
                       trigger("municipalities");
                       trigger("address");
                     }
-                  }
+                    }
                     disabled={loading}
                     className="ml-4 w-48 bg-gray-800 py-3 px-6 rounded-sm text-white uppercase font-medium focus:outline-none hover:bg-gray-700 hover:shadow-none"
                   >
-                    {loading ? "取得中..." : "住所取得"}
+                    {loading ? (
+                      <div className="flex items-center">
+                        <span className="loading loading-ring loading-md"></span>
+                        　取得中...
+                      </div>
+                    ) : (
+                      "住所取得"
+                    )}
+
                   </button>
                 </div>
                 <p>{errors.postcode && errors.postcode.message}</p>

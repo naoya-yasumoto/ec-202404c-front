@@ -67,7 +67,7 @@ const OrderConfirm: React.FC = () => {
   useEffect(() => {
     const today = new Date();
     today.setDate(today.getDate() + 2); // 今日の日付に2日を加える
-    const formattedDate = today.toISOString().substr(0, 10); 
+    const formattedDate = today.toISOString().substr(0, 10);
     setValue("deliveryDate", formattedDate); // フォームの値をセット
   }, []);
 
@@ -185,17 +185,17 @@ const OrderConfirm: React.FC = () => {
     );
     // 成功
     if (response.status === 200) {
-      if(formData.paymentMethodId === "1" ){
+      if (formData.paymentMethodId === "1") {
         navigate('/complete');
-      }else{
+      } else {
         navigate("/credit-card-info");
       }
-      
+
     } else {
       <p>エラーが発生しました！</p>;
     }
 
-    
+
   };
 
   const handleBackClick = () => {
@@ -234,29 +234,29 @@ const OrderConfirm: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 ">
 
-<div className="container mx-auto p-4 flex justify-center flex-col mt-2">
-      <div
-        className="flex items-center justify-center cursor-pointer bg-blue-gray-500 text-white p-2 rounded hover:underline mx-40 hover:bg-blue-gray-600"
-        onClick={toggleCartVisibility}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className={`h-4 w-4 mr-1 transition-transform transform ${isCartVisible ? 'rotate-180' : 'rotate-0'}`}
-          viewBox="0 0 11 10"
-          fill="currentColor"
+      <div className="container mx-auto p-4 flex justify-center flex-col mt-2">
+        <div
+          className="flex items-center justify-center cursor-pointer bg-blue-gray-500 text-white p-2 rounded hover:underline mx-40 hover:bg-blue-gray-600"
           onClick={toggleCartVisibility}
         >
-          <path
-            d="M0 0H10.9091L5.45455 9.27272L0 0ZM1.64063 0.937503L5.45455 7.42329L9.26847 0.937503H1.64063Z"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={`h-4 w-4 mr-1 transition-transform transform ${isCartVisible ? 'rotate-180' : 'rotate-0'}`}
+            viewBox="0 0 11 10"
             fill="currentColor"
-          />
-        </svg>
-        <span className="text-center">
-          カート表示する
-        </span>
+            onClick={toggleCartVisibility}
+          >
+            <path
+              d="M0 0H10.9091L5.45455 9.27272L0 0ZM1.64063 0.937503L5.45455 7.42329L9.26847 0.937503H1.64063Z"
+              fill="currentColor"
+            />
+          </svg>
+          <span className="text-center">
+            カート表示する
+          </span>
+        </div>
+        {isCartVisible && <CartTop cartItems={cartItems} handleDelete={handleDelete} />}
       </div>
-      {isCartVisible && <CartTop cartItems={cartItems} handleDelete={handleDelete} />}
-    </div>
 
       <div className="w-full sm:w-4/5 lg:w-3/5 mt-20 mb-20">
         <div className="mx-2 my-20 sm:my-auto">
@@ -325,7 +325,14 @@ const OrderConfirm: React.FC = () => {
                     disabled={loading}
                     className="ml-4 w-48 bg-gray-800 py-3 px-6 rounded-sm text-white uppercase font-medium focus:outline-none hover:bg-gray-700 hover:shadow-none"
                   >
-                    {loading ? "取得中..." : "住所取得"}
+                    {loading ? (
+                      <div className="flex items-center">
+                        <span className="loading loading-ring loading-md"></span>
+                        取得中...
+                      </div>
+                    ) : (
+                      "住所取得"
+                    )}
                   </button>
                 </div>
                 <p className="text-red-500 text-xs mt-1">
@@ -418,7 +425,7 @@ const OrderConfirm: React.FC = () => {
                   type="date"
                   id="deliveryDate"
                   {...register("deliveryDate")}
-                  min={new Date(new Date().setDate(new Date().getDate() + 2)).toISOString().split("T")[0]} 
+                  min={new Date(new Date().setDate(new Date().getDate() + 2)).toISOString().split("T")[0]}
                   className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
                 />
                 <br />
@@ -458,7 +465,7 @@ const OrderConfirm: React.FC = () => {
                             <input
                               type="radio"
                               {...field}
-                              
+
                               className="sr-only peer"
                               value="2"
                               id="answer_american-express-card"
@@ -481,7 +488,7 @@ const OrderConfirm: React.FC = () => {
                             <input
                               type="radio"
                               {...field}
-                              
+
                               className="sr-only peer"
                               value="2"
                               id="answer_master-card"
@@ -526,7 +533,7 @@ const OrderConfirm: React.FC = () => {
                             <input
                               type="radio"
                               {...field}
-                              
+
                               className="sr-only peer"
                               defaultChecked
                               value="2"
@@ -550,7 +557,7 @@ const OrderConfirm: React.FC = () => {
                             <input
                               type="radio"
                               {...field}
-                              
+
                               className="sr-only peer"
                               defaultChecked
                               value="1"
@@ -582,14 +589,22 @@ const OrderConfirm: React.FC = () => {
                   <button
                     type="submit"
                     //disabled={isSubmitting}
-                    className={`px-6 py-2 ${buttonColor} text-white rounded-sm focus:outline-none hover:bg-gray-700`}
-                    onClick={() => setButtonColor('bg-gray-400')}>
-                    注文
+                    className={`relative px-6 py-2 ${buttonColor} text-white rounded-sm focus:outline-none overflow-hidden group` }
+                    onClick={() => setButtonColor('bg-gray-500')}
+                    style={{width:'24%'}}
+                  >
+                    <span className="absolute top-0 left-0 w-0 h-0 transition-all duration-200 border-t-2 border-gray-700 group-hover:w-full ease"></span>
+                    <span className="absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 border-gray-700 group-hover:w-full ease"></span>
+                    <span className="absolute top-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-gray-700 group-hover:h-full ease"></span>
+                    <span className="absolute bottom-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-gray-700 group-hover:h-full ease"></span>
+                    <span className="absolute inset-0 w-full h-full duration-300 delay-300 bg-gray-900 opacity-0 group-hover:opacity-100"></span>
+                    <span className="relative transition-colors duration-300 delay-200 group-hover:text-white ease">注文</span>
                   </button>
                   <button
                     type="reset"
                     className="px-6 py-2 bg-gray-500 text-white rounded-sm focus:outline-none hover:bg-gray-400"
                     onClick={handleBackClick}
+                    style={{width:'27%'}}
                   >
                     トップへ戻る
                   </button>
