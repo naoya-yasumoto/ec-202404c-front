@@ -65,6 +65,13 @@ const OrderConfirm: React.FC = () => {
   const [triangleDirection, setTriangleDirection] = useState<'down' | 'up'>('down');
 
   useEffect(() => {
+    const today = new Date();
+    today.setDate(today.getDate() + 2); // 今日の日付に2日を加える
+    const formattedDate = today.toISOString().substr(0, 10); 
+    setValue("deliveryDate", formattedDate); // フォームの値をセット
+  }, []);
+
+  useEffect(() => {
     const fetchOrder = async () => {
       try {
         const token = getAccessToken();
@@ -411,6 +418,7 @@ const OrderConfirm: React.FC = () => {
                   type="date"
                   id="deliveryDate"
                   {...register("deliveryDate")}
+                  min={new Date(new Date().setDate(new Date().getDate() + 2)).toISOString().split("T")[0]} 
                   className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
                 />
                 <br />

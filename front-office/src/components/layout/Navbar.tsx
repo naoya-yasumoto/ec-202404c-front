@@ -216,7 +216,7 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
             >
               <li>
                 <a className="justify-between">
-                  {username}さん
+                  {/* {username}さん */}
                   {loginStatus && <span className="badge">ログイン中</span>}
                 </a>
               </li>

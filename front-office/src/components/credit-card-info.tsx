@@ -194,7 +194,7 @@ const CreditCardInfo: React.FC = () => {
                     type="submit"
                     className="flex items-center justify-center bg-blue-600 text-sm font-medium w-full h-10 rounded text-blue-50 hover:bg-blue-700"
                   >
-                    Start Subscription
+                    注文を確定する
                   </button>
                   <button
                     type="button"
