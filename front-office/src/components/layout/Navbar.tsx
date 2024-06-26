@@ -25,7 +25,7 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchType, setSearchType] = useState("All"); // 初期値はAll
   const navigate = useNavigate();
-  const { cartItems} = useContext(ECsiteContext);
+  const { cartItems } = useContext(ECsiteContext);
 
   useEffect(() => {
     if (isLoggedIn()) {
@@ -53,6 +53,13 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
   const handleViewCart = () => {
     if (isLoggedIn()) {
       navigate("/cart");
+    } else {
+      setShowModal(true);
+    }
+  };
+  const handleViewFavorite = () => {
+    if (isLoggedIn()) {
+      navigate("/favorite");
     } else {
       setShowModal(true);
     }
@@ -96,13 +103,13 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
   };
 
   return (
-    <div className="bg-gray-200 shadow-lg py-2">
+    <div className="bg-gray-200 shadow-lg py-2 mb-8">
       <div
         className="navbar container mx-auto"
         style={{ width: "80%", height: "calc(3.25rem * 2.0)" }}
       >
         <div className="flex-1 flex items-center">
-          <Link to="/item-list" className="text-4xl font-poiret font-semibold" title="一覧画面に遷移">RakuStyle</Link>
+          <Link to="/item-list" className="text-4xl font-poiret font-bold text-blue-gray-900" title="一覧画面に遷移">RakuStyle</Link>
           <ul className="menu menu-horizontal p-0 ml-8">
             <li>
               <Link
@@ -163,6 +170,49 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
             </select>
           </form>
 
+
+          <div className="dropdown dropdown-end ml-4">
+            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+              <div className="indicator flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="h-6 w-6 text-black"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.7}
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+                {/* <span className="badge badge-sm indicator-item bg-blue-gray-600 text-white h-5 w-5">
+            {cartItemsCount}
+          </span> */}
+              </div>
+            </div>
+            <div tabIndex={0} className="mt-3 z-[1] card card-compact dropdown-content w-64 bg-base-100 shadow">
+              <div className="card-body">
+                <span className="font-medium text-sm text-blue-gray-900">
+                  お気に入り一覧では、<br /><span className='text-blue-800 font-medium'>プレビューモード</span>を使用できます。
+                </span>
+
+                <div className="card-actions">
+                    <button
+                      className="bg-pink-400 text-white rounded-md px-2 md:px-3 py-1 md:py-2 hover:bg-pink-600"
+                      onClick={handleViewFavorite}
+                    >
+                      お気に入り一覧を見る
+                    </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
           <div className="dropdown dropdown-end ml-4">
             <div
               tabIndex={0}
@@ -174,7 +224,7 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
                 style={{ marginLeft: "-3px" }}
               >
                 <AiOutlineShoppingCart className="h-6 w-6 text-black" />
-                <span className="badge badge-sm indicator-item">
+                <span className="badge badge-sm indicator-item bg-blue-gray-600 text-white h-5 w-5">
                   {cartItemsCount}
                 </span>
               </div>
@@ -214,32 +264,33 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
             </div>
             <ul
               tabIndex={0}
-              className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+              className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52 pr-5"
             >
               <li>
                 <a className="justify-between">
                   {/* {username}さん */}
-                  {loginStatus && <span className="badge">ログイン中</span>}
+                  {loginStatus && <span><span className="badge h-7 pr-3 mr-6"><span className="h-2 w-2 bg-green-500 rounded-full mr-1" style={{ zIndex: 2, marginBottom: '0.8px' }}></span>ログイン中</span></span>}
                 </a>
               </li>
               {!loginStatus ? (
                 <>
                   <li>
-                    <Link to="/register" className="text-lg">
+                    <Link to="/register" className="text-medium font-normal cursor-pointer ml-3 hover:underline text-blue-gray-800">
                       新規登録
                     </Link>
                   </li>
-                  <li>
-                    <Link to="/login" className="text-lg">
+                  <li className="mb-2">
+                    <Link to="/login" className="text-medium font-normal cursor-pointer ml-3 hover:underline text-blue-gray-800">
                       ログイン
                     </Link>
                   </li>
                 </>
               ) : (
                 <li>
-                  <a onClick={handleLogout} className="text-lg cursor -pointer">
+                  <a onClick={handleLogout} className="text-medium font-normal cursor-pointer ml-3 hover:underline text-blue-gray-800">
                     ログアウト
                   </a>
+
                 </li>
               )}
             </ul>
