@@ -90,7 +90,7 @@ const Login: React.FC<LoginProps> = ({ setUsername }) => {
           <div className="flex justify-center">
             <div className="w-full sm:w-11/12 p-12 sm:px-10 sm:py-6 bg-white rounded-lg shadow-md lg:shadow-lg">
               <h2 className="text-center  font-semibold text-3xl lg:text-4xl text-gray-800 mt-6 mb-6">
-                Login
+                ログイン
               </h2>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <label
