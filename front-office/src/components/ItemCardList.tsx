@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import Item from "../components/Item";
 
-
-
 const ItemCardList: React.FC<{ items: any[]; type: string }> = ({
   items,
   type,
@@ -23,14 +21,14 @@ const ItemCardList: React.FC<{ items: any[]; type: string }> = ({
       <div className="flex justify-center">
         <div style={{ width: "65%" }}>
           <div>
-            <div className="font-poiret text-4xl font-bold">{type}
-              {
-              currentItems.length === 0 && 
-
-              <div className="flex justify-center">
-                <div className="my-20">検索結果が見つかりませんでした。</div>
-              </div>
-              }
+            <div className="font-poiret text-6xl font-bold text-blue-gray-900">
+              {type}
+              <span className="text-orange-800" style={{ marginLeft:'4.5px' }}>.</span>
+              {currentItems.length === 0 && (
+                <div className="flex justify-center">
+                  <div className="my-20">検索結果が見つかりませんでした。</div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -70,7 +68,7 @@ const ItemCardList: React.FC<{ items: any[]; type: string }> = ({
               d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
             ></path>
           </svg>
-          Previous
+          前へ
         </button>
         <div className="flex items-center gap-2">
           {Array.from(
@@ -103,7 +101,7 @@ const ItemCardList: React.FC<{ items: any[]; type: string }> = ({
           }`}
           type="button"
         >
-          Next
+          次へ
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
