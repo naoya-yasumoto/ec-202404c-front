@@ -15,12 +15,12 @@ const Item: React.FC<ItemProps> = ({ item }) => {
   return (
     <Link to={`/item/${item.id}`} className="relative max-w-[19%] rounded overflow-hidden shadow-lg m-4 border-2 border-gray-300 transition ease-out duration-500 hover:border-gray-600 hover:shadow-lg group block">
       <div className='bg-blue-gray-100 m-1 mx-1 py-3 rounded-sm overflow-hidden'>
-  <img
-    className="w-full h-auto object-cover transform hover:scale-110 transition duration-300"
-    src={`http://${HOST_IP}:9090/img/` + item.imagePath}
-    alt={item.name}
-  />
-</div>
+        <img
+          className="w-full h-auto object-cover transform hover:scale-110 transition duration-300"
+          src={`http://${HOST_IP}:9090/img/` + item.imagePath}
+          alt={item.name}
+        />
+      </div>
 
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2">{item.name}</div>

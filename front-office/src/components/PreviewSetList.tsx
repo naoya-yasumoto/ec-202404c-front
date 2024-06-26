@@ -17,16 +17,18 @@ const Item: React.FC<ItemProps> = ({ item, onImageClick }) => {
       onClick={handleCardClick}
       className="relative max-w-[19%] rounded overflow-hidden shadow-lg m-4 border-2 border-gray-300 transition ease-out duration-500 hover:border-gray-600 hover:shadow-lg group block cursor-pointer"
     >
-      <img
-        className="w-full h-auto object-cover"
-        src={`http://${HOST_IP}:9090/img/` + item.imagePath}
-        alt={item.name}
-      />
+      <div className='bg-teal-100 m-1 mx-1 py-3 rounded-sm overflow-hidden'>
+        <img
+          className="w-full h-auto object-cover transform hover:scale-110 transition duration-300"
+          src={`http://${HOST_IP}:9090/img/` + item.imagePath}
+          alt={item.name}
+        />
+      </div>
       <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">{item.name}</div>
+        <div className="font-bold text-md mb-2">{item.name}</div>
         <div className="text-gray-700 text-base">
-          <div>M</div>
-          <div className="inline-flex items-baseline">
+          <div>size:M</div>
+          <div className="inline-flex items-baseline text-sm">
             <Price amount={item.price} />
             <span className="ml-1">(税抜)</span>
           </div>
