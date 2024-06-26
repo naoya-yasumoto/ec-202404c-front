@@ -100,6 +100,7 @@ const OrderConfirm: React.FC = () => {
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
+        setButtonColor('bg-gray-500')
         const token = getAccessToken();
         if (!token) {
           setShowModal(true);
@@ -232,9 +233,9 @@ const OrderConfirm: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 ">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100" style={{ paddingTop:'50px',transform:' translateY(-28px)'}}>
 
-      <div className="container mx-auto p-4 flex justify-center flex-col mt-2">
+      <div className="container mx-auto flex justify-center flex-col">
         <div
           className="flex items-center justify-center cursor-pointer bg-blue-gray-500 text-white p-2 rounded hover:underline mx-40 hover:bg-blue-gray-600"
           onClick={toggleCartVisibility}
@@ -263,7 +264,7 @@ const OrderConfirm: React.FC = () => {
           <div className="flex justify-center">
             <div className="w-full sm:w-11/12 p-12 sm:px-10 sm:py-6 bg-white rounded-lg shadow-md lg:shadow-lg">
               <h2 className="text-center  font-semibold text-3xl lg:text-4xl text-gray-800 mt-6 mb-6">
-                注文確認画面
+                ご注文情報の入力
               </h2>
               <form className="mt-10" onSubmit={handleSubmit(onSubmit)}>
                 <label htmlFor="orderName" className="block text-xs font-semibold text-gray-600 uppercase">
@@ -585,7 +586,7 @@ const OrderConfirm: React.FC = () => {
                 </div>
                 <br />
 
-                <div className="flex justify-between mt-6">
+                <div className="flex justify-between mt-6 mb-6">
                   <button
                     type="submit"
                     //disabled={isSubmitting}
