@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { HOST_IP } from "../config";
 import CartItem from '../components/CartItem';
-import { getAccessToken, decodeToken, isLoggedIn } from "../utils/authUtils";
+import { getAccessToken, decodeToken } from "../utils/authUtils";
 
-const OrderHistory = ({ userId }) => {
+const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 3;
@@ -14,16 +14,16 @@ const OrderHistory = ({ userId }) => {
       try {
         const token = getAccessToken();
         const userInfo = decodeToken(token);
-        const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/history`, { userId : userInfo?.userid });
+        const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/history`, { userId: userInfo?.userid });
         setOrders(response.data);
-        console.log(response.data)
+        console.log(response.data);
       } catch (error) {
         console.error("注文履歴の取得に失敗しました。", error);
       }
     };
 
     fetchOrders();
-  }, [userId]);
+  }, []);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -32,25 +32,23 @@ const OrderHistory = ({ userId }) => {
   const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
 
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: "100%", padding: "0 40px" }}>
       <div className="flex justify-center">
-        <div style={{ width: "65%" }}>
-          <div>
-            <div className="font-poiret text-4xl font-bold">注文履歴</div>
-            {currentOrders.length === 0 && (
-              <div className="flex justify-center">
-                <div className="my-20">注文履歴が見つかりませんでした。</div>
-              </div>
-            )}
-          </div>
+        <div style={{ width: "65%", marginTop: "20px", marginBottom: "20px" }}>
+          <div className="font-poiret text-4xl font-bold mb-4">注文履歴</div>
+          {currentOrders.length === 0 && (
+            <div className="flex justify-center my-20">
+              注文履歴が見つかりませんでした。
+            </div>
+          )}
         </div>
       </div>
-      <div className="columns is-multiline" style={{justifyContent: "center" }}>
+      <div className="columns is-multiline" style={{ justifyContent: "center" }}>
         {currentOrders.map((order, index) => (
-          <div key={index} className="card">
+          <div key={index} className="card mb-4" style={{ width: "80%", margin: "10px 0" }}>
             <div className="card-content">
               <p><strong>注文日:</strong> {new Date(order.orderDate).toLocaleDateString()}</p>
-               <p><strong>配送日:</strong> {new Date(order.deliveryDate).toLocaleDateString()}</p>
+              <p><strong>配送日:</strong> {new Date(order.deliveryDate).toLocaleDateString()}</p>
               <div>
                 <strong>アイテム:</strong>
                 <ul>
@@ -63,7 +61,7 @@ const OrderHistory = ({ userId }) => {
           </div>
         ))}
       </div>
-      <nav className="flex items-center gap-4 justify-center mt-4">
+      <nav className="flex items-center gap-4 justify-center mt-4 mb-8">
         <button
           disabled={currentPage === 1}
           onClick={() => setCurrentPage(currentPage - 1)}

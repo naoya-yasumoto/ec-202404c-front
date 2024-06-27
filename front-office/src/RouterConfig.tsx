@@ -52,7 +52,7 @@ export const RouterConfig = () => {
               <Route path="/credit-card-info" element={<CreditCardInfo />} />
               <Route path="/complete" element={<OrderComplete />} />
               <Route path="/favorite" element={<Favorite />} />
-              <Route path="/order-history" element={<OrderHistory userId={username} />} /> {/* Order History route */}
+              <Route path="/order_history" element={<OrderHistory userId={username} />} /> {/* Order History route */}
               <Route path="*" element={<NotFound />} /> {/* 404ページへのルート */}
             </Routes>
           </AppLayout>
