@@ -26,16 +26,16 @@ const NotFound: React.FC = () => {
                 404
             </div>
             {/* 上部に配置するテキスト */}
-            <div className="absolute top-1/4 text-center font-josefin text-3xl text-blue-900">
+            <div className="absolute top-1/4 text-center font-josefin text-3xl text-blue-900" >
                 Page Not Found
             </div>
             {/* 下部に配置するリンク化されたテキスト */}
-            <div className="absolute bottom-1/4 text-center font-josefin text-3xl" style={{marginBottom:'2rem'}}>
+            <div className="absolute bottom-1/4 text-center font-josefin text-2xl font-semibold" style={{marginBottom:'2rem'}}>
                 <Link
                     to="/item-list"
-                    className="text-blue-900 hover:text-blue-gray-500 hover:underline"
+                    className="text-blue-gray-800 hover:text-blue-gray-500 hover:underline"
                 >
-                    Back to Top
+                    トップページに戻る
                 </Link>
             </div>
         </div>
