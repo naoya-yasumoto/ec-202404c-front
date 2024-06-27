@@ -14,15 +14,19 @@ const OrderComplete: React.FC = () => {
               <p className="text-center text-gray-600 text-lg">
                 ご注文いただきありがとうございます。
                 <br />
-                ご注文は正常に処理されました。
+                注文完了メールを送信いたしました。ご確認ください。
               </p>
               <div className="text-center mt-10">
                 <svg
-                  className="w-24 h-24 text-green-500 mx-auto"
+                  className="w-24 h-24 text-green-500 mx-auto animate-checkmark"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
+                  style={{
+                    clipPath: "inset(0 100% 0 0)",
+                    animation: "reveal 2s forwards",
+                  }}
                 >
                   <path
                     strokeLinecap="round"
@@ -32,7 +36,7 @@ const OrderComplete: React.FC = () => {
                   />
                 </svg>
               </div>
-              <div style={{ display:'flex',justifyContent:'center', marginTop:'100px'}}>
+              <div style={{ display:'flex',justifyContent:'center', marginTop:'58px'}}>
                 <Link
                   to="/item-list/set"
                   className="block w-full py-3 mt-4 bg-gray-800 rounded-sm font-medium text-white uppercase text-center focus:outline-none hover:bg-gray-700 hover:shadow-none"
@@ -51,5 +55,23 @@ const OrderComplete: React.FC = () => {
     </div>
   );
 };
+
+// CSS-in-JSでアニメーションを定義
+const styles = `
+@keyframes reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+`;
+
+// styleタグを使って追加
+const styleSheet = document.createElement("style");
+styleSheet.type = "text/css";
+styleSheet.innerText = styles;
+document.head.appendChild(styleSheet);
 
 export default OrderComplete;
