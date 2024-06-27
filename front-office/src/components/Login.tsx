@@ -41,7 +41,7 @@ const Login: React.FC<LoginProps> = ({ setUsername }) => {
       `http://${HOST_IP}:8080/ec-202404c/auth/login`,
       formData
     );
-    console.log(response)
+    console.log(response);
     // 成功
     if (response.status === 200) {
       navigate("/item-list");
@@ -128,15 +128,18 @@ const Login: React.FC<LoginProps> = ({ setUsername }) => {
                   ログイン
                 </button>
                 <div className="sm:flex sm:flex-wrap mt-8 sm:mb-4 text-sm text-center">
-                  <a href="#" className="flex-2 underline">
-                    {/* Forgot password?  */}
-                  </a>
-                  <p className="flex-1 text-gray-500 text-md mx-4 my-1 sm:my-auto">
-                    {/* or */}
-                  </p>
-                  <Link to="/register" className="flex-2 underline">
-                    Create an Account
-                  </Link>
+                  <div className="flex justify-between w-full">
+                    <div className="flex-0">
+                      <Link to="/register" className="hover:underline">
+                        アカウント新規登録
+                      </Link>
+                    </div>
+                    <div className="flex-0">
+                      <Link to="/item-list" className="hover:underline">
+                        トップページに戻る
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>

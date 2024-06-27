@@ -4,7 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import MySelect from "./MySelect";
 import { prefecturesOptions } from "../utils/prefectures";
 import { HOST_IP } from "../config";
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { validationSchema } from "../utils/validationSchema";
 
@@ -22,14 +22,24 @@ interface SignUpForm {
 }
 
 const Register: React.FC = () => {
-  const { register, handleSubmit, control, setValue, watch, trigger, formState: { errors } } = useForm<SignUpForm>({
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    trigger,
+    formState: { errors },
+  } = useForm<SignUpForm>({
     mode: "onBlur",
     resolver: zodResolver(validationSchema),
   });
 
   const [loading, setLoading] = useState(false);
   const [emailExists, setEmailExists] = useState(false);
-  const [emailExistsMessage, setEmailExistsMessage] = useState<string | null>(null);
+  const [emailExistsMessage, setEmailExistsMessage] = useState<string | null>(
+    null
+  );
 
   const navigate = useNavigate();
 
@@ -49,17 +59,20 @@ const Register: React.FC = () => {
     console.log(formData);
 
     try {
-      const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/users/register`, formData);
+      const response = await axios.post(
+        `http://${HOST_IP}:8080/ec-202404c/users/register`,
+        formData
+      );
       if (response.status === 201) {
-        navigate('/login');
+        navigate("/login");
       }
     } catch (error: any) {
       if (error.response && error.response.status === 409) {
         //alert("そのメールアドレスはすでに使われています。");
       } else if (error.response && error.response.status >= 500) {
-        console.error('サーバーエラー:', error);
+        console.error("サーバーエラー:", error);
       } else {
-        console.error('An error occurred:', error);
+        console.error("An error occurred:", error);
       }
     }
   };
@@ -87,10 +100,12 @@ const Register: React.FC = () => {
     setLoading(false);
   };
 
-
   const checkEmailExists = async (email: string) => {
     try {
-      const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/users/check-email`, { email });
+      const response = await axios.post(
+        `http://${HOST_IP}:8080/ec-202404c/users/check-email`,
+        { email }
+      );
       setEmailExists(response.status === 409);
       setEmailExistsMessage(" ");
     } catch (error) {
@@ -105,7 +120,7 @@ const Register: React.FC = () => {
         <div className="mx-2 my-20 sm:my-auto">
           <div className="flex justify-center">
             <div className="w-full sm:w-11/12 p-12 sm:px-10 sm:py-6 bg-white rounded-lg shadow-md lg:shadow-lg">
-              <h2 className="text-center  font-semibold text-3xl lg:text-4xl text-gray-800 mt-6 mb-6" >
+              <h2 className="text-center  font-semibold text-3xl lg:text-4xl text-gray-800 mt-6 mb-6">
                 新規登録
               </h2>
               <form onSubmit={handleSubmit(onSubmit)}>
@@ -160,7 +175,9 @@ const Register: React.FC = () => {
                   }}
                   className="block w-full py-3 px-1 mt-2 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
                 />
-                {emailExistsMessage && <p className="text-black-500">{emailExistsMessage}</p>}
+                {emailExistsMessage && (
+                  <p className="text-black-500">{emailExistsMessage}</p>
+                )}
                 <p>{errors.email && errors.email.message}</p>
 
                 <label
@@ -189,8 +206,10 @@ const Register: React.FC = () => {
                   {...register("confirmationPassword")}
                   className="block w-full py-3 px-1 mt-2 mb-4 text-gray-800 appearance-none border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200"
                 />
-                <p>{errors.confirmationPassword && errors.confirmationPassword.message}</p>
-
+                <p>
+                  {errors.confirmationPassword &&
+                    errors.confirmationPassword.message}
+                </p>
 
                 <label
                   htmlFor="postcode"
@@ -208,12 +227,11 @@ const Register: React.FC = () => {
                   <button
                     type="button"
                     onClick={async () => {
-                      await fetchAddress((watch("postcode")))
+                      await fetchAddress(watch("postcode"));
                       trigger("prefecture");
                       trigger("municipalities");
                       trigger("address");
-                    }
-                    }
+                    }}
                     disabled={loading}
                     className="ml-4 w-48 bg-gray-800 py-3 px-6 rounded-sm text-white uppercase font-medium focus:outline-none hover:bg-gray-700 hover:shadow-none"
                   >
@@ -225,7 +243,6 @@ const Register: React.FC = () => {
                     ) : (
                       "住所取得"
                     )}
-
                   </button>
                 </div>
                 <p>{errors.postcode && errors.postcode.message}</p>
@@ -305,6 +322,20 @@ const Register: React.FC = () => {
                   >
                     リセット
                   </button>
+                </div>
+                <div className="sm:flex sm:flex-wrap mt-8 sm:mb-4 text-sm text-center">
+                  <div className="flex justify-between w-full">
+                    <div className="flex-0">
+                      <Link to="/login" className="hover:underline">
+                        ログイン
+                      </Link>
+                    </div>
+                    <div className="flex-0">
+                      <Link to="/item-list" className="hover:underline">
+                        トップページに戻る
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>
