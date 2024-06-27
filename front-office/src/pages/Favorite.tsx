@@ -157,7 +157,7 @@ const Favorite: React.FC = () => {
                               top: imagePosition.top,
                               left: imagePosition.left,
                               transform: "translate(-50%, -50%)",
-                              zIndex:'30'
+                              zIndex:'40'
                             }}
                           />
                           <div
