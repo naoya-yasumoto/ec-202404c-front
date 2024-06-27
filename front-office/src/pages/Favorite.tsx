@@ -151,8 +151,8 @@ const Favorite: React.FC = () => {
                             alt="Selected"
                             className="z-50 transition-all duration-500"
                             style={{
-                              maxWidth: "73%",
-                              maxHeight: "73%",
+                              maxWidth: "61%",
+                              maxHeight: "61%",
                               position: "absolute",
                               top: imagePosition.top,
                               left: imagePosition.left,
@@ -164,9 +164,9 @@ const Favorite: React.FC = () => {
                               position: "absolute",
                               width: "120px",
                               height: "30px",
-                              backgroundColor: "rgba(128, 128, 128, 0.1)",
+                              backgroundColor: "rgba(128, 128, 128, 0.09)",
                               borderRadius: "15px",
-                              transform: "translateY(630%)",
+                              transform: "translateY(540%)",
                               top: imagePosition.top,
                               left: `calc(${imagePosition.left} - 55px)`,
                               zIndex: '40',
@@ -210,9 +210,25 @@ const Favorite: React.FC = () => {
                 justifyContent: "center",
               }}
             >
-              <div className="text-2xl font-semibold" style={{ width: "70%" }}>
-                お気に入りに登録されたすべてのアイテム
+              <div style={{ position: 'relative', width: '70%', paddingTop: '10px' }}>
+                <div
+                  className="text-2xl font-semibold"
+                  style={{ width: '70%' }}
+                >
+                  お気に入りに登録されたすべてのアイテム
+                </div>
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(5.5rem)', // テキストの20px下に配置
+                    width: '100%',
+                    height: '10px', // 任意の高さ
+                    backgroundColor: 'white',
+                    zIndex: 9999 // すべての要素の上に重ねる
+                  }}
+                ></div>
               </div>
+
             </div>
             <ItemCardList items={itemsFavorite} />
           </div>
