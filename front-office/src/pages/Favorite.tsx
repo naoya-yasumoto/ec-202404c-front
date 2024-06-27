@@ -157,6 +157,7 @@ const Favorite: React.FC = () => {
                               top: imagePosition.top,
                               left: imagePosition.left,
                               transform: "translate(-50%, -50%)",
+                              zIndex:'30'
                             }}
                           />
                           <div
@@ -224,7 +225,7 @@ const Favorite: React.FC = () => {
                     width: '100%',
                     height: '10px', // 任意の高さ
                     backgroundColor: 'white',
-                    zIndex: 9999 // すべての要素の上に重ねる
+                    zIndex: '30' // すべての要素の上に重ねる
                   }}
                 ></div>
               </div>

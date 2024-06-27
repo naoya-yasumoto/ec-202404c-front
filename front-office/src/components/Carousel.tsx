@@ -9,11 +9,11 @@ import Carousel6 from "../assets/Carousel-6.png"; // インポートした画像
 
 export default function CarouselTransition() {
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center z-30">
       <Carousel
         transition={{ duration: 1.5 }}
         className="rounded-xl"
-        style={{ maxWidth: "900px", maxHeight: "600px" }}
+        style={{ maxWidth: "900px", maxHeight: "600px" ,zIndex:'30'}}
       >
         <img
           src={Carousel1} // インポートした画像を使用

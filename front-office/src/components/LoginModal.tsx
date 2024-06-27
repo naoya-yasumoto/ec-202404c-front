@@ -19,7 +19,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ show, onClose }) => {
 
   return (
     <div className={`fixed inset-0 flex items-center justify-center bg-black bg-opacity-55 transition-opacity duration-300 opacity-100`} style={{ zIndex: 9999 }}>
-      <div className="bg-white p-10 rounded-lg shadow-lg relative" style={{ width: '45%', height: '29%', maxHeight:'500px', maxWidth:'500px'}}>
+      <div className="bg-white p-10 rounded-lg shadow-lg relative" style={{ width: '45%', maxHeight:'500px', maxWidth:'500px'}}>
         <h2 className="text-2xl font-semibold mb-4">ログインしてください</h2>
         <p>この機能を利用するにはログインが必要です。</p>
         <div>
