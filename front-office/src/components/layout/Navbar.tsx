@@ -65,6 +65,14 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
     }
   };
 
+  const handleViewOrderHistory = () => {
+    if (isLoggedIn()) {
+      navigate("/order_history");
+    } else {
+      setShowModal(true);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       const token = getAccessToken();
@@ -103,13 +111,19 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
   };
 
   return (
-    <div className="bg-gray-200 shadow-lg py-2 mb-8">
+    <div className="bg-gray-200 shadow-lg py-2 mb-8  fixed top-0 left-0 w-full z-50">
       <div
         className="navbar container mx-auto"
         style={{ width: "80%", height: "calc(3.25rem * 2.0)" }}
       >
         <div className="flex-1 flex items-center">
-        <Link to="/item-list" className="text-5xl text-blue-gray-900 font-poiret font-semibold" title="一覧画面に遷移">R<span className='text-orange-900 font-bold'>a</span>kuStyle</Link>
+          <Link
+            to="/item-list"
+            className="text-5xl text-blue-gray-900 font-poiret font-semibold"
+            title="一覧画面に遷移"
+          >
+            R<span className="text-orange-900 font-bold">a</span>kuStyle
+          </Link>
           <ul className="menu menu-horizontal p-0 ml-8">
             <li>
               <Link
@@ -170,9 +184,12 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
             </select>
           </form>
 
-
           <div className="dropdown dropdown-end ml-4">
-            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle"
+            >
               <div className="indicator flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -193,25 +210,31 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
           </span> */}
               </div>
             </div>
-            <div tabIndex={0} className="mt-3 z-[1] card card-compact dropdown-content w-64 bg-base-100 shadow">
+            <div
+              tabIndex={0}
+              className="mt-3 z-[1] card card-compact dropdown-content w-64 bg-base-100 shadow"
+            >
               <div className="card-body">
                 <span className="font-medium text-sm text-blue-gray-900">
-                  お気に入り一覧では、<br /><span className='text-blue-800 font-medium'>プレビューモード</span>を使用できます。
+                  お気に入り一覧では、
+                  <br />
+                  <span className="text-blue-800 font-medium">
+                    プレビューモード
+                  </span>
+                  を使用できます。
                 </span>
 
                 <div className="card-actions">
-                    <button
-                      className="bg-pink-400 text-white rounded-md px-2 md:px-3 py-1 md:py-2 hover:bg-pink-600"
-                      onClick={handleViewFavorite}
-                    >
-                      お気に入り一覧を見る
-                    </button>
+                  <button
+                    className="bg-pink-400 text-white rounded-md px-2 md:px-3 py-1 md:py-2 hover:bg-pink-600"
+                    onClick={handleViewFavorite}
+                  >
+                    お気に入り一覧を見る
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-
-
 
           <div className="dropdown dropdown-end ml-4">
             <div
@@ -235,7 +258,7 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
             >
               <div className="card-body">
                 <span className="font-bold text-lg">
-                  {cartItemsCount} <span className='text-sm'>点</span>
+                  {cartItemsCount} <span className="text-sm">点</span>
                 </span>
                 <span className="text-info">
                   合計金額(税込) <Price amount={cartSubtotal.toFixed(2)} />
@@ -269,29 +292,57 @@ const Navbar: React.FC<NavbarProps> = ({ username, setUsername }) => {
               <li>
                 <a className="justify-between">
                   {/* {username}さん */}
-                  {loginStatus && <span><span className="badge h-7 pr-3 mr-6"><span className="h-2 w-2 bg-green-500 rounded-full mr-1" style={{ zIndex: 2, marginBottom: '0.8px' }}></span>ログイン中</span></span>}
+                  {loginStatus && (
+                    <span>
+                      <span className="badge h-7 pr-3 mr-6">
+                        <span
+                          className="h-2 w-2 bg-green-500 rounded-full mr-1"
+                          style={{ zIndex: 2, marginBottom: "0.8px" }}
+                        ></span>
+                        ログイン中
+                      </span>
+                    </span>
+                  )}
                 </a>
               </li>
               {!loginStatus ? (
                 <>
                   <li>
-                    <Link to="/register" className="text-medium font-normal cursor-pointer ml-3 hover:underline text-blue-gray-800">
+                    <Link
+                      to="/register"
+                      className="text-medium font-normal cursor-pointer ml-3 hover:underline text-blue-gray-800"
+                    >
                       新規登録
                     </Link>
                   </li>
                   <li className="mb-2">
-                    <Link to="/login" className="text-medium font-normal cursor-pointer ml-3 hover:underline text-blue-gray-800">
+                    <Link
+                      to="/login"
+                      className="text-medium font-normal cursor-pointer ml-3 hover:underline text-blue-gray-800"
+                    >
                       ログイン
                     </Link>
                   </li>
                 </>
               ) : (
-                <li>
-                  <a onClick={handleLogout} className="text-medium font-normal cursor-pointer ml-3 hover:underline text-blue-gray-800">
-                    ログアウト
-                  </a>
-
-                </li>
+                <>
+                  <li>
+                    <a
+                      onClick={handleLogout}
+                      className="text-medium font-normal cursor-pointer ml-3 hover:underline text-blue-gray-800"
+                    >
+                      ログアウト
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      onClick={handleViewOrderHistory}
+                      className="text-medium font-normal cursor-pointer ml-3 hover:underline text-blue-gray-800"
+                    >
+                      注文履歴を見る
+                    </a>
+                  </li>
+                </>
               )}
             </ul>
           </div>
