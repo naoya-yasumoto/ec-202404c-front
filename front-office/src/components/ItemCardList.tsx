@@ -26,7 +26,7 @@ const ItemCardList: React.FC<{ items: any[]; type: string }> = ({
               <span className="text-orange-800" style={{ marginLeft:'4.5px' }}>.</span>
               {currentItems.length === 0 && (
                 <div className="flex justify-center">
-                  <div className="my-20">検索結果が見つかりませんでした。</div>
+                  <div className="my-20 text-3xl text-blue-gray-800">検索結果が見つかりませんでした。</div>
                 </div>
               )}
             </div>
