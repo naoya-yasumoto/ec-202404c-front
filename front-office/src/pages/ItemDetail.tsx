@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
@@ -11,6 +11,7 @@ import Toast from '../components/ToCartToast';
 import { z } from 'zod';
 import Footer from '../components/layout/Footer';
 import Price from '../components/Price';
+import { ECsiteContext } from "../contexts";
 
 
 interface Item {
@@ -46,6 +47,7 @@ const ItemDetail: React.FC = () => {
   const [showToast, setShowToast] = useState<boolean>(false);
   const [selectedColor, setSelectedColor] = useState<string>("gray-800");
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const { setCartItems } = useContext(ECsiteContext);
 
   const navigate = useNavigate();
 
@@ -75,7 +77,7 @@ const ItemDetail: React.FC = () => {
       } else {
         response = await axios.get(`http://${HOST_IP}:8080/ec-202404c/item/${id}`);
       }
-      console.log(response.data)
+      // console.log(response.data)
       setItem(response.data);
       setIsFavorite(response.data.favorite); // Set the isFavorite state
       setTotalPrice(response.data.price); // Initialize with default price
@@ -124,6 +126,7 @@ const ItemDetail: React.FC = () => {
     try {
       const response = await axios.post(`http://${HOST_IP}:8080/ec-202404c/cart/add`, cartItem);
       if (response.status === 200) {
+        setCartItems(response.data.itemList);
         setShowToast(true);
       }
     } catch (error: any) {
@@ -190,7 +193,7 @@ const ItemDetail: React.FC = () => {
                         src={`http://${HOST_IP}:9090/img/${item.topImagePath}`}
                         loading="lazy"
                         alt="Photo by Himanshu Dewangan"
-                        className="h-full w-full object-cover object-center transition duration-200 hover:opacity-75"
+                        className="h-full w-full object-cover object-center transition duration-200 hover:opacity-75 transform transition-transform duration-300 ease-in-out hover:scale-110"
                       />
                     </div>
                   )}
@@ -204,18 +207,18 @@ const ItemDetail: React.FC = () => {
                         src={`http://${HOST_IP}:9090/img/${item.bottomImagePath}`}
                         loading="lazy"
                         alt="Photo by Himanshu Dewangan"
-                        className="h-full w-full object-cover object-center transition duration-200 hover:opacity-75"
+                        className="h-full w-full object-cover object-center transition duration-200 hover:opacity-75 transform transition-transform duration-300 ease-in-out hover:scale-110"
                       />
                     </div>
                   )}
                 </div>}
 
-                <div className="relative overflow-hidden rounded-lg bg-gray-100 lg:col-span-4">
+                <div className="relative overflow-hidden rounded-lg bg-blue-gray-100 lg:col-span-4">
                   <img
                     src={`http://${HOST_IP}:9090/img/${item.imagePath}`}
                     loading="lazy"
                     alt={item.name}
-                    className="h-full w-full object-cover object-center"
+                    className="h-full w-full object-cover object-center transform transition-transform duration-300 ease-in-out hover:scale-105"
                   />
                   <a
                     href="#"
@@ -242,7 +245,7 @@ const ItemDetail: React.FC = () => {
 
               <div className="md:py-8">
                 <div className="mb-2 md:mb-3">
-                  <h2 className="text-2xl font-bold text-gray-800 lg:text-3xl" style={{ marginTop: '4px' }}>
+                  <h2 className="text-2xl font-bold text-gray-800" style={{ marginTop: '4px',maxWidth:'360px'}}>
                     {item.name}
                   </h2>
                 </div>
@@ -321,9 +324,9 @@ const ItemDetail: React.FC = () => {
                       />
                     </div>
 
-                    <div className="relative w-28 h-10 bg-gray-800 text-white text-center rounded-md font-arial transition-colors duration-300 group overflow-hidden border border-transparent">
+                    <div className="relative w-28 h-10 bg-blue-gray-900 text-white text-center rounded-md font-arial transition-colors duration-300 group overflow-hidden border border-transparent" style={{marginTop:'20px',width:'193px'}}>
                       <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 group-hover:-translate-y-full">
-                        <div className="text-sm">カートに追加</div>
+                        <div className="text-sm font-medium">カートに追加</div>
                       </div>
                       <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 translate-y-full group-hover:translate-y-0">
                         <span className="icon">
@@ -346,12 +349,12 @@ const ItemDetail: React.FC = () => {
                   </form>
                 </div>
 
-                <div className="mt-10 md:mt-16 lg:mt-20">
+                <div className="mt-5">
                   <div className="mb-3 text-lg font-semibold text-gray-800">
                     商品詳細
                   </div>
 
-                  <p className="text-gray-700">{item.description}</p>
+                  <p className="text-gray-700" style={{maxWidth:'360px'}}>{item.description}</p>
                 </div>
               </div>
             </div>

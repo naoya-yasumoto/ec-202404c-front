@@ -1,47 +1,69 @@
 import React, { useState } from "react";
-import Item from "../components/Item";
+import { HOST_IP } from "../config";
+import Price from "./Price";
 
-const ItemCardList: React.FC<{ items: any[]; type: string }> = ({
+interface ItemProps {
+  item: any;
+  onImageClick: (imagePath: string) => void;
+}
+
+const Item: React.FC<ItemProps> = ({ item, onImageClick }) => {
+  const handleCardClick = () => {
+    onImageClick(item.imagePath);
+  };
+
+  return (
+    <div
+      onClick={handleCardClick}
+      className="relative max-w-[19%] rounded overflow-hidden shadow-lg m-4 border-2 border-gray-300 transition ease-out duration-500 hover:border-gray-600 hover:shadow-lg group block cursor-pointer"
+    >
+      <div className='bg-teal-100 m-1 mx-1 py-3 rounded-sm overflow-hidden'>
+        <img
+          className="w-full h-auto object-cover transform hover:scale-110 transition duration-300"
+          src={`http://${HOST_IP}:9090/img/` + item.imagePath}
+          alt={item.name}
+        />
+      </div>
+      <div className="px-6 py-4">
+        <div className="font-bold text-md mb-2">{item.name}</div>
+        <div className="text-gray-700 text-base">
+          <div>size:M</div>
+          <div className="inline-flex items-baseline text-sm">
+            <Price amount={item.price} />
+            <span className="ml-1">(税抜)</span>
+          </div>
+        </div>
+      </div>
+      <div className="py-6"></div> {/* 下部の余白を保持 */}
+    </div>
+  );
+};
+
+interface PreviewSetListProps {
+  items: any[];
+  onImageClick: (imagePath: string) => void;
+}
+
+const PreviewSetList: React.FC<PreviewSetListProps> = ({
   items,
-  type,
+  onImageClick,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
-  // ページネーションのためのページ変更ハンドラ
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  // 現在のページのアイテムを取得
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div style={{ width: "100%" }}>
-      <div className="flex justify-center">
-        <div style={{ width: "65%" }}>
-          <div>
-            <div className="font-poiret text-6xl font-bold text-blue-gray-900">
-              {type}
-              <span className="text-orange-800" style={{ marginLeft:'4.5px' }}>.</span>
-              {currentItems.length === 0 && (
-                <div className="flex justify-center">
-                  <div className="my-20">検索結果が見つかりませんでした。</div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        className="columns is-multiline"
-        style={{ display: "flex", justifyContent: "center" }}
-      >
+      <div className="flex flex-wrap justify-center">
         {currentItems.map((item, index) => (
-          <Item key={index} item={item} />
+          <Item key={index} item={item} onImageClick={onImageClick} />
         ))}
       </div>
-      {/* プラグインページネーションの表示 */}
       <nav className="flex items-center gap-4 justify-center mt-4">
         <button
           disabled={currentPage === 1}
@@ -68,7 +90,7 @@ const ItemCardList: React.FC<{ items: any[]; type: string }> = ({
               d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
             ></path>
           </svg>
-          前へ
+          Previous
         </button>
         <div className="flex items-center gap-2">
           {Array.from(
@@ -101,7 +123,7 @@ const ItemCardList: React.FC<{ items: any[]; type: string }> = ({
           }`}
           type="button"
         >
-          次へ
+          Next
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -123,4 +145,4 @@ const ItemCardList: React.FC<{ items: any[]; type: string }> = ({
   );
 };
 
-export default ItemCardList;
+export default PreviewSetList;
